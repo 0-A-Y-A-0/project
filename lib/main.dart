@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart' as ref;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:project/providers/theme_provider.dart';
+import 'package:project/screens/search_screen.dart';
 import 'package:project/screens/sign_in_screen.dart';
 import 'package:project/components/theme.dart';
 
@@ -20,7 +20,11 @@ class watashiWaSta extends ConsumerWidget {
       theme: AppTheme.light(),
       darkTheme: AppTheme.dark(),
       themeMode: theme, // consuming the theme provider let's go!
-      home: const SignInScreen(),
+      routes: {
+        'SignInPage' : (context) => SignInScreen(),
+        'SearchPage' : (context) => SearchScreen(),
+      },
+      initialRoute: 'SignInPage',
     );
   }
 }

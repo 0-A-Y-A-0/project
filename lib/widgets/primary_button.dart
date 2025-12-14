@@ -24,7 +24,7 @@ class PrimaryButton extends StatelessWidget {
           foregroundColor: cs.onPrimary,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         ),
-        onPressed: (){},
+        onPressed: onPressed,
         child: Text(label, style: const TextStyle(fontFamily: 'Monoglyceride',fontSize: 20)),
       ),
     );

@@ -1,23 +1,49 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:project/providers/signIn_provide.dart';
 import 'package:project/widgets/my_text_field.dart';
+import '../models/SignInState.dart';
 import '../widgets/primary_button.dart';
 
-class SignInScreen extends StatefulWidget {
-  const SignInScreen({super.key});
-
-  @override
-  State<SignInScreen> createState() => _SignInScreenState();
-}
-
-class _SignInScreenState extends State<SignInScreen> {
-  final _phoneCtrl = TextEditingController(); //these are used to write in the textfield n clear it n take input 
+// class SignInScreen extends StatefulWidget {
+//   const SignInScreen({super.key});
+//
+//   @override
+//   State<SignInScreen> createState() => _SignInScreenState();
+// }
+//
+// class _SignInScreenState extends State<SignInScreen> {
+  class SignInScreen extends ConsumerWidget {
+  final _phoneCtrl = TextEditingController(); //these are used to write in the textfield n clear it n take input
   final _passCtrl = TextEditingController();
-  double w(double px) => px * MediaQuery.of(context).size.width / 1080;
-  
  
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final signIn = ref.watch(SignInNotifierProvider); // for rebuilding ui
+    ref.listen<SignInState>(SignInNotifierProvider, (previous, next) { // to react when the state changes
+      if (next.status == SignInStatus.success) {
+        // Navigate to search screen
+        Navigator.pushReplacementNamed(context,'SearchPage');
+
+      } else if (next.status == SignInStatus.error) {
+        // Show a pop up with error message
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Text('ERROR !!! Try again later', style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold
+            ),),
+            backgroundColor: Colors.red,
+            behavior: SnackBarBehavior.floating,
+            margin: const EdgeInsets.all(8),
+            duration: Duration(seconds: 3),
+          ),
+        );
+
+      }
+    });
+
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
@@ -84,12 +110,22 @@ class _SignInScreenState extends State<SignInScreen> {
                 SizedBox(height: screenHeight * (22 / 1920)),
                   
                 PrimaryButton(
-                  label: "Sign In",
-                  onPressed: (){},  
+                  // change the text if it's loading 
+                  label: signIn.status == SignInStatus.loading
+                        ? "Loading ..."
+                        : "Sign In",
+                  onPressed: (){
+                    // here we consume the sign in provider bro
+                    // when pressed, read the data
+                    ref.read(SignInNotifierProvider.notifier).signIn(
+                        phone: _phoneCtrl.text,
+                        password: _passCtrl.text
+                    ) ;
+                  },
                 ),
-                  
+
                 SizedBox(height: screenHeight * (16 / 1920)),
-                  
+
                 Text(
                   "Forgot password?",
                   style: TextStyle(
@@ -97,7 +133,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     color: cs.secondary,
                     decoration: TextDecoration.underline,
                   ),
-                  
+
                 ),
                 SizedBox(height: screenHeight * (100 / 1920)),
               ],

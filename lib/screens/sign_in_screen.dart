@@ -13,11 +13,15 @@ class SignInScreen extends StatefulWidget {
 class _SignInScreenState extends State<SignInScreen> {
   final _phoneCtrl = TextEditingController(); //these are used to write in the textfield n clear it n take input 
   final _passCtrl = TextEditingController();
+  double w(double px) => px * MediaQuery.of(context).size.width / 1080;
   
  
   @override
   Widget build(BuildContext context) {
-     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     final bgAsset = isDark
         ? 'assets/images/backgrounds/signin_dark_bg.svg'
@@ -38,57 +42,64 @@ class _SignInScreenState extends State<SignInScreen> {
             ),
           ),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
+            padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05, vertical: screenHeight * 0.02),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(height: 70),
+                SizedBox(height: 200 * screenHeight / 1920),
+
                 Text(
                   "Sign in",
                   style: TextStyle(
                     color: cs.onPrimary,
-                    fontSize: 56,
+                    fontSize: screenWidth * 0.15,
                     fontFamily: 'Monoglyceride',
                   ),
                 ),
-                const SizedBox(height: 55),
-                Text("Phone Number", style: TextStyle(color: cs.onSurface,fontWeight: FontWeight.w700,fontSize:18 )),
-                const SizedBox(height: 8),
+
+                SizedBox(height: screenHeight * 0.1),
+
+                Text("Phone Number", style: TextStyle(color: cs.onSurface,fontWeight: FontWeight.w700,fontSize:screenWidth * 0.04 )),
+
+                SizedBox(height: screenHeight * 0.003),
+
                 MyTextField(
                   controller: _phoneCtrl,
                   hintText: "+963-000-000-000",
                   keyboardType: TextInputType.phone,
                 ),
                   
-                const SizedBox(height: 20),
+                SizedBox(height: screenHeight * 0.013),
                   
-                Text("Password", style: TextStyle(color: cs.onSurface,fontWeight: FontWeight.w700,fontSize:18)),
-                const SizedBox(height: 8),
+                Text("Password", style: TextStyle(color: cs.onSurface,fontWeight: FontWeight.w700,fontSize:screenWidth * 0.04)),
+
+                SizedBox(height: screenHeight * 0.003),
+
                 MyTextField(
                   controller: _passCtrl,
                   hintText: "********",
                   obscureText: true,
                 ),
                   
-                const SizedBox(height: 22),
+                SizedBox(height: screenHeight * (22 / 1920)),
                   
                 PrimaryButton(
                   label: "Sign In",
                   onPressed: (){},  
                 ),
                   
-                const SizedBox(height: 16),
+                SizedBox(height: screenHeight * (16 / 1920)),
                   
                 Text(
                   "Forgot password?",
                   style: TextStyle(
-                    fontWeight: FontWeight.w700,fontSize:18,
+                    fontWeight: FontWeight.w700,fontSize:screenWidth * 0.03,
                     color: cs.secondary,
                     decoration: TextDecoration.underline,
                   ),
                   
                 ),
-                const SizedBox(height: 100),
+                SizedBox(height: screenHeight * (100 / 1920)),
               ],
             ),
           ),

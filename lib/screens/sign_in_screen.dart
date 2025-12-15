@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:project/providers/signIn_provide.dart';
+import 'package:project/providers/auth_provide.dart';
 import 'package:project/widgets/my_text_field.dart';
-import '../models/SignInState.dart';
+import '../models/AuthState.dart';
 import '../widgets/primary_button.dart';
 
 // class SignInScreen extends StatefulWidget {
@@ -20,13 +20,13 @@ import '../widgets/primary_button.dart';
  
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final signIn = ref.watch(SignInNotifierProvider); // for rebuilding ui
-    ref.listen<SignInState>(SignInNotifierProvider, (previous, next) { // to react when the state changes
-      if (next.status == SignInStatus.success) {
+    final signIn = ref.watch(AuthNotifierProvider); // for rebuilding ui
+    ref.listen<AuthState>(AuthNotifierProvider, (previous, next) { // to react when the state changes
+      if (next.status == AuthStatus.completed) {
         // Navigate to search screen
         Navigator.pushReplacementNamed(context,'SearchPage');
 
-      } else if (next.status == SignInStatus.error) {
+      } else if (next.status == AuthStatus.error) {
         // Show a pop up with error message
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -40,7 +40,8 @@ import '../widgets/primary_button.dart';
             duration: Duration(seconds: 3),
           ),
         );
-
+      }else if (next.status == AuthStatus.waiting){
+        // here we'll do something
       }
     });
 
@@ -85,7 +86,9 @@ import '../widgets/primary_button.dart';
 
                 SizedBox(height: screenHeight * 0.1),
 
-                Text("Phone Number", style: TextStyle(color: cs.onSurface,fontWeight: FontWeight.w700,fontSize:screenWidth * 0.04 )),
+                Text("Phone Number", style: TextStyle(
+                    color: cs.onSurface,fontWeight: FontWeight.w700,fontSize:screenWidth * 0.04),
+                ),
 
                 SizedBox(height: screenHeight * 0.003),
 
@@ -111,15 +114,17 @@ import '../widgets/primary_button.dart';
                   
                 PrimaryButton(
                   // change the text if it's loading 
-                  label: signIn.status == SignInStatus.loading
+                  label: signIn.status == AuthStatus.loading
                         ? "Loading ..."
                         : "Sign In",
                   onPressed: (){
                     // here we consume the sign in provider bro
                     // when pressed, read the data
-                    ref.read(SignInNotifierProvider.notifier).signIn(
-                        phone: _phoneCtrl.text,
-                        password: _passCtrl.text
+                    ref.read(AuthNotifierProvider.notifier).signIn(
+                      authType: AuthType.sign_in,
+                      dataMap: {
+                        "phone": _phoneCtrl.text,
+                        "password": _passCtrl.text}
                     ) ;
                   },
                 ),

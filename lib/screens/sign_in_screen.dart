@@ -72,7 +72,7 @@ import '../widgets/primary_button.dart';
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 200 * screenHeight / 1920),
+                SizedBox(height: 150 * screenHeight / 1920),
 
                 Text(
                   "Sign in",
@@ -83,7 +83,7 @@ import '../widgets/primary_button.dart';
                   ),
                 ),
 
-                SizedBox(height: screenHeight * 0.1),
+                SizedBox(height: screenHeight * 0.11),
 
                 Text("Phone Number", style: TextStyle(color: cs.onSurface,fontWeight: FontWeight.w700,fontSize:screenWidth * 0.04 )),
 
@@ -103,11 +103,11 @@ import '../widgets/primary_button.dart';
 
                 MyTextField(
                   controller: _passCtrl,
-                  hintText: "********",
+                  hintText: " * * * * * * * *",
                   obscureText: true,
                 ),
                   
-                SizedBox(height: screenHeight * (22 / 1920)),
+                SizedBox(height: screenHeight * 0.02),
                   
                 PrimaryButton(
                   // change the text if it's loading 
@@ -124,12 +124,12 @@ import '../widgets/primary_button.dart';
                   },
                 ),
 
-                SizedBox(height: screenHeight * (16 / 1920)),
+                SizedBox(height: screenHeight * 0.02),
 
                 Text(
                   "Forgot password?",
                   style: TextStyle(
-                    fontWeight: FontWeight.w700,fontSize:screenWidth * 0.03,
+                    fontWeight: FontWeight.w700,fontSize:screenWidth * 0.04,
                     color: cs.secondary,
                     decoration: TextDecoration.underline,
                   ),

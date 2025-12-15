@@ -7,16 +7,18 @@ class PrimaryButton extends StatelessWidget {
     required this.onPressed,
   });
 
+  
   final String label;
   final VoidCallback? onPressed;
 
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
+    final screenHeight = MediaQuery.of(context).size.height;
   
 
     return SizedBox(
-      height: 48,
+      height: screenHeight*0.065,
       width: double.infinity,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(

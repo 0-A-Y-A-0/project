@@ -5,6 +5,7 @@ class AppTheme {
   static const beige = Color(0xFFCEBEBE);
   static const fairouzi = Color(0xFF50A2A7);
   static const dustyRose = Color(0xFFA26769);
+  
 
   static ThemeData light() {
     final cs = const ColorScheme(

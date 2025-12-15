@@ -42,7 +42,7 @@ class SignInNotifier extends Notifier<SignInState>{
 
 }
 
-// this is the provider 💀
+// this is the provider 💀🦅🪼🐾
 final SignInNotifierProvider = NotifierProvider<SignInNotifier, SignInState>(
         () { return SignInNotifier(); }
 );

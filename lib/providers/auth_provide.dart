@@ -12,7 +12,7 @@ class AuthNotifier extends Notifier<AuthState>{
     return AuthState(status: AuthStatus.initial) ;
   }
 
-  Future<void> signIn({required AuthType authType, required Map <String, String> dataMap}) async {
+  Future<void> auth({required AuthType authType, required Map <String, dynamic> dataMap}) async {
     state = AuthState(status: AuthStatus.loading) ;
 
     try {

@@ -1,27 +1,22 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:project/screens/register_second_screen.dart';
 import 'package:project/widgets/my_text_field.dart';
 
+import '../providers/auth_provide.dart';
 import '../widgets/primary_button.dart';
 
-class RegisterFirstScreen extends StatefulWidget {
-  const RegisterFirstScreen({super.key});
-  //
-  @override
-  State<RegisterFirstScreen> createState() => _RegisterFirstScreenState();
-}
-
-//
-class _RegisterFirstScreenState extends State<RegisterFirstScreen> {
-  // class RegisterFirstScreen extends ConsumerWidget {
+class RegisterFirstScreen extends ConsumerWidget {
   final _firstNameCtrl = TextEditingController();
   final _lastNameCtrl = TextEditingController();
   final _phoneNumCtrl = TextEditingController();
   final _passwordCtrl = TextEditingController();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final register = ref.watch(AuthNotifierProvider);
 
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
@@ -157,9 +152,15 @@ class _RegisterFirstScreenState extends State<RegisterFirstScreen> {
                       label: 'Continue',
                       onPressed: () {
                                 //well change this to provider things
-                                Navigator.pushReplacementNamed(
-                                  context,
-                                  "RegisterSecondPage"
+                                Navigator.pushReplacement(
+                                  context,MaterialPageRoute(
+                                  builder: (_) => RegisterSecondScreen(
+                                    firstName: _firstNameCtrl.text,
+                                    lastName: _lastNameCtrl.text,
+                                    phoneNum: _phoneNumCtrl.text,
+                                    password: _passwordCtrl.text,
+                                  ),
+                                ),
                                 );
                               },
                     ),

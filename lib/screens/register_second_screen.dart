@@ -1,22 +1,32 @@
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:project/screens/register_first_screen.dart';
 import 'package:project/widgets/date_text_field.dart';
 import 'package:project/widgets/primary_button.dart';
 import 'package:project/widgets/upload_box.dart';
 
-class RegisterSecondScreen extends StatefulWidget {
-  const RegisterSecondScreen({super.key});
+import '../models/AuthState.dart';
+import '../providers/auth_provide.dart';
+
+class RegisterSecondScreen extends ConsumerStatefulWidget {
+  String? firstName;
+  String? lastName;
+  String? phoneNum;
+  String? password;
+  RegisterSecondScreen({super.key, this.firstName, this.lastName, this.phoneNum, this.password});
 
   @override
-  State<RegisterSecondScreen> createState() => _RegisterSecondScreenState();
+  ConsumerState<RegisterSecondScreen> createState() => _RegisterSecondScreenState();
 }
 
-class _RegisterSecondScreenState extends State<RegisterSecondScreen> {
+class _RegisterSecondScreenState extends ConsumerState<RegisterSecondScreen> {
   final _birthdateCtrl = TextEditingController();
 
   DateTime? _birthdate;
@@ -131,6 +141,8 @@ class _RegisterSecondScreenState extends State<RegisterSecondScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final register = ref.watch(AuthNotifierProvider);
+
     final cs = Theme.of(context).colorScheme;
     final isDark = cs.brightness == Brightness.dark;
 
@@ -211,17 +223,30 @@ class _RegisterSecondScreenState extends State<RegisterSecondScreen> {
                 // Register button (matches your button styling via theme)
                 PrimaryButton(
                   // change the text if it's loading
-                  label: 'Continue',
-                  //  signIn.status == SignInStatus.loading
-                  //       ? "Loading ..."
-                  //       : "Sign In",
-                  onPressed: () {_submit();
-                    // // here we consume the sign in provider bro
-                    // // when pressed, read the data
-                    // ref.read(SignInNotifierProvider.notifier).signIn(
-                    //     phone: _phoneCtrl.text,
-                    //     password: _passCtrl.text
-                    // ) ;
+                  label: register.status == AuthStatus.loading
+                        ? "Loading ..."
+                        : "Sign In",
+                  onPressed: () async {
+                    // _submit();
+                    // here we consume the sign in provider bro
+                    // when pressed, read the data
+                    ref.read(AuthNotifierProvider.notifier).auth(
+                        authType: AuthType.register,
+                        dataMap: {
+                          "first_name" : widget.firstName,
+                          "last_name" : widget.lastName,
+                          "phone" : widget.phoneNum,
+                          "password" : widget.password,
+                          "birthdate" : _birthdate,
+                          "profile_image":  await MultipartFile.fromFile(
+                              _profileImageXfile!.path,
+                              filename: _profileImageXfile!.name),
+                          "id_image":  await MultipartFile.fromFile(
+                              _idImageXfile!.path,
+                              filename: _idImageXfile!.name),
+                        }
+                    );
+                    Navigator.pushReplacementNamed(context, 'SignInPage');
                   },
                 ),
                 SizedBox(height: screenHeight * 0.05),
@@ -230,7 +255,7 @@ class _RegisterSecondScreenState extends State<RegisterSecondScreen> {
                       style: TextStyle(color: cs.onSurface, fontSize: screenHeight * 0.021),
                       children: [
                         const TextSpan(
-                          text: "Already have an account?\nsign in ",
+                          text: "Already have an account?\nsign in",
                         ),
                         TextSpan(
                           text: "here",
@@ -242,7 +267,7 @@ class _RegisterSecondScreenState extends State<RegisterSecondScreen> {
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
                               //well change this to provider things
-                              Navigator.pushReplacementNamed(
+                              Navigator.pushNamed(
                                 context,
                                 "SignInPage"
                               );

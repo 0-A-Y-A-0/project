@@ -1,7 +1,7 @@
 
 import 'package:project/models/User.dart';
 
-enum AuthStatus { initial, loading, waiting, completed, error }
+enum AuthStatus { initial, loading, waiting, accepted, completed, error }
 
 class AuthState {
   final AuthStatus status;

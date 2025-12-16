@@ -23,10 +23,12 @@ import '../widgets/primary_button.dart';
     final signIn = ref.watch(AuthNotifierProvider); // for rebuilding ui
     ref.listen<AuthState>(AuthNotifierProvider, (previous, next) { // to react when the state changes
       if (next.status == AuthStatus.completed) {
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
         // Navigate to search screen
-        Navigator.pushReplacementNamed(context,'SearchPage');
+        Navigator.pushReplacementNamed(context,'MainScreen');
 
       } else if (next.status == AuthStatus.error) {
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
         // Show a pop up with error message
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -41,7 +43,31 @@ import '../widgets/primary_button.dart';
           ),
         );
       }else if (next.status == AuthStatus.waiting){
-        // here we'll do something
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Text('Your account has been saved successfully, wait till the admin review it then sign in', style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold
+            ),),
+            backgroundColor: Colors.yellow,
+            behavior: SnackBarBehavior.floating,
+            margin: const EdgeInsets.all(8),
+            duration: Duration(days: 1),
+          ),
+        );
+      }else if (next.status == AuthStatus.accepted){
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Text('The admin accepted your account! you can sign in', style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold
+            ),),
+            backgroundColor: Colors.green,
+            behavior: SnackBarBehavior.floating,
+            margin: const EdgeInsets.all(8),
+            duration: Duration(days: 1),
+          ),
+        );
       }
     });
 
@@ -120,7 +146,7 @@ import '../widgets/primary_button.dart';
                   onPressed: (){
                     // here we consume the sign in provider bro
                     // when pressed, read the data
-                    ref.read(AuthNotifierProvider.notifier).signIn(
+                    ref.read(AuthNotifierProvider.notifier).auth(
                       authType: AuthType.sign_in,
                       dataMap: {
                         "phone": _phoneCtrl.text,

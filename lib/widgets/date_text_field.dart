@@ -1,29 +1,28 @@
 import 'package:flutter/material.dart';
 
-class MyTextField extends StatelessWidget {
-  const MyTextField({
+class MyDateField extends StatelessWidget {
+  const MyDateField({
     super.key,
     required this.controller,
     required this.hintText,
-    this.obscureText = false,
-    this.keyboardType,
+    required this.onTap,
+    this.sizedBoxHeight,
   });
 
   final TextEditingController controller;
   final String hintText;
-  final bool obscureText;
-  final TextInputType? keyboardType;
+  final VoidCallback onTap;
+  final double? sizedBoxHeight;
 
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
 
-
     return TextField(
       controller: controller,
-      obscureText: obscureText,
-      keyboardType: keyboardType,
-      style: TextStyle(color: cs.onSurface,fontWeight: FontWeight.w200),
+      readOnly: true,
+      onTap: onTap,
+      style: TextStyle(color: cs.onSurface, fontWeight: FontWeight.w200),
       decoration: InputDecoration(
         hintText: hintText,
         hintStyle: TextStyle(color: cs.onSurface.withAlpha(170)),
@@ -34,6 +33,10 @@ class MyTextField extends StatelessWidget {
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide(color: cs.secondary, width: 2),
+        ),
+        suffixIcon: IconButton(
+          icon: Icon(Icons.calendar_month, color: cs.onSurface),
+          onPressed: onTap,
         ),
       ),
     );

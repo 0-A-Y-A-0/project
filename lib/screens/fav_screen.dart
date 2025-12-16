@@ -1,8 +1,8 @@
 
 import 'package:flutter/material.dart';
 
-class SearchScreen extends StatelessWidget {
-  const SearchScreen({super.key});
+class FavScreen extends StatelessWidget {
+  const FavScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -10,7 +10,7 @@ class SearchScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: cs.onPrimary,
       body: Center(
-        child: Text("search page let's go"),
+        child: Text("fav page let's go"),
       ),
     );
   }

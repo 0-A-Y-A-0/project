@@ -1,8 +1,8 @@
 
 import 'package:flutter/material.dart';
 
-class SearchScreen extends StatelessWidget {
-  const SearchScreen({super.key});
+class ChatScreen extends StatelessWidget {
+  const ChatScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -10,7 +10,7 @@ class SearchScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: cs.onPrimary,
       body: Center(
-        child: Text("search page let's go"),
+        child: Text("chat page let's go"),
       ),
     );
   }

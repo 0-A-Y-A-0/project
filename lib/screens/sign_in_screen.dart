@@ -23,11 +23,13 @@ import '../widgets/primary_button.dart';
     final signIn = ref.watch(AuthNotifierProvider); // for rebuilding ui
     ref.listen<AuthState>(AuthNotifierProvider, (previous, next) { // to react when the state changes
       if (next.status == AuthStatus.completed) {
+        print("completed");
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
         // Navigate to search screen
         Navigator.pushReplacementNamed(context,'MainScreen');
 
       } else if (next.status == AuthStatus.error) {
+        print("error error from lstener");
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
         // Show a pop up with error message
         ScaffoldMessenger.of(context).showSnackBar(
@@ -43,26 +45,32 @@ import '../widgets/primary_button.dart';
           ),
         );
       }else if (next.status == AuthStatus.waiting){
+        print("waiting");
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: const Text('Your account has been saved successfully, wait till the admin review it then sign in', style: TextStyle(
-                color: Colors.white,
+                color: Colors.black,
                 fontWeight: FontWeight.bold
             ),),
-            backgroundColor: Colors.yellow,
+            backgroundColor: Colors.yellow.shade800,
             behavior: SnackBarBehavior.floating,
             margin: const EdgeInsets.all(8),
             duration: Duration(days: 1),
           ),
         );
+        ref.read(AuthNotifierProvider.notifier).startPolling();
       }else if (next.status == AuthStatus.accepted){
+        ref.read(AuthNotifierProvider.notifier).stopPolling();
+        print("accepted");
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: const Text('The admin accepted your account! you can sign in', style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold
             ),),
-            backgroundColor: Colors.green,
+            backgroundColor: Colors.green.shade900,
             behavior: SnackBarBehavior.floating,
             margin: const EdgeInsets.all(8),
             duration: Duration(days: 1),
@@ -133,7 +141,7 @@ import '../widgets/primary_button.dart';
                 MyTextField(
                   controller: _passCtrl,
                   hintText: " * * * * * * * *",
-                  obscureText: true,
+                  // obscureText: false,
                 ),
                   
                 SizedBox(height: screenHeight * 0.02),
@@ -149,8 +157,10 @@ import '../widgets/primary_button.dart';
                     ref.read(AuthNotifierProvider.notifier).auth(
                       authType: AuthType.sign_in,
                       dataMap: {
-                        "phone": _phoneCtrl.text,
-                        "password": _passCtrl.text}
+                     "country_code": "+963",
+                     "phone_number": _phoneCtrl.text,
+                     "password": _passCtrl.text,
+                      }
                     ) ;
                   },
                 ),

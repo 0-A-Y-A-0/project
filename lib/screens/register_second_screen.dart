@@ -227,6 +227,12 @@ class _RegisterSecondScreenState extends ConsumerState<RegisterSecondScreen> {
                         ? "Loading ..."
                         : "Sign In",
                   onPressed: () async {
+                    print(widget.firstName);
+                    print(widget.lastName);
+                    print(widget.password);
+                    print(widget.phoneNum);
+                    print( _birthdate?.toIso8601String());
+                    print(_profileImageXfile!.path);
                     // _submit();
                     // here we consume the sign in provider bro
                     // when pressed, read the data
@@ -235,13 +241,15 @@ class _RegisterSecondScreenState extends ConsumerState<RegisterSecondScreen> {
                         dataMap: {
                           "first_name" : widget.firstName,
                           "last_name" : widget.lastName,
-                          "phone" : widget.phoneNum,
+                          "country_code": "+963",
+                          "phone_number" : widget.phoneNum,
                           "password" : widget.password,
-                          "birthdate" : _birthdate,
-                          "profile_image":  await MultipartFile.fromFile(
+                          "password_confirmation" : widget.password,
+                          "birth_date" : _birthdate?.toIso8601String(),
+                          "legal_photo":  await MultipartFile.fromFile(
                               _profileImageXfile!.path,
                               filename: _profileImageXfile!.name),
-                          "id_image":  await MultipartFile.fromFile(
+                          "legal_doc":  await MultipartFile.fromFile(
                               _idImageXfile!.path,
                               filename: _idImageXfile!.name),
                         }

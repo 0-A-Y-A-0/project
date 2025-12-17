@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 final dioProvider = Provider<Dio>((ref) {
   return Dio(
     BaseOptions(
-      baseUrl: 'https://baseURL',//here we change it to out base url
+      baseUrl: 'http://10.0.2.2:8000/api',//here we change it to out base url
       connectTimeout: const Duration(seconds: 10),
       receiveTimeout: const Duration(seconds: 10),
       headers: {'Accept': 'application/json'},

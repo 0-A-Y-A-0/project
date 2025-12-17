@@ -5,7 +5,7 @@ class ThemeNotifier extends Notifier<ThemeMode>{
   @override
   ThemeMode build() {
     // this is the default value ... we can change it for texting till we have a toggle
-    return ThemeMode.light ;
+    return ThemeMode.dark ;
   }
 
   void switchMode() {

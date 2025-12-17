@@ -20,23 +20,32 @@ class RegisterSecondScreen extends ConsumerStatefulWidget {
   final String? lastName;
   final String? phoneNum;
   final String? password;
-  RegisterSecondScreen({super.key, this.firstName, this.lastName, this.phoneNum, this.password});
+  RegisterSecondScreen({
+    super.key,
+    this.firstName,
+    this.lastName,
+    this.phoneNum,
+    this.password,
+  });
 
   @override
-  ConsumerState<RegisterSecondScreen> createState() => _RegisterSecondScreenState();
+  ConsumerState<RegisterSecondScreen> createState() =>
+      _RegisterSecondScreenState();
 }
 
 class _RegisterSecondScreenState extends ConsumerState<RegisterSecondScreen> {
   final _birthdateCtrl = TextEditingController();
 
   DateTime? _birthdate;
-  File? _profileImage;//these are stored as normal files for display only :)
+  File? _profileImage; //these are stored as normal files for display only :)
   File? _idImage;
-  XFile? _idImageXfile; //we'll use these when we send pic to backend (convert to bits? then send via dio)
+  XFile?
+  _idImageXfile; //we'll use these when we send pic to backend (convert to bits? then send via dio)
   XFile? _profileImageXfile;
 
-  final _picker = ImagePicker(); //important for image picker package..only used in its func
-  
+  final _picker =
+      ImagePicker(); //important for image picker package..only used in its func
+
   //date dialog future func
   Future<void> _pickBirthdate() async {
     final now = DateTime.now();
@@ -48,13 +57,11 @@ class _RegisterSecondScreenState extends ConsumerState<RegisterSecondScreen> {
       firstDate: DateTime(1900),
       lastDate: now,
       helpText: 'Select birthdate',
-      
+
       builder: (context, child) {
         final cs = Theme.of(context).colorScheme;
         return Theme(
-          data: Theme.of(context).copyWith(
-            colorScheme: cs,
-          ),
+          data: Theme.of(context).copyWith(colorScheme: cs),
           child: child!,
         );
       },
@@ -67,8 +74,8 @@ class _RegisterSecondScreenState extends ConsumerState<RegisterSecondScreen> {
       _birthdateCtrl.text = DateFormat('dd/MM/yyyy').format(picked);
     });
   }
- 
- //image picker future
+
+  //image picker future
   Future<void> _pickImage({required bool isProfile}) async {
     //makes the thing at the bottom
     final source = await showModalBottomSheet<ImageSource>(
@@ -101,18 +108,15 @@ class _RegisterSecondScreenState extends ConsumerState<RegisterSecondScreen> {
 
     if (source == null) return;
 
-    final picked = await _picker.pickImage(
-      source: source,
-      imageQuality: 85,
-    );
+    final picked = await _picker.pickImage(source: source, imageQuality: 85);
     if (picked == null) return;
 
-    //just saving the xfile here for later 
+    //just saving the xfile here for later
     if (isProfile) {
-        _profileImageXfile = picked;
-      } else {
-        _idImageXfile = picked;
-      }
+      _profileImageXfile = picked;
+    } else {
+      _idImageXfile = picked;
+    }
 
     setState(() {
       final file = File(picked.path);
@@ -124,7 +128,7 @@ class _RegisterSecondScreenState extends ConsumerState<RegisterSecondScreen> {
     });
   }
 
-  //checking if life is worth living 
+  //checking if life is worth living
   // void _submit() {
   //   // well connect this to backend later
   //   if (_birthdate == null || _profileImage == null || _idImage == null) {
@@ -157,133 +161,157 @@ class _RegisterSecondScreenState extends ConsumerState<RegisterSecondScreen> {
       // resizeToAvoidBottomInset: true,
       body: Stack(
         children: [
-          Positioned.fill(
-                child: SvgPicture.asset(bgAsset, fit: BoxFit.fill),
-              ),
+          Positioned.fill(child: SvgPicture.asset(bgAsset, fit: BoxFit.fill)),
           SingleChildScrollView(
             padding: EdgeInsets.symmetric(
-                horizontal: screenWidth * 0.05,
-                vertical: screenHeight * 0.02,
-              ),
+              horizontal: screenWidth * 0.05,
+              vertical: screenHeight * 0.02,
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(height: 100 * screenHeight / 1920),
-          
-                  Text(
-                    "Register",
-                    style: TextStyle(
-                      color: cs.onPrimary,
-                      fontSize: screenWidth * 0.15,
-                      fontFamily: 'Monoglyceride',
-                    ),
+
+                Text(
+                  "Register",
+                  style: TextStyle(
+                    color: cs.onPrimary,
+                    fontSize: screenWidth * 0.15,
+                    fontFamily: 'Monoglyceride',
                   ),
-          
-                  SizedBox(height: screenHeight * 0.05),
-          
-                
+                ),
+
+                SizedBox(height: screenHeight * 0.05),
+
                 // Birthdate label
                 Text(
                   "Birthdate",
-                  style: TextStyle(color: cs.onSurface,fontWeight: FontWeight.w700,fontSize:screenWidth * 0.04 ),
+                  style: TextStyle(
+                    color: cs.onSurface,
+                    fontWeight: FontWeight.w700,
+                    fontSize: screenWidth * 0.04,
+                  ),
                 ),
                 SizedBox(height: screenHeight * 0.003),
-                
-                MyDateField(controller: _birthdateCtrl, hintText: "dd/mm/yyyy", onTap: _pickBirthdate),
-                
-                
+
+                MyDateField(
+                  controller: _birthdateCtrl,
+                  hintText: "dd/mm/yyyy",
+                  onTap: _pickBirthdate,
+                ),
+
                 SizedBox(height: screenHeight * 0.03),
-                
+
                 // Profile picture
                 Text(
                   "profile picture",
-                  style: TextStyle(color: cs.onSurface,fontWeight: FontWeight.w700,fontSize:screenWidth * 0.04),
+                  style: TextStyle(
+                    color: cs.onSurface,
+                    fontWeight: FontWeight.w700,
+                    fontSize: screenWidth * 0.04,
+                  ),
                 ),
                 SizedBox(height: screenHeight * 0.003),
                 UploadBox(
                   imageFile: _profileImage,
                   onTap: () => _pickImage(isProfile: true),
                 ),
-                
+
                 SizedBox(height: screenHeight * 0.03),
-                
+
                 // ID picture
                 Text(
                   "ID picture",
-                  style: TextStyle(color: cs.onSurface,fontWeight: FontWeight.w700,fontSize:screenWidth * 0.04),
+                  style: TextStyle(
+                    color: cs.onSurface,
+                    fontWeight: FontWeight.w700,
+                    fontSize: screenWidth * 0.04,
+                  ),
                 ),
                 SizedBox(height: screenHeight * 0.003),
                 UploadBox(
                   imageFile: _idImage,
                   onTap: () => _pickImage(isProfile: false),
                 ),
-                
+
                 SizedBox(height: screenHeight * 0.04),
-                
+
                 // Register button (matches your button styling via theme)
                 PrimaryButton(
                   // change the text if it's loading
                   label: register.status == AuthStatus.loading
-                        ? "Loading ..."
-                        : "Sign In",
+                      ? "Loading ..."
+                      : "Register",
                   onPressed: () async {
                     print(widget.firstName);
                     print(widget.lastName);
                     print(widget.password);
                     print(widget.phoneNum);
-                    print( _birthdate?.toIso8601String());
+                    print(_birthdate?.toIso8601String());
                     print(_profileImageXfile!.path);
+
+                    final phone = widget.phoneNum!.trim();
+
+                    final countryCode = phone.length >= 4
+                        ? phone.substring(0, 4)
+                        : phone;
+                    final phoneNumber = phone.length > 4
+                        ? phone.substring(4)
+                        : "";
+
                     // _submit();
                     // here we consume the sign in provider bro
                     // when pressed, read the data
-                    ref.read(AuthNotifierProvider.notifier).auth(
-                        authType: AuthType.register,
-                        dataMap: {
-                          "first_name" : widget.firstName,
-                          "last_name" : widget.lastName,
-                          "country_code": "+963",
-                          "phone_number" : widget.phoneNum,
-                          "password" : widget.password,
-                          "password_confirmation" : widget.password,
-                          "birth_date" : _birthdate?.toIso8601String(),
-                          "legal_photo":  await MultipartFile.fromFile(
+                    ref
+                        .read(AuthNotifierProvider.notifier)
+                        .auth(
+                          authType: AuthType.register,
+                          dataMap: {
+                            "first_name": widget.firstName,
+                            "last_name": widget.lastName,
+                            "country_code": countryCode,
+                            "phone_number": phoneNumber,
+                            "password": widget.password,
+                            "password_confirmation": widget.password,
+                            "birth_date": _birthdate?.toIso8601String(),
+                            "legal_photo": await MultipartFile.fromFile(
                               _profileImageXfile!.path,
-                              filename: _profileImageXfile!.name),
-                          "legal_doc":  await MultipartFile.fromFile(
+                              filename: _profileImageXfile!.name,
+                            ),
+                            "legal_doc": await MultipartFile.fromFile(
                               _idImageXfile!.path,
-                              filename: _idImageXfile!.name),
-                        }
-                    );
+                              filename: _idImageXfile!.name,
+                            ),
+                          },
+                        );
                     Navigator.pushReplacementNamed(context, 'SignInPage');
                   },
                 ),
                 SizedBox(height: screenHeight * 0.05),
                 RichText(
-                    text: TextSpan(
-                      style: TextStyle(color: cs.onSurface, fontSize: screenHeight * 0.021),
-                      children: [
-                        const TextSpan(
-                          text: "Already have an account?\nsign in",
-                        ),
-                        TextSpan(
-                          text: "here",
-                          style: TextStyle(
-                            color: cs.secondary,
-                            decoration: TextDecoration.underline,
-                            fontWeight: FontWeight.w700,
-                          ),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () {
-                              //well change this to provider things
-                              Navigator.pushNamed(
-                                context,
-                                "SignInPage"
-                              );
-                            },
-                        ),
-                      ],
+                  text: TextSpan(
+                    style: TextStyle(
+                      color: cs.onSurface,
+                      fontSize: screenHeight * 0.021,
                     ),
+                    children: [
+                      const TextSpan(text: "Already have an account?\nsign in  "),
+                      TextSpan(
+                        text: "here",
+                        style: TextStyle(
+                          color: cs.secondary,
+                          decoration: TextDecoration.underline,
+                          fontWeight: FontWeight.w700,
+                        ),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            //well change this to provider things
+                            Navigator.pushNamed(context, "SignInPage");
+                          },
+                      ),
+                    ],
                   ),
+                ),
                 SizedBox(height: screenHeight * 0.1),
               ],
             ),
@@ -293,5 +321,3 @@ class _RegisterSecondScreenState extends ConsumerState<RegisterSecondScreen> {
     );
   }
 }
-
-

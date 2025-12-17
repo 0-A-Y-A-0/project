@@ -14,63 +14,72 @@ import '../widgets/primary_button.dart';
 // }
 //
 // class _SignInScreenState extends State<SignInScreen> {
-  class SignInScreen extends ConsumerWidget {
-  final _phoneCtrl = TextEditingController(); //these are used to write in the textfield n clear it n take input
+class SignInScreen extends ConsumerWidget {
+  final _phoneCtrl = TextEditingController(text: "+963");
   final _passCtrl = TextEditingController();
- 
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final signIn = ref.watch(AuthNotifierProvider); // for rebuilding ui
-    ref.listen<AuthState>(AuthNotifierProvider, (previous, next) { // to react when the state changes
+    ref.listen<AuthState>(AuthNotifierProvider, (previous, next) {
+      // to react when the state changes
       if (next.status == AuthStatus.completed) {
         print("completed");
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
         // Navigate to search screen
-        Navigator.pushReplacementNamed(context,'MainScreen');
-
+        Navigator.pushReplacementNamed(context, 'MainScreen');
       } else if (next.status == AuthStatus.error) {
         print("error error from lstener");
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
         // Show a pop up with error message
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Text('ERROR !!! Try again later', style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold
-            ),),
+            content: const Text(
+              'ERROR !!! Try again later',
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
             backgroundColor: Colors.red,
             behavior: SnackBarBehavior.floating,
             margin: const EdgeInsets.all(8),
             duration: Duration(seconds: 3),
           ),
         );
-      }else if (next.status == AuthStatus.waiting){
+      } else if (next.status == AuthStatus.waiting) {
         print("waiting");
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Text('Your account has been saved successfully, wait till the admin review it then sign in', style: TextStyle(
+            content: const Text(
+              'Your account has been saved successfully, wait till the admin review it then sign in',
+              style: TextStyle(
                 color: Colors.black,
-                fontWeight: FontWeight.bold
-            ),),
-            backgroundColor: Colors.yellow.shade800,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            backgroundColor: Color(0xFFA26769),
             behavior: SnackBarBehavior.floating,
             margin: const EdgeInsets.all(8),
             duration: Duration(days: 1),
           ),
         );
         ref.read(AuthNotifierProvider.notifier).startPolling();
-      }else if (next.status == AuthStatus.accepted){
+      } else if (next.status == AuthStatus.accepted) {
         ref.read(AuthNotifierProvider.notifier).stopPolling();
         print("accepted");
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Text('The admin accepted your account! you can sign in', style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold
-            ),),
-            backgroundColor: Colors.green.shade900,
+            content: const Text(
+              'The admin accepted your account! you can sign in',
+              style: TextStyle(
+                color: Color.fromARGB(255, 0, 0, 0),
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            backgroundColor: Color(0xFF50A2A7),
             behavior: SnackBarBehavior.floating,
             margin: const EdgeInsets.all(8),
             duration: Duration(days: 1),
@@ -87,27 +96,32 @@ import '../widgets/primary_button.dart';
     final bgAsset = isDark
         ? 'assets/images/backgrounds/signin_dark_bg.svg'
         : 'assets/images/backgrounds/signin_light_bg.svg';
-        //to put the correct bg
+    //to put the correct bg
 
     final cs = Theme.of(context).colorScheme;
 
     return Scaffold(
-      
-      body: Stack //to put the bg svg under the rest
-      (
-        children:[
-          Positioned.fill(
-            child: SvgPicture.asset(
-              bgAsset,
-              fit: BoxFit.fill, 
+  resizeToAvoidBottomInset: true,
+  body: GestureDetector(
+    onTap: () => FocusScope.of(context).unfocus(),
+    child: Stack(
+      children: [
+        Positioned.fill(
+          child: SvgPicture.asset(bgAsset, fit: BoxFit.fill),
+        ),
+
+        SafeArea(
+          child: SingleChildScrollView(
+            padding: EdgeInsets.fromLTRB(
+              screenWidth * 0.05,
+              screenHeight * 0.02,
+              screenWidth * 0.05,
+              screenHeight * 0.02 + MediaQuery.of(context).viewInsets.bottom,
             ),
-          ),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05, vertical: screenHeight * 0.02),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 150 * screenHeight / 1920),
+                SizedBox(height: 100 * screenHeight / 1920),
 
                 Text(
                   "Sign in",
@@ -120,48 +134,58 @@ import '../widgets/primary_button.dart';
 
                 SizedBox(height: screenHeight * 0.11),
 
-                Text("Phone Number", style: TextStyle(
-                    color: cs.onSurface,fontWeight: FontWeight.w700,fontSize:screenWidth * 0.04),
+                Text(
+                  "Phone Number",
+                  style: TextStyle(
+                    color: cs.onSurface,
+                    fontWeight: FontWeight.w700,
+                    fontSize: screenWidth * 0.04,
+                  ),
                 ),
-
                 SizedBox(height: screenHeight * 0.003),
 
                 MyTextField(
                   controller: _phoneCtrl,
                   hintText: "+963-000-000-000",
                   keyboardType: TextInputType.phone,
+                  maxLength: 13,
                 ),
-                  
-                SizedBox(height: screenHeight * 0.013),
-                  
-                Text("Password", style: TextStyle(color: cs.onSurface,fontWeight: FontWeight.w700,fontSize:screenWidth * 0.04)),
 
+                SizedBox(height: screenHeight * 0.013),
+
+                Text(
+                  "Password",
+                  style: TextStyle(
+                    color: cs.onSurface,
+                    fontWeight: FontWeight.w700,
+                    fontSize: screenWidth * 0.04,
+                  ),
+                ),
                 SizedBox(height: screenHeight * 0.003),
 
                 MyTextField(
                   controller: _passCtrl,
                   hintText: " * * * * * * * *",
-                  // obscureText: false,
+                  obscureText: true,
                 ),
-                  
+
                 SizedBox(height: screenHeight * 0.02),
-                  
+
                 PrimaryButton(
-                  // change the text if it's loading 
-                  label: signIn.status == AuthStatus.loading
-                        ? "Loading ..."
-                        : "Sign In",
-                  onPressed: (){
-                    // here we consume the sign in provider bro
-                    // when pressed, read the data
+                  label: signIn.status == AuthStatus.loading ? "Loading ..." : "Sign In",
+                  onPressed: () {
+                    final phone = _phoneCtrl.text.trim();
+                    final countryCode = phone.length >= 4 ? phone.substring(0, 4) : phone;
+                    final phoneNumber = phone.length > 4 ? phone.substring(4) : "";
+
                     ref.read(AuthNotifierProvider.notifier).auth(
                       authType: AuthType.sign_in,
                       dataMap: {
-                     "country_code": "+963",
-                     "phone_number": _phoneCtrl.text,
-                     "password": _passCtrl.text,
-                      }
-                    ) ;
+                        "country_code": countryCode,
+                        "phone_number": phoneNumber,
+                        "password": _passCtrl.text,
+                      },
+                    );
                   },
                 ),
 
@@ -170,18 +194,22 @@ import '../widgets/primary_button.dart';
                 Text(
                   "Forgot password?",
                   style: TextStyle(
-                    fontWeight: FontWeight.w700,fontSize:screenWidth * 0.04,
+                    fontWeight: FontWeight.w700,
+                    fontSize: screenWidth * 0.04,
                     color: cs.secondary,
                     decoration: TextDecoration.underline,
                   ),
-
                 ),
-                SizedBox(height: screenHeight * (100 / 1920)),
+
+                SizedBox(height: screenHeight * 0.24),
               ],
             ),
           ),
-        ] 
-      ),
-    );
+        ),
+      ],
+    ),
+  ),
+);
+
   }
 }

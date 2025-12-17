@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:project/models/AuthState.dart';
 import 'package:dio/dio.dart';
 import 'package:project/models/User.dart';
+import 'package:project/providers/dio_provider.dart';
 
 enum AuthType { sign_in, register}
 
@@ -17,12 +18,14 @@ class AuthNotifier extends Notifier<AuthState>{
 
     try {
       // this is where we request
-      final dio = Dio();
+      //final dio = Dio();
+      final dio = ref.read(dioProvider);//used dio provider
+
       final response = await dio.post(
         // sign in or register url
         authType == AuthType.sign_in
-        ? 'https://signin_url'
-        : 'https://register_url',
+        ? '/signin_url'
+        : '/register_url',
         // the data as a map { name : "fas3oon", phone: 000, ...}
         data: dataMap,
       );

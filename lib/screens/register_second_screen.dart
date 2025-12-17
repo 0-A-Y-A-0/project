@@ -16,10 +16,10 @@ import '../models/AuthState.dart';
 import '../providers/auth_provide.dart';
 
 class RegisterSecondScreen extends ConsumerStatefulWidget {
-  String? firstName;
-  String? lastName;
-  String? phoneNum;
-  String? password;
+  final String? firstName;
+  final String? lastName;
+  final String? phoneNum;
+  final String? password;
   RegisterSecondScreen({super.key, this.firstName, this.lastName, this.phoneNum, this.password});
 
   @override
@@ -125,19 +125,19 @@ class _RegisterSecondScreenState extends ConsumerState<RegisterSecondScreen> {
   }
 
   //checking if life is worth living 
-  void _submit() {
-    // well connect this to backend later
-    if (_birthdate == null || _profileImage == null || _idImage == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('please fill all fields idiot')),
-      );
-      return;
-    }
+  // void _submit() {
+  //   // well connect this to backend later
+  //   if (_birthdate == null || _profileImage == null || _idImage == null) {
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       const SnackBar(content: Text('please fill all fields idiot')),
+  //     );
+  //     return;
+  //   }
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('yayyy registered! (we will take your soul)')),
-    );
-  }
+  //   ScaffoldMessenger.of(context).showSnackBar(
+  //     const SnackBar(content: Text('yayyy registered! (we will take your soul)')),
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:flutter/services.dart';
 class MyTextField extends StatelessWidget {
   const MyTextField({
     super.key,
@@ -7,12 +7,14 @@ class MyTextField extends StatelessWidget {
     required this.hintText,
     this.obscureText = false,
     this.keyboardType,
+    this.maxLength,
   });
 
   final TextEditingController controller;
   final String hintText;
   final bool obscureText;
   final TextInputType? keyboardType;
+  final int? maxLength;
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +26,9 @@ class MyTextField extends StatelessWidget {
       obscureText: obscureText,
       keyboardType: keyboardType,
       style: TextStyle(color: cs.onSurface,fontWeight: FontWeight.w200),
+      inputFormatters: [
+    LengthLimitingTextInputFormatter(maxLength),
+      ],
       decoration: InputDecoration(
         hintText: hintText,
         hintStyle: TextStyle(color: cs.onSurface.withAlpha(170)),

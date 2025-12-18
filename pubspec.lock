@@ -121,6 +121,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "8.12.1"
+  card_swiper:
+    dependency: "direct main"
+    description:
+      name: card_swiper
+      sha256: "21e52a144decbf0054e7cfed8bbe46fc89635e6c86b767eaccfe7d5aeba32528"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.1"
   characters:
     dependency: transitive
     description:
@@ -624,6 +632,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.5.0"
+  nested_scroll_view_plus:
+    dependency: transitive
+    description:
+      name: nested_scroll_view_plus
+      sha256: "81ad080fac8368ae1406d59c34799845cea463ba98a9459f464d71dd8c2f3d3a"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.3"
   node_preamble:
     dependency: transitive
     description:
@@ -789,6 +805,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  snap_scroll_physics:
+    dependency: transitive
+    description:
+      name: snap_scroll_physics
+      sha256: "253249c8a07526cd18ada11720126c72f09657096e8c52f8754c377629b72bf3"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.1+3"
   source_gen:
     dependency: transitive
     description:
@@ -861,6 +885,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.4.1"
+  super_cupertino_navigation_bar:
+    dependency: "direct main"
+    description:
+      name: super_cupertino_navigation_bar
+      sha256: c725330bc7f135862ffe7c4e1f04772a35740d78f2f5d97a7200b910638f7668
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.2"
+  tab_container:
+    dependency: "direct main"
+    description:
+      name: tab_container
+      sha256: "15f87032f63fd7f0a59740aa31c5bc7056af3159a37311bca546d343240f3029"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.5.3"
   term_glyph:
     dependency: transitive
     description:

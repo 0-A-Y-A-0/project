@@ -14,9 +14,11 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  // we set the initial tab (1 = search page)
   final PersistentTabController _controller =
   PersistentTabController(initialIndex: 1);
 
+  // our screens list, in order
   List<Widget> _screens() {
     return const [
       ChatScreen(),
@@ -34,36 +36,42 @@ class _MainScreenState extends State<MainScreen> {
     return PersistentTabView(
       context,
       controller: _controller,
-      screens: _screens(),
-      items: [
+      screens: _screens(), // we pass the screens list
+      items: [ // the icons list (a list of PersistentBottomNavBarItem)
         createBarIcon(iconPath: 'assets/icons/chat_icon.png', activeColor: cs.primary, inactiveColor: cs.tertiary.withAlpha(125)),
         createBarIcon(iconPath: 'assets/icons/search_icon.png', activeColor: cs.primary, inactiveColor: cs.tertiary.withAlpha(125)),
         createBarIcon(iconPath: 'assets/icons/add_icon.png', activeColor: cs.primary, inactiveColor: cs.tertiary.withAlpha(125)),
         createBarIcon(iconPath: 'assets/icons/fav_icon.png', activeColor: cs.primary, inactiveColor: cs.tertiary.withAlpha(125)),
         createBarIcon(iconPath: 'assets/icons/profile_icon.png', activeColor: cs.primary, inactiveColor: cs.tertiary.withAlpha(125)),
       ],
-      navBarStyle: NavBarStyle.style12,
+      navBarStyle: NavBarStyle.style12, // the style we chose (the one with dots)
       backgroundColor: cs.onPrimary,
 
-      // these are for helping the dots appear
+      // these are for helping the dots appear ... stay away 👾
       confineToSafeArea: true,
       hideNavigationBarWhenKeyboardAppears: true,
       navBarHeight: kBottomNavigationBarHeight,
 
+      // adding the border on the top
       decoration: NavBarDecoration(
         border: Border(
           top: BorderSide(
-            color: cs.primary.withAlpha(200),
+            color: cs.secondary.withAlpha(200),
             width: 2,
           ),
         ),
       ),
 
+      // this is ctrl c ctrl v from the READ ME ...  its just applying the animations
       animationSettings: const NavBarAnimationSettings(
+
+        // the animation between the bar icons
         navBarItemAnimation: ItemAnimationSettings(
           duration: Duration(milliseconds: 400),
           curve: Curves.ease,
         ),
+
+        // the animation between the screens
         screenTransitionAnimation: ScreenTransitionAnimationSettings(
           animateTabTransition: true,
           duration: Duration(milliseconds: 200),
@@ -76,6 +84,7 @@ class _MainScreenState extends State<MainScreen> {
   }
 }
 
+// a method to create the bar icons
 PersistentBottomNavBarItem createBarIcon({required String iconPath, int size = 24,required Color activeColor, required Color inactiveColor }){
   PersistentBottomNavBarItem item = PersistentBottomNavBarItem(
       icon: ImageIcon(

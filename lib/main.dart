@@ -28,8 +28,7 @@ class watashiWaSta extends ConsumerWidget {
         'MainScreen' : (context) => MainScreen(),
         'RegisterFirstPage' : (context) => RegisterFirstScreen(),
       },
-      // initialRoute: 'SignInPage',
-      initialRoute: 'RegisterFirstPage',
+      initialRoute: 'MainScreen',
     );
   }
 }

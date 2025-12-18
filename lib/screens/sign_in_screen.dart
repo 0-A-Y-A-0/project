@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -198,6 +199,31 @@ class SignInScreen extends ConsumerWidget {
                     fontSize: screenWidth * 0.04,
                     color: cs.secondary,
                     decoration: TextDecoration.underline,
+                  ),
+                ),
+                SizedBox(height: screenHeight * 0.02),
+                RichText(
+                  text: TextSpan(
+                    style: TextStyle(
+                      color: cs.onSurface,
+                      fontSize: screenHeight * 0.021,
+                    ),
+                    children: [
+                      const TextSpan(text: "Don't have an account?\nregister  "),
+                      TextSpan(
+                        text: "here",
+                        style: TextStyle(
+                          color: cs.secondary,
+                          decoration: TextDecoration.underline,
+                          fontWeight: FontWeight.w700,
+                        ),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            //well change this to provider things
+                            Navigator.pushReplacementNamed(context, "RegisterFirstPage");
+                          },
+                      ),
+                    ],
                   ),
                 ),
 

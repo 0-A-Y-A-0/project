@@ -33,7 +33,7 @@ class RegisterFirstScreen extends ConsumerWidget {
     return Scaffold(
   resizeToAvoidBottomInset: true,
   body: GestureDetector(
-    onTap: () => FocusScope.of(context).unfocus(),
+    onTap: () => FocusScope.of(context).unfocus(),//for unfocusing from textfields
     child: Stack(
       children: [
         Positioned.fill(
@@ -148,7 +148,7 @@ class RegisterFirstScreen extends ConsumerWidget {
                 PrimaryButton(
                   label: 'Continue',
                   onPressed: () {
-                    Navigator.pushReplacement(
+                    Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (_) => RegisterSecondScreen(

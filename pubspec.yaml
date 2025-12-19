@@ -110,19 +110,20 @@ flutter_native_splash:
   # the splash screen theme doesn't get affected by the app, it's decided by the phone theme
   # if we change anything here we do :  flutter pub run flutter_native_splash:create
   # then it's good to do flutter pub get
-  # the splash screen icon should be around 300 x 300 png (after testing :) )
+  # the splash screen icon png should be around 1024x1024 canvas and 300x300 icon in the middle of it
+  # so the crop doesn't affect it ... (after testing and testing ... and testing :) )
   color: "#CEBEBE"
-  image: assets/icons/splash_test_icon.png
+  image: assets/icons/splash_icon.png
 
   color_dark: "#6D2E3C"
-  image_dark: assets/icons/splash_test_icon.png
+  image_dark: assets/icons/splash_icon.png
 
   android: true
   ios: false
 
   android_12:
     color: "#CEBEBE"
-    image: assets/icons/splash_test_icon.png
+    image: assets/icons/splash_icon.png
 
     color_dark: "#6D2E3C"
-    image_dark: assets/icons/splash_test_icon.png
+    image_dark: assets/icons/splash_icon.png

@@ -1,5 +1,6 @@
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
+import 'package:project/components/theme.dart';
 import 'package:project/models/aprtment.dart';
 import 'package:tab_container/tab_container.dart';
 
@@ -13,15 +14,27 @@ class ApartmentDetailsScreen extends StatefulWidget {
 
 class _ApartmentDetailsScreenState extends State<ApartmentDetailsScreen>
     with SingleTickerProviderStateMixin {
+
+  // to add a tab :
+  // increase the number of tabs in the controller
+  // add an icon (pay attention to the .index)
+  // add a color for the tab
+  // add a child for the tab
+
   late TabController _tabController ;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(
-      length: 3, // number of tabs
+      length: 5, // number of tabs
       vsync: this,
     );
+
+    // here we listen to the changes made by the tab controller
+    _tabController.addListener(() {
+      setState(() {}); // rebuild when tab changes
+    });
   }
 
   @override
@@ -46,6 +59,7 @@ class _ApartmentDetailsScreenState extends State<ApartmentDetailsScreen>
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // the photos
           SizedBox(
             // to control the height
             height: screenHeight * 0.33,
@@ -69,8 +83,9 @@ class _ApartmentDetailsScreenState extends State<ApartmentDetailsScreen>
               pagination: SwiperPagination(
                 alignment: Alignment.bottomCenter,
                 builder: DotSwiperPaginationBuilder(
-                  activeColor: Colors.white,
-                  color: Colors.white.withAlpha(150),
+                  // i wanted it to be beige anyway
+                  activeColor: AppTheme.beige,
+                  color: AppTheme.beige.withAlpha(150),
                   size: screenWidth * 0.015, // the normal size
                   activeSize: screenWidth * 0.025, // the active size
                   space: screenWidth * 0.02, // the space between them
@@ -85,93 +100,74 @@ class _ApartmentDetailsScreenState extends State<ApartmentDetailsScreen>
 
               //  left/right arrows
               control: SwiperControl(
-                color: Colors.white.withAlpha(150),
-                disableColor: Colors.white.withAlpha(150),
+                color: AppTheme.beige.withAlpha(150),
+                disableColor: AppTheme.beige.withAlpha(150),
               ),
             ),
           ),
 
           // the tabs
           Container(
-            margin: EdgeInsets.only(top: 10, left: 10, right: 10, bottom: 10),
+            margin: EdgeInsets.only(top: 10, left: 8, right: 8),
             width: double.infinity,
-            height: screenHeight * 0.4,
-            child: TabContainerFocus(
+            height: screenHeight * 0.5,
+            
+            child: TabContainer(
               controller: _tabController,
-              // focusDecoration: BoxDecoration(
-              //   border: Border.all(color: cs.primary, width: 3),
-              //   color: cs.primary,
+
+              tabEdge: TabEdge.top, // where the tabs appear
+              tabsStart: 0, // where they start (0.1 = 10%)
+              tabsEnd: 1, // where they end
+              // tabMaxLength: screenWidth * 0.2, // length means the width of the tab ... the default is the best
+
+              borderRadius: BorderRadius.circular(8), // for the entire container
+              tabBorderRadius: BorderRadius.circular(8), // only for the tabs
+              childPadding: const EdgeInsets.only(top: 1), // for the content
+
+              // this doesn't do anything
+              // selectedTextStyle: TextStyle(
+              //   color: Colors.yellow,
+              //   fontSize: screenWidth * 0.045,
               // ),
-              // focusPadding: const EdgeInsets.all(10),
+              // unselectedTextStyle: TextStyle(
+              //   color: cs.tertiary,
+              //   fontSize: screenWidth * 0.04,
+              // ),
 
-              child: TabContainer(
-                controller: _tabController,
+              // the colors of the tabs in order
+              colors: [
+                cs.primary.withAlpha(120),
+                cs.primary.withAlpha(120),
+                cs.primary.withAlpha(120),
+                cs.primary.withAlpha(120),
+                cs.primary.withAlpha(120),
+              ],
 
-                tabEdge: TabEdge.left, // where the tabs appear
-                tabsStart: 0.1, // where they start (0.1 = 10%)
-                tabsEnd: 0.9, // where they end
-                tabMaxLength: screenHeight * 0.2, // the tabs are vertical => length means the width of the tab
+              // the titles
+              tabs: [
+                createTabIcon(path: "assets/icons/info_icon.png",
+                    index: _tabController.index, value: 0, cs: cs),
 
-                borderRadius: BorderRadius.circular(16), // for the entire container
-                tabBorderRadius: BorderRadius.circular(16), // only for the tabs
-                childPadding: const EdgeInsets.all(10), // for the content
+                createTabIcon(path: "assets/icons/star_icon.png",
+                    index: _tabController.index, value: 1, cs: cs),
 
-                selectedTextStyle: TextStyle(
-                  color: cs.primary,
-                  fontSize: screenWidth * 0.045,
-                ),
-                unselectedTextStyle: TextStyle(
-                  color: cs.tertiary,
-                  fontSize: screenWidth * 0.04,
-                ),
+                createTabIcon(path: "assets/icons/calendar_icon.png",
+                    index: _tabController.index, value: 2, cs: cs),
 
-                // the colors of the tabs in order
-                colors: [
-                  cs.primary,
-                  cs.primary,
-                  cs.primary,
-                ],
+                createTabIcon(path: "assets/icons/location_icon.png",
+                    index: _tabController.index, value: 3, cs: cs),
 
-                // the titles
-                tabs: [
-                  ImageIcon(
-                    AssetImage("assets/icons/info_icon.png"),
-                    color: cs.onPrimary,
-                  ),
-                  ImageIcon(
-                    AssetImage("assets/icons/star_icon.png"),
-                    color: cs.onPrimary,
-                  ),
-                  ImageIcon(
-                    AssetImage("assets/icons/more_icon.png"),
-                    color: cs.onPrimary,
-                  ),
-                ],
+                createTabIcon(path: "assets/icons/bookmark_icon.png",
+                    index: _tabController.index, value: 4, cs: cs),
+              ],
 
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("Location :   ${widget.apartment.location}",
-                      style: TextStyle(
-                          color: cs.onPrimary,
-                          fontWeight: FontWeight.w900,
-                          fontSize: screenWidth * 0.045),),
-                      Text("Price :   ${widget.apartment.price}",
-                      style: TextStyle(
-                          color: cs.onPrimary,
-                          fontWeight: FontWeight.w900,
-                          fontSize: screenWidth * 0.045),)
-                    ],
-                  ),
-                  Container(
-                    child: Text('rating'),
-                  ),
-                  Container(
-                    child: Text('map and other stuff'),
-                  ),
-                ],
-              ),
+              children: [
+                Text('info'),
+                Text('rating'),
+                Text('calendar'),
+                Text('map + location'),
+                Text('more'),
+              ],
             ),
           )
         ],
@@ -179,3 +175,27 @@ class _ApartmentDetailsScreenState extends State<ApartmentDetailsScreen>
     );
   }
 }
+
+ImageIcon createTabIcon ({required String path, required int index, required int value, required ColorScheme cs}){
+  return ImageIcon(
+    AssetImage(path),
+    color: index == value
+        ? cs.onPrimary
+        : cs.primary.withAlpha(160),
+    size: index == value
+        ? 30
+        : 20,
+  );
+
+  // this was the code for each icon
+  // ImageIcon(
+  //   AssetImage("assets/icons/calendar_icon.png"),
+  //   color: _tabController.index == 2
+  //       ? iconsActive
+  //       : iconsDisabled,
+  //   size: _tabController.index == 2
+  //       ? activeSize
+  //       : disabledSize,
+  // ),
+}
+

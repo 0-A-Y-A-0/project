@@ -44,6 +44,7 @@ dependencies:
   super_cupertino_navigation_bar: ^2.1.2
   card_swiper: ^3.0.1
   tab_container: ^3.5.3
+  flutter_native_splash: ^2.4.7
 
 dev_dependencies:
   flutter_test:
@@ -104,3 +105,24 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+
+flutter_native_splash:
+  # the splash screen theme doesn't get affected by the app, it's decided by the phone theme
+  # if we change anything here we do :  flutter pub run flutter_native_splash:create
+  # then it's good to do flutter pub get
+  # the splash screen icon should be around 300 x 300 png (after testing :) )
+  color: "#CEBEBE"
+  image: assets/icons/splash_test_icon.png
+
+  color_dark: "#6D2E3C"
+  image_dark: assets/icons/splash_test_icon.png
+
+  android: true
+  ios: false
+
+  android_12:
+    color: "#CEBEBE"
+    image: assets/icons/splash_test_icon.png
+
+    color_dark: "#6D2E3C"
+    image_dark: assets/icons/splash_test_icon.png

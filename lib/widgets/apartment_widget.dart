@@ -67,16 +67,24 @@ class _ApartmentWidgetState extends State<ApartmentWidget> {
                             begin: Alignment.bottomCenter,
                             end: Alignment.topCenter,
                           ),
-                          border: Border(
-                            bottom: BorderSide(
-                              color: cs.brightness == Brightness.light
-                                  ? cs.secondary
-                                  : Color.alphaBlend(
-                                Colors.black.withAlpha(30),
-                                cs.secondary,
-                              ),
-                              width: 2,
+                        ),
+                      ),
+                    ),
+
+                    // the left border
+                    Container(
+                      width: double.infinity,
+                      height: screenHeight * 0.3,
+                      decoration: BoxDecoration(
+                        border: Border(
+                          left: BorderSide(
+                            color: cs.brightness == Brightness.light
+                                ? cs.secondary
+                                : Color.alphaBlend(
+                              Colors.black.withAlpha(30),
+                              cs.secondary,
                             ),
+                            width: 3,
                           ),
                         ),
                       ),

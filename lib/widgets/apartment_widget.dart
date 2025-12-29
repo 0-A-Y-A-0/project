@@ -103,7 +103,9 @@ class _ApartmentWidgetState extends State<ApartmentWidget> {
                             style: TextStyle(
                                 color: cs.onPrimary,
                                 fontWeight: FontWeight.w900,
-                                fontSize: screenWidth * 0.045),
+                                fontSize: screenWidth * 0.045,
+                                fontFamily: 'BellotaText',
+                            ),
                           ),
 
                           Text(
@@ -111,7 +113,9 @@ class _ApartmentWidgetState extends State<ApartmentWidget> {
                             style: TextStyle(
                                 color: cs.onPrimary,
                                 fontWeight: FontWeight.w700,
-                                fontSize: screenWidth * 0.045),
+                                fontSize: screenWidth * 0.045,
+                                fontFamily: 'BellotaText',
+                            ),
                           )
                         ],
                       )

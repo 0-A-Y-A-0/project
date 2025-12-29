@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:project/models/aprtment.dart';
 import 'package:project/widgets/apartment_widget.dart';
+import 'package:project/widgets/filter_button.dart';
 import 'package:super_cupertino_navigation_bar/super_cupertino_navigation_bar.dart';
 
 class SearchScreen extends StatelessWidget {
@@ -9,6 +10,9 @@ class SearchScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme ;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       backgroundColor: cs.onPrimary,
 
@@ -43,7 +47,7 @@ class SearchScreen extends StatelessWidget {
               // the cancel button
               cancelTextStyle: TextStyle(
                 color: cs.primary.withAlpha(150),
-                fontFamily: 'Monoglyceride',
+                fontFamily: 'BellotaText', // it doesn't respond to the font
               ),
 
               // the text we write
@@ -80,7 +84,21 @@ class SearchScreen extends StatelessWidget {
             bottom:
             SuperAppBarBottom(
               enabled: true,
-              height: 1,
+              height: screenHeight * 0.08,
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child:
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    // spacing: 4,
+                    children: [
+                      FilterButton(label: "Price"),
+                      FilterButton(label: "Rating"),
+                      FilterButton(label: "Location"),
+                      FilterButton(label: "Other"),
+                    ],
+                  )
+              )
             ),
 
             // the border at the bottom
@@ -107,6 +125,29 @@ class SearchScreen extends StatelessWidget {
             height: 200);
           },
         ),
+      ),
+    );
+  }
+
+  Container createFilterButton(){
+    return Container(
+      height: 42,
+      padding: EdgeInsets.only(left: 4, bottom: 8),
+      child: FilterChip(
+        label: const Text("Price"),
+        avatar: const Icon(
+          Icons.arrow_downward,
+          size: 18,
+        ),
+        // side: BorderSide(
+        //   color: Colors.grey,
+        //   width: 1.5,
+        // ),
+        padding: EdgeInsets.all(1),
+        selected: false,
+        onSelected: (value) {
+
+        },
       ),
     );
   }

@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
-import 'package:project/models/aprtment.dart';
+import 'package:project/models/Apartment.dart';
 import 'package:project/screens/apartment_details_screen.dart';
 
 class ApartmentWidget extends StatefulWidget {
@@ -45,7 +45,7 @@ class _ApartmentWidgetState extends State<ApartmentWidget> {
                   children: [
                     // the apartment image
                     Image.asset(
-                      widget.apartment.imgPath,
+                      widget.apartment.photos.isEmpty ? "assets/images/apartments/test.jpg" : widget.apartment.photos[0],
                       width: double.infinity,
                       height: screenHeight * 0.3,
                       fit: BoxFit.cover,
@@ -91,7 +91,7 @@ class _ApartmentWidgetState extends State<ApartmentWidget> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
-                            widget.apartment.location,
+                            widget.apartment.makeAddress(),
                             style: TextStyle(
                                 color: cs.onPrimary,
                                 fontWeight: FontWeight.w900,
@@ -99,7 +99,7 @@ class _ApartmentWidgetState extends State<ApartmentWidget> {
                           ),
 
                           Text(
-                            "${widget.apartment.price} \$",
+                            "${widget.apartment.rent_price_per_night} \$",
                             style: TextStyle(
                                 color: cs.onPrimary,
                                 fontWeight: FontWeight.w700,

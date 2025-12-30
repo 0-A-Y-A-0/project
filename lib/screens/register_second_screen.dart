@@ -7,7 +7,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:project/screens/register_first_screen.dart';
 import 'package:project/widgets/date_text_field.dart';
 import 'package:project/widgets/primary_button.dart';
 import 'package:project/widgets/upload_box.dart';

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:project/models/aprtment.dart';
+import 'package:project/models/Apartment.dart';
 import 'package:project/widgets/apartment_widget.dart';
 import 'package:super_cupertino_navigation_bar/super_cupertino_navigation_bar.dart';
 
@@ -103,8 +103,7 @@ class SearchScreen extends StatelessWidget {
             //   height: 200,
             //   color: cs.primary,
             // );
-            return ApartmentWidget(apartment: Apartment( "Jdaydet artouz", 100, "assets/images/apartments/test.jpg"),
-            height: 200);
+            return ApartmentWidget(apartment: Apartment( governorate: Governorate.Damascus,city: "here",street:"rfe",building_number: "32",floor: 3, apartment_number: 1, number_of_bedrooms: 2, number_of_bathrooms: 1, area_sq_meters: 100, description_en: "Beautiful apartment", rent_price_per_night: 100.0), height: 200);  
           },
         ),
       ),

@@ -56,10 +56,17 @@ class _MainScreenState extends State<MainScreen> {
       decoration: NavBarDecoration(
         border: Border(
           top: BorderSide(
-            color: cs.secondary.withAlpha(200),
+            color: cs.secondary,
             width: 2,
           ),
         ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withAlpha(150),
+            blurRadius: 10,
+            offset: Offset(0, 0),
+          ),
+        ],
       ),
 
       // this is ctrl c ctrl v from the READ ME ...  its just applying the animations

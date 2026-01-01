@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
 class FilterButton extends StatefulWidget {
-  const FilterButton({super.key, required this.label});
+  const FilterButton({super.key, required this.label, this.withIcon = true});
   final String label;
+  final bool withIcon; // if we want the icon or not
 
   @override
   State<FilterButton> createState() => _FilterButtonState();
@@ -30,11 +31,13 @@ class _FilterButtonState extends State<FilterButton> {
                   fontFamily: 'BellotaText',
                 ),
                 ),
-                avatar: ImageIcon(
+
+                // if we want the icon or not ... i don't know ... it might be useful
+                avatar: widget.withIcon ? ImageIcon(
                   AssetImage("assets/icons/down_icon.png"),
                   size: 18,
                   color: cs.primary,
-                ),
+                ) : null ,
 
                 backgroundColor: cs.primary.withAlpha(15),
 

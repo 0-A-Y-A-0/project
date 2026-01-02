@@ -3,17 +3,25 @@ import 'dart:ffi';
 import 'package:flutter/material.dart';
 
 class FilterButton extends StatefulWidget {
-  const FilterButton({super.key, required this.label, this.withIcon = true});
+  const FilterButton({
+    super.key,
+    required this.label,
+    required this.options,
+    required this.onSelected,
+  });
 
-  final String label;
-  final bool withIcon; // if we want the icon or not
+  final String label; // the filter name
+  final List<String> options;
+  final void Function(String value) onSelected; // to link with providers
 
   @override
   State<FilterButton> createState() => _FilterButtonState();
 }
 
 class _FilterButtonState extends State<FilterButton> {
-  bool isSelected = false;
+  // later when we connect this with the provider we should pass this value
+  String? _selectedValue; // this to store the choice and know if the filter is on or not
+  // _selectedValue!= null => active / is selected
 
   @override
   Widget build(BuildContext context) {
@@ -21,86 +29,121 @@ class _FilterButtonState extends State<FilterButton> {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
-    String? selectedOption;
+    return Padding(
+      padding: EdgeInsets.only(left: 10),
 
-    return Container(
-      // the height of the button
-      height: screenHeight * 0.08, // 42
-      padding: EdgeInsets.only(left: 8, bottom: 8),
-      // the button itself
-      child: FilterChip(
-        label: Text(
-          widget.label,
-          style: TextStyle(
-            color: cs.primary,
-            fontWeight: FontWeight.w600,
-            fontFamily: 'BellotaText',
+      child: OutlinedButton(
+        // the style .. nothing to talk about here
+        style: OutlinedButton.styleFrom(
+          backgroundColor: cs.onPrimary.withAlpha(180),
+          side: BorderSide(
+            color: _selectedValue != null
+                ? cs.primary.withAlpha(200) // is selected => visible border
+                : Colors.transparent,
+            width: 1.5,
           ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         ),
 
-        // if we want the icon or not ... i don't know ... it might be useful
-        avatar: ImageIcon(
-                AssetImage("assets/icons/down_icon.png"),
-                size: 18,
-                color: cs.primary,
-              ),
+        // here we gonna show the bottom sheet and options
+        onPressed: showOptions,
 
-        backgroundColor: cs.primary.withAlpha(15),
-
-        // changing the border id selected
-        side: BorderSide(
-          color: isSelected ? cs.primary : cs.onPrimary,
-          width: isSelected ? 1 : 0.5,
-        ),
-
-        selected: isSelected,
-        onSelected: (value) async {
-          // the widget that appears from the bottom (it takes its child's height)
-          // the value inside <> its the value we gonna return to the backend
-          final result = await showModalBottomSheet<int>(
-            context: context,
-            isScrollControlled: true,
-
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+        // this button works like this ... it takes the components as children
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ImageIcon(
+              AssetImage("assets/icons/down_icon.png"),
+              size: screenWidth * 0.07,
+              color: cs.primary.withAlpha(200),
             ),
 
-            // here we add the child depending on the type
-            builder: (context) {
-              return Container(
-                  // height: 50
-                width: double.infinity,
-                padding: EdgeInsets.all(16),
-                child: DropdownButton<String>(
-                  isExpanded: true,
-                  menuWidth: double.infinity,
-                    value: selectedOption,
-                    items: ["Option 1", "Option 2", "Option 3"]
-                        .map((e) => DropdownMenuItem(
-                      value: e,
-                      child: Text(e),
-                    ))
-                        .toList(),
-                    onChanged: (value) {
-                        selectedOption = value;
-                        print("changed");
-                    },
-                  hint: Text("Select an option"),
+            SizedBox(width: screenWidth * 0.02),
+
+            Text(
+              widget.label,
+              style: TextStyle(
+                color: cs.primary,
+                fontWeight: FontWeight.w600,
+                fontSize: screenWidth * 0.045,
+                fontFamily: 'BellotaText',
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void showOptions() {
+    showModalBottomSheet(
+
+      context: context,
+
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+
+      // here the widget inside the bottom sheet
+      builder: (context) {
+        final cs = Theme.of(context).colorScheme;
+        final screenWidth = MediaQuery.of(context).size.width;
+        final screenHeight = MediaQuery.of(context).size.height;
+
+        return Container(
+          // i forced the height so it doesn't appear too big
+          height: screenHeight * 0.1 * widget.options.length, // 0.1 is the size of the tile (after testing oc :) )
+          padding: EdgeInsets.only(right: 10, left: 10, top: 10),
+
+          child: ListView.separated(
+            separatorBuilder: (_, __) => Divider(
+              height: 1,
+              color: cs.brightness == Brightness.dark
+                  ? Colors.grey.withAlpha(50)
+                  : Colors.grey.withAlpha(150),
+            ),
+
+            itemCount: widget.options.length,
+
+            itemBuilder: (context, index) {
+              final option = widget.options[index];
+
+              return ListTile(
+                title: Text(
+                    option,
+                  style: TextStyle(
+                    color: cs.primary,
+                    fontWeight: FontWeight.w700,
+                    fontSize: screenWidth * 0.05,
+                    fontFamily: 'BellotaText',
+                  ),
                 ),
 
+                // change bg color when selected
+                tileColor: option == _selectedValue
+                    ? cs.primary.withAlpha(40)
+                    : null,
+
+                //
+                onTap: () {
+                  setState(() {
+                    _selectedValue = option; // it makes it not null => button active
+                  });
+
+                  // here we do the function we sent (the linking part)
+                  // we send the option to the function to use it
+                  widget.onSelected(option);
+
+                  // to close the sheet after we chose anything
+                  Navigator.pop(context);
+                },
               );
             },
-          );
 
-          // changing the status
-          if (result != null || selectedOption != null) {
-            setState(() {
-              isSelected = true;
-              print("idk what the hell should happen here");
-            });
-          }
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }

@@ -18,10 +18,8 @@ class _ApartmentWidgetState extends State<ApartmentWidget> {
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme ;
-
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-
 
     return
       Container(
@@ -31,10 +29,9 @@ class _ApartmentWidgetState extends State<ApartmentWidget> {
           boxShadow: [
             BoxShadow(
               color: Colors.black.withAlpha(cs.brightness == Brightness.light
-              ? 50 : 150),
-              blurRadius: cs.brightness == Brightness.light
-                  ? screenWidth * 0.02 : screenWidth * 0.03, // the size
-              offset: Offset(0, 0), // x y
+              ? 100 : 150),
+              blurRadius: screenWidth * 0.03,
+              offset: Offset(0, 0),
             ),
           ],
         ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:project/models/Apartment.dart';
 import 'package:project/widgets/apartment_widget.dart';
 import 'package:project/widgets/filter_button.dart';
+import 'package:project/widgets/location_filter_button.dart';
 import 'package:super_cupertino_navigation_bar/super_cupertino_navigation_bar.dart';
 
 class SearchScreen extends StatelessWidget {
@@ -19,7 +20,7 @@ class SearchScreen extends StatelessWidget {
       body: SuperScaffold(
           appBar: SuperAppBar(
             // we make  it transparent to make a cool effect ... i'm a genius i know🦄
-            backgroundColor: cs.onPrimary.withAlpha(150),
+            backgroundColor: cs.onPrimary.withAlpha(140),
 
             // a fixed title
             title: Text("My App",
@@ -92,17 +93,48 @@ class SearchScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     // spacing: 4,
                     children: [
-                      FilterButton(label: "Price"),
-                      FilterButton(label: "Rating"),
-                      FilterButton(label: "Location"),
-                      FilterButton(label: "Other"),
+
+                      LocationFilterButton(
+                          governorates: ["D", "A", "S", "L"], // if we duplicate items bad things happen
+                          cities: ["D", "A", "S", "L2"],
+                          onGovernorateSelected: (option){
+                            print("changed ----- $option");
+                          },
+                          onCitySelected: (option){
+                            print("changed ----- $option");
+                          },
+                      ),
+
+                      FilterButton(
+                          label: "Price",
+                        options: [
+                          "Less than 1000\$",
+                          "Between 1000\$ and 2500\$",
+                          "More than 2500\$ "
+                        ],
+                        onSelected: (option){
+                            print("changed ----- $option");
+                        },
+                      ),
+
+                      FilterButton(
+                        label: "Rating",
+                        options: [
+                          "Less than ☆☆☆",
+                          "Between ☆☆ and ☆☆☆☆",
+                        ],
+                        onSelected: (option){
+                          print("changed ----- $option");
+                        },
+                      ),
+
+
                     ],
                   )
               )
             ),
 
             // the border at the bottom
-            // i think we'll connect this with the filter provider later ... idk
             border: Border(
               bottom: BorderSide(
                 color: cs.onPrimary,
@@ -115,38 +147,9 @@ class SearchScreen extends StatelessWidget {
         body: ListView.builder(
           itemCount: 5,
           itemBuilder: (context, index) {
-            // return Container(
-            //   margin: EdgeInsets.all(15),
-            //   width: double.infinity,
-            //   height: 200,
-            //   color: cs.primary,
-            // );
             return ApartmentWidget(apartment: Apartment( governorate: Governorate.Damascus,city: "here",street:"rfe",building_number: "32",floor: 3, apartment_number: 1, number_of_bedrooms: 2, number_of_bathrooms: 1, area_sq_meters: 100, description_en: "Beautiful apartment", rent_price_per_night: 100.0), height: 200);  
           },
         ),
-      ),
-    );
-  }
-
-  Container createFilterButton(){
-    return Container(
-      height: 42,
-      padding: EdgeInsets.only(left: 4, bottom: 8),
-      child: FilterChip(
-        label: const Text("Price"),
-        avatar: const Icon(
-          Icons.arrow_downward,
-          size: 18,
-        ),
-        // side: BorderSide(
-        //   color: Colors.grey,
-        //   width: 1.5,
-        // ),
-        padding: EdgeInsets.all(1),
-        selected: false,
-        onSelected: (value) {
-
-        },
       ),
     );
   }

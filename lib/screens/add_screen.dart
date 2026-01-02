@@ -312,9 +312,11 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
                         // Governorate dropdown
                         DropdownButtonFormField<Governorate>(
                           initialValue: _gov,
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
                             labelText: 'Governorate',
-                            border: OutlineInputBorder(),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12)
+                            ),
                           ),
                           items: Governorate.values
                               .map(
@@ -333,9 +335,11 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
                         // City
                         TextFormField(
                           controller: _cityCtrl,
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
                             labelText: 'City',
-                            border: OutlineInputBorder(),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12)
+                            ),
                           ),
                           validator: (v) => (v == null || v.trim().isEmpty)
                               ? 'City is required'
@@ -346,9 +350,11 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
                         // Street
                         TextFormField(
                           controller: _streetCtrl,
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
                             labelText: 'Street',
-                            border: OutlineInputBorder(),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12)
+                            ),
                           ),
                           validator: (v) => (v == null || v.trim().isEmpty)
                               ? 'Street is required'
@@ -362,9 +368,11 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
                             Expanded(
                               child: TextFormField(
                                 controller: _buildingCtrl,
-                                decoration: const InputDecoration(
+                                decoration: InputDecoration(
                                   labelText: 'Building number',
-                                  border: OutlineInputBorder(),
+                                  border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(12)
+                                  ),
                                 ),
                                 validator: (v) =>
                                     (v == null || v.trim().isEmpty)
@@ -376,9 +384,11 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
                             Expanded(
                               child: TextFormField(
                                 controller: _floorCtrl,
-                                decoration: const InputDecoration(
+                                decoration: InputDecoration(
                                   labelText: 'Floor',
-                                  border: OutlineInputBorder(),
+                                  border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(12)
+                                  ),
                                 ),
                                 keyboardType: TextInputType.number,
                                 inputFormatters: [
@@ -397,9 +407,11 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
                         // Apartment number
                         TextFormField(
                           controller: _aptNumCtrl,
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
                             labelText: 'Apartment number',
-                            border: OutlineInputBorder(),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12)
+                            ),
                           ),
                           keyboardType: TextInputType.number,
                           inputFormatters: [
@@ -441,9 +453,11 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
                             Expanded(
                               child: DropdownButtonFormField<int>(
                                 initialValue: _bedrooms,
-                                decoration: const InputDecoration(
+                                decoration: InputDecoration(
                                   labelText: 'Bedrooms',
-                                  border: OutlineInputBorder(),
+                                  border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(12)
+                                  ),
                                 ),
                                 items: nums
                                     .map(
@@ -461,9 +475,11 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
                             Expanded(
                               child: DropdownButtonFormField<int>(
                                 initialValue: _bathrooms,
-                                decoration: const InputDecoration(
+                                decoration: InputDecoration(
                                   labelText: 'Bathrooms',
-                                  border: OutlineInputBorder(),
+                                  border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(12)
+                                  ),
                                 ),
                                 items: nums
                                     .map(
@@ -485,9 +501,11 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
                         // Area
                         TextFormField(
                           controller: _areaCtrl,
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
                             labelText: 'Area (m²)',
-                            border: OutlineInputBorder(),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12)
+                            ),
                           ),
                           keyboardType: const TextInputType.numberWithOptions(
                             decimal: true,
@@ -520,9 +538,11 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
                       children: [
                         TextFormField(
                           controller: _priceCtrl,
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
                             labelText: 'Rent price per night',
-                            border: OutlineInputBorder(),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12)
+                            ),
                           ),
                           keyboardType: const TextInputType.numberWithOptions(
                             decimal: true,
@@ -544,9 +564,11 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
 
                         TextFormField(
                           controller: _descCtrl,
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
                             labelText: 'Description',
-                            border: OutlineInputBorder(),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12)
+                            ),
                             alignLabelWithHint: true,
                           ),
                           minLines: 4,

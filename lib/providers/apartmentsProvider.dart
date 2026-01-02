@@ -3,12 +3,8 @@ import 'package:project/providers/dio_provider.dart';
 import 'package:project/models/Apartment.dart';
 import 'package:dio/dio.dart';
 
-
-final apartmentsProvider =
-    NotifierProvider<ApartmentsNotifier, AsyncValue<List<Apartment>>>(//very lovely provider gives built in error loading and success
-  ApartmentsNotifier.new,
-);
-
+// this should be async notifier ... easier
+// the whole class should be edited
 class ApartmentsNotifier extends Notifier<AsyncValue<List<Apartment>>> {
   @override
   AsyncValue<List<Apartment>> build() {
@@ -68,6 +64,13 @@ class ApartmentsNotifier extends Notifier<AsyncValue<List<Apartment>>> {
     state = result;
   }
 }
+
+final apartmentsProvider =
+NotifierProvider<ApartmentsNotifier, AsyncValue<List<Apartment>>>(//very lovely provider gives built in error loading and success
+  ApartmentsNotifier.new,
+);
+
+
 
 
 

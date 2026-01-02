@@ -19,7 +19,7 @@ class ListContainer extends StatelessWidget {
           color: cs.onPrimary,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-              color: cs.primary.withAlpha(200),
+              color: cs.onPrimary,
               width: 1
           ),
           boxShadow: [

@@ -136,7 +136,7 @@ class ProfileScreen extends StatelessWidget {
                 ),
 
                 createDivider(
-                    cs.brightness == ThemeMode.dark ? Colors.grey.withAlpha(50) : Colors.grey.withAlpha(150)
+                    cs.brightness == Brightness.dark ? Colors.grey.withAlpha(50) : Colors.grey.withAlpha(150)
                 ),
 
                 ListButton(
@@ -148,7 +148,7 @@ class ProfileScreen extends StatelessWidget {
                 ),
 
                 createDivider(
-                    cs.brightness == ThemeMode.dark ? Colors.grey.withAlpha(50) : Colors.grey.withAlpha(150)
+                    cs.brightness == Brightness.dark ? Colors.grey.withAlpha(50) : Colors.grey.withAlpha(150)
                 ),
 
                 ListButton(
@@ -187,7 +187,7 @@ class ProfileScreen extends StatelessWidget {
                 ),
 
                 createDivider(
-                    cs.brightness == ThemeMode.dark ? Colors.grey.withAlpha(50) : Colors.grey.withAlpha(150)
+                    cs.brightness == Brightness.dark ? Colors.grey.withAlpha(50) : Colors.grey.withAlpha(150)
                 ),
 
                 Stack(
@@ -254,7 +254,7 @@ class ProfileScreen extends StatelessWidget {
                 ),
 
                 createDivider(
-                    cs.brightness == ThemeMode.dark ? Colors.grey.withAlpha(50) : Colors.grey.withAlpha(150)
+                    cs.brightness == Brightness.dark ? Colors.grey.withAlpha(50) : Colors.grey.withAlpha(150)
                 ),
 
                 ListButton(
@@ -266,7 +266,7 @@ class ProfileScreen extends StatelessWidget {
                 ),
 
                 createDivider(
-                    cs.brightness == ThemeMode.dark ? Colors.grey.withAlpha(50) : Colors.grey.withAlpha(150)
+                    cs.brightness == Brightness.dark ? Colors.grey.withAlpha(50) : Colors.grey.withAlpha(150)
                 ),
 
                 ListButton(

@@ -31,9 +31,10 @@ class _ApartmentWidgetState extends State<ApartmentWidget> {
           boxShadow: [
             BoxShadow(
               color: Colors.black.withAlpha(cs.brightness == Brightness.light
-              ? 100 : 150),
-              blurRadius: screenWidth * 0.03,
-              offset: Offset(0, 0),
+              ? 50 : 150),
+              blurRadius: cs.brightness == Brightness.light
+                  ? screenWidth * 0.02 : screenWidth * 0.03, // the size
+              offset: Offset(0, 0), // x y
             ),
           ],
         ),
@@ -82,7 +83,7 @@ class _ApartmentWidgetState extends State<ApartmentWidget> {
                               Colors.black.withAlpha(30),
                               cs.secondary,
                             ),
-                            width: 4,
+                            width: 3,
                           ),
                         ),
                       ),

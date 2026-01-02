@@ -1,7 +1,7 @@
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:project/components/theme.dart';
-import 'package:project/models/aprtment.dart';
+import 'package:project/models/Apartment.dart';
 import 'package:tab_container/tab_container.dart';
 
 class ApartmentDetailsScreen extends StatefulWidget {

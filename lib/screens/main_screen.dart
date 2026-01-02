@@ -23,7 +23,7 @@ class _MainScreenState extends State<MainScreen> {
     return const [
       ChatScreen(),
       SearchScreen(),
-      AddScreen(),
+      AddApartmentScreen(),
       FavScreen(),
       ProfileScreen(),
     ];

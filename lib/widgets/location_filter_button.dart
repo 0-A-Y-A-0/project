@@ -1,32 +1,45 @@
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class LocationFilterButton extends StatefulWidget {
-  const LocationFilterButton({
+import '../providers/cities_provider.dart';
+
+class LocationFilterButton extends ConsumerStatefulWidget {
+  LocationFilterButton({
     super.key,
-    required this.governorates, required this.onGovernorateSelected, required this.onCitySelected, required this.cities,
+    this.selectedGov,
+    this.selectedCity,
+    this.onSheetClosed,
   });
 
-  final List<String> governorates;
-  final List<String> cities; // i thinkkkkkkkk we chould handle the provider when we call this class
-
-  // to link with providers
-  final void Function(String gov) onGovernorateSelected;
-  final void Function(String city) onCitySelected;
-
-  // --------------------------
-  // we can add loading bools so we can use the for ui
+  int? selectedGov;
+  String? selectedCity;
+  final VoidCallback? onSheetClosed; // the function that will be done after the sheet is closed (linking)
 
   @override
-  State<LocationFilterButton> createState() => _LocationFilterButtonState();
+  ConsumerState<LocationFilterButton> createState() =>
+      _LocationFilterButtonState();
 }
 
-class _LocationFilterButtonState extends State<LocationFilterButton> {
-  String? _selectedGov;
-  String? _selectedCity;
-
-  // _selectedGov != null
+class _LocationFilterButtonState extends ConsumerState<LocationFilterButton> {
+  // govs list like the backend
+  final List<String> governorates = [
+    "Damascus",
+    "Rif Damascus",
+    "Aleppo",
+    "Homs",
+    "Hama",
+    "Latakia",
+    "Tartous",
+    "Idlib",
+    "Daraa",
+    "As Suwayda",
+    "Quneitra",
+    "Deir Ezzor",
+    "Al Hasakah",
+    "Raqqa",
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -42,12 +55,14 @@ class _LocationFilterButtonState extends State<LocationFilterButton> {
         style: OutlinedButton.styleFrom(
           backgroundColor: cs.onPrimary.withAlpha(180),
           side: BorderSide(
-            color: _selectedGov != null
+            color: widget.selectedGov != null
                 ? cs.primary.withAlpha(200) // is selected => visible border
                 : Colors.transparent,
             width: 1.5,
           ),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
         ),
 
         // here we gonna show the bottom sheet and options
@@ -83,7 +98,6 @@ class _LocationFilterButtonState extends State<LocationFilterButton> {
 
   void showOptions() {
     showModalBottomSheet(
-
       context: context,
 
       shape: const RoundedRectangleBorder(
@@ -92,94 +106,116 @@ class _LocationFilterButtonState extends State<LocationFilterButton> {
 
       // here the widget inside the bottom sheet
       builder: (context) {
+        final cs = Theme.of(context).colorScheme;
         final screenHeight = MediaQuery.of(context).size.height;
 
-        return Container(
-          // i forced the height so it doesn't appear too big
-          height: screenHeight * 0.26,
-          padding: EdgeInsets.only(right: 10, left: 10, top: 15),
-          child: Column(
-            children: [
-              // Gov dropdown
-              DropdownButtonFormField(
-                initialValue: _selectedGov,
+        return StatefulBuilder( // to make the widget stateful
+          builder: (context, setModalState) { // setState is the state of the sheet
+            return Consumer(// to make the stateful widget stateful
+              builder: (context, ref, _) {
 
-                  // for next time ... isLoading => change the text
-                  hint: Text(
-                      "Select governorate"
+                final cities = ref.watch(CitiesProvider(widget.selectedGov));
+                return Container(
+                  // i forced the height so it doesn't appear too big
+                  height: screenHeight * 0.26,
+                  padding: EdgeInsets.only(right: 10, left: 10, top: 15),
+                  child: Column(
+                    children: [
+
+                      // Gov dropdown
+                      DropdownButtonFormField(
+                        initialValue: widget.selectedGov,
+
+                        // hint: Text("Select governorate"),
+                        decoration: InputDecoration(
+                          labelText: 'Governorate',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        items: List.generate(
+                          governorates.length,
+                          (i) => DropdownMenuItem(
+                            value: i,
+                            child: Text(governorates[i]),
+                          ),
+                        ),
+
+                        // here we should add ... if isLoading => (){} (do nothing
+                        onChanged: (value) {
+                          if (value == null) return;
+
+                          print("changed ----- $value");
+
+                          // updating the sheet state
+                          setModalState(() {
+                            widget.selectedGov = value;
+                            widget.selectedCity = null;
+                          });
+
+                          // updating the button state
+                          setState(() {});
+                        },
+                      ),
+
+                      const SizedBox(height: 20),
+
+                      // Cities dropdown
+                      DropdownButtonFormField<String?>(
+                        initialValue: widget.selectedCity,
+
+                        hint: widget.selectedGov == null
+                            ? Text(
+                                "Select governorate first",
+                                style: TextStyle(
+                                  color: cs.primary.withAlpha(100),
+                                ),
+                              )
+                            : cities.isLoading
+                            ? Text("Loading...")
+                            : null,
+                        decoration: InputDecoration(
+                          labelText: "City",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+
+                        // we can add a loading widget here i think
+                        items: cities.when(
+                          data: (cities) => cities
+                              .map(
+                                (city) => DropdownMenuItem(
+                                  value: city,
+                                  child: Text(city),
+                                ),
+                              )
+                              .toList(),
+                          loading: () => [],
+                          error: (_, __) => [],
+                        ),
+
+                        // here we should add ... if isLoading => (){} (do nothing
+                        onChanged:
+                            (widget.selectedGov == null || cities.isLoading)
+                            ? null
+                            : (val) {
+                                setState(() {
+                                  widget.selectedCity = val;
+                                });
+                              },
+                      ),
+                    ],
                   ),
-                  decoration: InputDecoration(
-                    labelText: 'Governorate',
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-
-                  items: widget.governorates
-                      .map(
-                        (gov) => DropdownMenuItem(
-                      value: gov,
-                      child: Text(gov),
-                    ),
-                  ).toList(),
-
-                  // here we should add ... if isLoading => (){} (do nothing
-                  onChanged:(String? value) {
-                    if (value == null) return;
-
-                    setState(() {
-                      _selectedGov = value;
-                      _selectedCity = null; // we always reset the city after choosing a gov
-                    });
-
-                    // then we call the function we sent
-                    // linking with the provider (go fetch cities/ change filter state)
-                    widget.onGovernorateSelected(value);
-                  },
-              ),
-
-              const SizedBox(height: 20),
-
-              // Cities dropdown
-              DropdownButtonFormField(
-                initialValue: _selectedCity,
-
-                // for next time ... isLoading => change the text
-                hint: _selectedGov == null
-                ? const Text("Select governorate first")
-              : const Text("Select city"),
-                decoration: InputDecoration(
-                  labelText: 'City',
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12)
-                  ),
-                ),
-
-                items: widget.cities
-                    .map(
-                      (city) => DropdownMenuItem(
-                    value: city,
-                    child: Text(city),
-                  ),
-                ).toList(),
-
-                // here we should add ... if isLoading => (){} (do nothing
-                onChanged:(_selectedGov == null)
-                    ? null
-                    : (String? value) {
-                  if (value == null) return;
-
-                  setState(() {
-                    _selectedCity = value;
-                  });
-
-                  widget.onCitySelected(value);
-                },
-              ),
-            ],
-          ),
+                );
+              },
+            );
+          },
         );
       },
-    );
+    ).then((_) {
+      // this is after the sheet closes
+      widget.onSheetClosed!();
+    });
   }
 }

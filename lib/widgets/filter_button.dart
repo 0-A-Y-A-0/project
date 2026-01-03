@@ -3,26 +3,25 @@ import 'dart:ffi';
 import 'package:flutter/material.dart';
 
 class FilterButton extends StatefulWidget {
-  const FilterButton({
+  FilterButton({
     super.key,
     required this.label,
     required this.options,
     required this.onSelected,
+    required this.value
   });
 
   final String label; // the filter name
   final List<String> options;
-  final void Function(String value) onSelected; // to link with providers
+  final void Function() onSelected; // to link with providers
+
+  String? value; // we pass the value from the parent so we can use it freely
 
   @override
   State<FilterButton> createState() => _FilterButtonState();
 }
 
 class _FilterButtonState extends State<FilterButton> {
-  // later when we connect this with the provider we should pass this value
-  String? _selectedValue; // this to store the choice and know if the filter is on or not
-  // _selectedValue!= null => active / is selected
-
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
@@ -37,7 +36,7 @@ class _FilterButtonState extends State<FilterButton> {
         style: OutlinedButton.styleFrom(
           backgroundColor: cs.onPrimary.withAlpha(180),
           side: BorderSide(
-            color: _selectedValue != null
+            color: widget.value != null
                 ? cs.primary.withAlpha(200) // is selected => visible border
                 : Colors.transparent,
             width: 1.5,
@@ -121,19 +120,19 @@ class _FilterButtonState extends State<FilterButton> {
                 ),
 
                 // change bg color when selected
-                tileColor: option == _selectedValue
+                tileColor: option == widget.value
                     ? cs.primary.withAlpha(40)
                     : null,
 
                 //
                 onTap: () {
                   setState(() {
-                    _selectedValue = option; // it makes it not null => button active
+                    widget.value = option; // it makes it not null => button active
                   });
 
                   // here we do the function we sent (the linking part)
                   // we send the option to the function to use it
-                  widget.onSelected(option);
+                  widget.onSelected();
 
                   // to close the sheet after we chose anything
                   Navigator.pop(context);

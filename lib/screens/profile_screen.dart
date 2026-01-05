@@ -1,19 +1,24 @@
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:project/widgets/primary_button.dart';
 import 'package:project/widgets/profile_list_button.dart';
 import 'package:project/widgets/profile_list_container.dart';
 import 'package:project/widgets/theme_switch.dart';
 
-class ProfileScreen extends StatelessWidget {
+import '../providers/user_provider.dart';
+
+class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final cs = Theme.of(context).colorScheme;
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
+
+    final user = ref.watch(UserProvider);
 
     return Scaffold(
       backgroundColor: cs.onPrimary,
@@ -43,7 +48,7 @@ class ProfileScreen extends StatelessWidget {
 
                 child: ClipOval(
                   child: Image.asset(
-                    'assets/images/apartments/test.jpg',
+                    user?.photo_url ?? 'assets/images/apartments/test.jpg',
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -57,7 +62,7 @@ class ProfileScreen extends StatelessWidget {
 
                   // user name
                   Text(
-                    "Aya Hamad",
+                    "${user?.first_name} ${user?.last_name}",
                     style: TextStyle(
                       color: cs.primary,
                       fontWeight: FontWeight.w900,
@@ -72,7 +77,8 @@ class ProfileScreen extends StatelessWidget {
                     // we have to force a width so the text wrap works ... remove it if you want to see yellow flags 🚧
                     width: screenWidth * 0.46,
                     child: Text(
-                      "this is me testing the overflow text wrap i don't know what im writing i just want to fill some space and bla bla bla bla i hope its more than two lines now are you open mindu?",
+                      user!.bio! ,
+                      // "this is me testing the overflow text wrap i don't know what im writing i just want to fill some space and bla bla bla bla i hope its more than two lines now are you open mindu?",
                       style: TextStyle(
                         color: cs.primary,
                         fontWeight: FontWeight.w500,

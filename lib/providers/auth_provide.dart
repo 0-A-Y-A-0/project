@@ -5,6 +5,7 @@ import 'package:project/models/AuthState.dart';
 import 'package:dio/dio.dart';
 import 'package:project/models/User.dart';
 import 'package:project/providers/dio_provider.dart';
+import 'package:project/providers/user_provider.dart';
 
 enum AuthType { sign_in, register }
 
@@ -27,13 +28,11 @@ class AuthNotifier extends Notifier<AuthState> {
     try {
       print("is loading");
       // this is where we request
-      //final dio = Dio();
       final dio = ref.read(dioProvider); //used dio provider
 
       final response = await dio.post(
         // sign in or register url
         authType == AuthType.sign_in ? '/user/login' : '/user/register',
-        // the data as a map { name : "fas3oon", phone: 000, ...}
         data: FormData.fromMap(dataMap),
       );
 
@@ -42,7 +41,12 @@ class AuthNotifier extends Notifier<AuthState> {
         final userData = response.data['user'];
         state = AuthState(
           status: AuthStatus.completed,
-          user: User(
+          error: "no error!",
+        );
+
+        // creating the user in the user provider
+        ref.read(UserProvider.notifier).setUser(
+          User(
             phone: userData['phone']['full_phone_str'],
             token: response.data['token'],
             first_name: userData['first_name'],
@@ -51,15 +55,20 @@ class AuthNotifier extends Notifier<AuthState> {
             photo_url: userData['legal_photo_url'],
             doc_url: userData['legal_doc_url'],
           ),
-          error: "no error!",
         );
+
       } else if (response.statusCode == 201) {
         print('register completed');
         // if it succeeded && register, is waiting and store the user
         final userData = response.data['user'];
         state = AuthState(
           status: AuthStatus.waiting,
-          user: User(
+          error: "wait for the admin to accept your account",
+        );
+
+        // creating the user in the user provider
+        ref.read(UserProvider.notifier).setUser(
+          User(
             phone: userData['phone']['full_phone_str'],
             first_name: userData['first_name'],
             last_name: userData['last_name'],
@@ -67,7 +76,6 @@ class AuthNotifier extends Notifier<AuthState> {
             photo_url: userData['legal_photo_url'],
             doc_url: userData['legal_doc_url'],
           ),
-          error: "wait for the admin to accept your account",
         );
       } else {
         print(response.statusCode);
@@ -94,7 +102,10 @@ class AuthNotifier extends Notifier<AuthState> {
   void startPolling() {
     _pollingTimer?.cancel();
     print("started polling");
-    String? phone = state.user?.getPhone();
+
+    final user = ref.watch(UserProvider);
+
+    String? phone = user?.phone;
     print(phone);
 
     _pollingTimer = Timer.periodic(const Duration(seconds: 5), (_) async {

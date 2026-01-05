@@ -133,7 +133,7 @@ class SignInScreen extends ConsumerWidget {
                   ),
                 ),
 
-                SizedBox(height: screenHeight * 0.11),
+                SizedBox(height: screenHeight * 0.075),
 
                 Text(
                   "Phone Number",

@@ -6,7 +6,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'package:project/models/Apartment.dart';
+import 'package:project/models/Governorates.dart';
 import 'package:project/providers/apartmentsProvider.dart';
+
+import '../providers/cities_provider.dart';
 
 class AddApartmentScreen extends ConsumerStatefulWidget {
   const AddApartmentScreen({super.key});
@@ -20,11 +23,11 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
   final _formKey = GlobalKey<FormState>();
 
   // dropdown values
-  Governorate? _gov;
+  int? _gov;
+  int? _city;
   int? _bedrooms;
   int? _bathrooms;
 
-  final _cityCtrl = TextEditingController();
   final _streetCtrl = TextEditingController();
   final _buildingCtrl = TextEditingController();
   final _floorCtrl = TextEditingController();
@@ -81,33 +84,36 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
     final price = double.parse(_priceCtrl.text.trim());
 
     // create Apartment model
-    final apartment = Apartment(
-      governorate: _gov!,
-      city: _cityCtrl.text.trim(),
-      street: _streetCtrl.text.trim(),
-      building_number: _buildingCtrl.text.trim(),
-      floor: floor,
-      apartment_number: aptNum,
-      number_of_bedrooms: _bedrooms!,
-      number_of_bathrooms: _bathrooms!,
-      area_sq_meters: areaAsInt,
-      description_en: _descCtrl.text.trim(),
-      rent_price_per_night: price,
-    );
+    // final apartment = Apartment(
+    //   govIndex: _gov!,
+    //   city: _city!,
+    //   street: _streetCtrl.text.trim(),
+    //   building_number: _buildingCtrl.text.trim(),
+    //   floor: floor,
+    //   apartment_number: aptNum,
+    //   number_of_bedrooms: _bedrooms!,
+    //   number_of_bathrooms: _bathrooms!,
+    //   area_sq_meters: areaAsInt,
+    //   description_en: _descCtrl.text.trim(),
+    //   rent_price_per_night: price,
+    // );
 
-    final dataMap = <String, dynamic>{...apartment.toJson()};
+    // should be edited
 
-    for (int i = 0; i < _images.length; i++) {
-      final x = _images[i];
-      dataMap['asset[$i]'] = await MultipartFile.fromFile(
-        x.path,
-        filename: x.name,
-      );
-    }
-
-    final formData = FormData.fromMap(dataMap);
-    // send to backend using provider
-    await ref.read(apartmentsProvider.notifier).createApartment(formData);
+    // final dataMap = <String, dynamic>{...apartment.toJson()};
+    //
+    // for (int i = 0; i < _images.length; i++) {
+    //   final x = _images[i];
+    //   dataMap['asset[$i]'] = await MultipartFile.fromFile(
+    //     x.path,
+    //     filename: x.name,
+    //   );
+    // }
+    //
+    // final formData = FormData.fromMap(dataMap);
+    //
+    // // send to backend using provider
+    // await ref.read(apartmentsProvider.notifier).createApartment(formData);
 
     //  check provider state (error or success)
     final st = ref.read(apartmentsProvider);
@@ -128,12 +134,12 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
     //  clear fields
     setState(() {
       _gov = null;
+      _city = null;
       _bedrooms = null;
       _bathrooms = null;
       _images.clear();
     });
 
-    _cityCtrl.clear();
     _streetCtrl.clear();
     _buildingCtrl.clear();
     _floorCtrl.clear();
@@ -155,6 +161,8 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
 
     // For bedrooms/bathrooms dropdown
     final nums = List<int>.generate(10, (i) => i + 1);
+
+    final cities = ref.watch(CitiesProvider(_gov as int?));
 
     return Scaffold(
       appBar: AppBar(
@@ -310,7 +318,7 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
                         SizedBox(height: screenHeight * 0.02),
 
                         // Governorate dropdown
-                        DropdownButtonFormField<Governorate>(
+                        DropdownButtonFormField<int>(
                           initialValue: _gov,
                           decoration: InputDecoration(
                             labelText: 'Governorate',
@@ -318,32 +326,64 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
                               borderRadius: BorderRadius.circular(12)
                             ),
                           ),
-                          items: Governorate.values
-                              .map(
-                                (g) => DropdownMenuItem(
-                                  value: g,
-                                  child: Text(g.name),
-                                ),
-                              )
-                              .toList(),
-                          onChanged: (v) => setState(() => _gov = v),
+                          items: List.generate(
+                            Governorates.governorates.length,
+                                (i) => DropdownMenuItem(
+                              value: i,
+                              child: Text(Governorates.governorates[i]),
+                            ),
+                          ),
+                          onChanged: (value) {
+                            if (value == null) return;
+
+                            print("changed ----- $value");
+
+                            // updating the sheet state
+                            setState(() {
+                              _gov = value;
+                              _city = null;
+                            });
+
+                            // updating the button state
+                            setState(() {});
+                          },
                           validator: (v) =>
-                              v == null ? 'Select governorate' : null,
+                              v == null ? 'Select a governorate' : null,
                         ),
                         SizedBox(height: screenHeight * 0.02),
 
                         // City
-                        TextFormField(
-                          controller: _cityCtrl,
+                        DropdownButtonFormField<int>(
+                          initialValue: _city,
                           decoration: InputDecoration(
-                            labelText: 'City',
+                            labelText: _gov == null ? "Select a governorate first"
+                                : cities.isLoading ? "Loading..."
+                                : 'City',
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12)
                             ),
                           ),
-                          validator: (v) => (v == null || v.trim().isEmpty)
-                              ? 'City is required'
-                              : null,
+                            items: cities.when(
+                              data: (cities) => List.generate(
+                                cities.length,
+                                    (i) => DropdownMenuItem(
+                                  value: i,
+                                  child: Text(cities[i]),
+                                ),
+                              ),
+                              loading: () => [],
+                              error: (_, __) => [],
+                            ),
+                            onChanged:
+                            (_gov == null || cities.isLoading)
+                                ? null
+                                : (val) {
+                              setState(() {
+                                _city = val;
+                              });
+                            },
+                          validator: (v) =>
+                          v == null ? 'Select a city' : null,
                         ),
                         SizedBox(height: screenHeight * 0.02),
 

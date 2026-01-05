@@ -23,9 +23,11 @@ class ApartmentsNotifier extends Notifier<AsyncValue<List<Apartment>>> {
     final List list =
         (raw is Map && raw['data'] is List) ? raw['data'] as List : raw as List;
 
-    return list
-        .map((e) => Apartment.fromJson(Map<String, dynamic>.from(e)))
-        .toList();
+    // return list
+    //     .map((e) => Apartment.fromJson(Map<String, dynamic>.from(e)))
+    //     .toList();
+
+    return [];
   }
 
   Future<void> loadApartments() async {

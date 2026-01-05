@@ -57,6 +57,8 @@ class AuthNotifier extends Notifier<AuthState> {
           ),
         );
 
+        print(userData['legal_photo_url']);
+
       } else if (response.statusCode == 201) {
         print('register completed');
         // if it succeeded && register, is waiting and store the user

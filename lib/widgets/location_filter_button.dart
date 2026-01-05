@@ -3,6 +3,7 @@ import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../models/Governorates.dart';
 import '../providers/cities_provider.dart';
 
 class LocationFilterButton extends ConsumerStatefulWidget {
@@ -10,11 +11,13 @@ class LocationFilterButton extends ConsumerStatefulWidget {
     super.key,
     this.selectedGov,
     this.selectedCity,
+    this.selectedCityIndex,
     this.onSheetClosed,
   });
 
   int? selectedGov;
   String? selectedCity;
+  int? selectedCityIndex;
   final VoidCallback? onSheetClosed; // the function that will be done after the sheet is closed (linking)
 
   @override
@@ -23,23 +26,20 @@ class LocationFilterButton extends ConsumerStatefulWidget {
 }
 
 class _LocationFilterButtonState extends ConsumerState<LocationFilterButton> {
-  // govs list like the backend
-  final List<String> governorates = [
-    "Damascus",
-    "Rif Damascus",
-    "Aleppo",
-    "Homs",
-    "Hama",
-    "Latakia",
-    "Tartous",
-    "Idlib",
-    "Daraa",
-    "As Suwayda",
-    "Quneitra",
-    "Deir Ezzor",
-    "Al Hasakah",
-    "Raqqa",
-  ];
+  final List<String> governorates = Governorates.governorates;
+
+  // we should not use widget. ... so we do this
+  int? _selectedGov;
+  String? _selectedCity;
+  int? _selectedCityIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedGov = widget.selectedGov;
+    _selectedCity = widget.selectedCity;
+    _selectedCityIndex = widget.selectedCityIndex;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +55,7 @@ class _LocationFilterButtonState extends ConsumerState<LocationFilterButton> {
         style: OutlinedButton.styleFrom(
           backgroundColor: cs.onPrimary.withAlpha(180),
           side: BorderSide(
-            color: widget.selectedGov != null
+            color: _selectedGov != null
                 ? cs.primary.withAlpha(200) // is selected => visible border
                 : Colors.transparent,
             width: 1.5,
@@ -114,7 +114,7 @@ class _LocationFilterButtonState extends ConsumerState<LocationFilterButton> {
             return Consumer(// to make the stateful widget stateful
               builder: (context, ref, _) {
 
-                final cities = ref.watch(CitiesProvider(widget.selectedGov));
+                final cities = ref.watch(CitiesProvider(_selectedGov));
                 return Container(
                   // i forced the height so it doesn't appear too big
                   height: screenHeight * 0.26,
@@ -124,7 +124,7 @@ class _LocationFilterButtonState extends ConsumerState<LocationFilterButton> {
 
                       // Gov dropdown
                       DropdownButtonFormField(
-                        initialValue: widget.selectedGov,
+                        initialValue: _selectedGov,
 
                         // hint: Text("Select governorate"),
                         decoration: InputDecoration(
@@ -141,7 +141,7 @@ class _LocationFilterButtonState extends ConsumerState<LocationFilterButton> {
                           ),
                         ),
 
-                        // here we should add ... if isLoading => (){} (do nothing
+                        // here we should add ... if isLoading => (){} (do nothing)
                         onChanged: (value) {
                           if (value == null) return;
 
@@ -149,8 +149,9 @@ class _LocationFilterButtonState extends ConsumerState<LocationFilterButton> {
 
                           // updating the sheet state
                           setModalState(() {
-                            widget.selectedGov = value;
-                            widget.selectedCity = null;
+                            _selectedCity = null;
+                            _selectedCityIndex = null;
+                            _selectedGov = value;
                           });
 
                           // updating the button state
@@ -162,9 +163,20 @@ class _LocationFilterButtonState extends ConsumerState<LocationFilterButton> {
 
                       // Cities dropdown
                       DropdownButtonFormField<String?>(
-                        initialValue: widget.selectedCity,
+                        // this forces the widget to refresh each time selectedGov changes
+                        // without it an error will happen when we select a city then select another gov
+                        key: ValueKey(_selectedGov),
+                        initialValue: cities.when(
+                          data: (list) {
+                            if (_selectedCity == null) return null;
+                            if (!list.contains(_selectedCity)) return null;
+                            return _selectedCity;
+                          },
+                          loading: () => null,
+                          error: (_, __) => null,
+                        ),
 
-                        hint: widget.selectedGov == null
+                        hint: _selectedGov == null
                             ? Text(
                                 "Select governorate first",
                                 style: TextStyle(
@@ -197,12 +209,17 @@ class _LocationFilterButtonState extends ConsumerState<LocationFilterButton> {
 
                         // here we should add ... if isLoading => (){} (do nothing
                         onChanged:
-                            (widget.selectedGov == null || cities.isLoading)
+                            (_selectedGov == null || cities.isLoading)
                             ? null
                             : (val) {
+                              if (val == null) return;
+
                                 setState(() {
-                                  widget.selectedCity = val;
+                                  _selectedCity = val;
+                                  _selectedCityIndex=  cities.value!.indexOf(val);
                                 });
+
+                                // to take the city index
                               },
                       ),
                     ],

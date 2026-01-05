@@ -5,6 +5,8 @@ import 'package:project/widgets/filter_button.dart';
 import 'package:project/widgets/location_filter_button.dart';
 import 'package:super_cupertino_navigation_bar/super_cupertino_navigation_bar.dart';
 
+import '../models/Governorates.dart';
+
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
 
@@ -17,6 +19,7 @@ class _SearchScreenState extends State<SearchScreen> {
   // the filters values to be used later
   int? selectedGovNum;
   String? selectedCity;
+  int? selectedCityIndex;
   String? priceValue;
   String? rateValue;
 
@@ -112,6 +115,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   LocationFilterButton(
                     selectedGov: selectedGovNum,
                     selectedCity: selectedCity,
+                    selectedCityIndex: selectedCityIndex,
                     onSheetClosed: () {
                       print("sheet closed!! we should link here");
                     },
@@ -152,7 +156,7 @@ class _SearchScreenState extends State<SearchScreen> {
           itemBuilder: (context, index) {
             return ApartmentWidget(
               apartment: Apartment(
-                governorate: Governorate.Damascus,
+                governorate: 0,
                 city: "here",
                 street: "rfe",
                 building_number: "32",
@@ -198,6 +202,7 @@ class _SearchScreenState extends State<SearchScreen> {
           onPressed: () {
             selectedGovNum = null;
             selectedCity = null;
+            selectedCityIndex = null;
             priceValue = null;
             priceValue = null;
 

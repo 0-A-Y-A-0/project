@@ -26,6 +26,8 @@ class _SearchScreenState extends State<SearchScreen> {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
+    final isRtl = Directionality.of(context) == TextDirection.rtl;
+
     return Scaffold(
       backgroundColor: cs.onPrimary,
 
@@ -47,7 +49,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
           // the icon next to the title
           actions: Container(
-            margin: EdgeInsets.only(right: 20, top: 10),
+            margin: EdgeInsetsDirectional.only(end: screenWidth * 0.06, top: screenHeight * 0.007),
             child: ImageIcon(
               AssetImage('assets/icons/filter_icon.png'),
               size: 24,
@@ -102,12 +104,13 @@ class _SearchScreenState extends State<SearchScreen> {
             height: screenHeight * 0.08,
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
+              reverse: isRtl,//starts from "start" side in rtl because row somehow already understands rtl ltr
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 // spacing: 4,
                 children: [
 
-                  createClearButton(),
+                  createClearButton(screenWidth),//so it uses media query
 
                   LocationFilterButton(
                     selectedGov: selectedGovNum,
@@ -172,9 +175,9 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 
-  Padding createClearButton(){
+  Padding createClearButton(double screenWidth){
     return Padding(
-        padding: EdgeInsets.only(left: 10),
+        padding: EdgeInsetsDirectional.only(start: screenWidth * 0.06),
 
         child: OutlinedButton(
           style: OutlinedButton.styleFrom(

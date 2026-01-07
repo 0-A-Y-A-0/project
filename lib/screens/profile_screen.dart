@@ -1,7 +1,4 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
-import 'package:project/widgets/primary_button.dart';
 import 'package:project/widgets/profile_list_button.dart';
 import 'package:project/widgets/profile_list_container.dart';
 import 'package:project/widgets/theme_switch.dart';

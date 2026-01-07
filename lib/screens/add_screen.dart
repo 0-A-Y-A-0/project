@@ -181,6 +181,11 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
               children: [
                 // ---------------- PHOTOS ----------------
                 Card(
+                  elevation: 12, 
+                  shadowColor: Colors.black,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(screenWidth * 0.03),
+                  ),
                   child: Padding(
                     padding: EdgeInsets.all(screenWidth * 0.03),
                     child: Column(
@@ -293,6 +298,11 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
 
                 // ---------------- ADDRESS ----------------
                 Card(
+                  elevation: 12, 
+                  shadowColor: Colors.black,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(screenWidth * 0.03),
+                  ),
                   child: Padding(
                     padding: EdgeInsets.all(screenWidth * 0.03),
                     child: Column(
@@ -315,7 +325,7 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
                           decoration: InputDecoration(
                             labelText: 'Governorate',
                             border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12)
+                              borderRadius: BorderRadius.circular(12),
                             ),
                           ),
                           items: Governorate.values
@@ -338,7 +348,7 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
                           decoration: InputDecoration(
                             labelText: 'City',
                             border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12)
+                              borderRadius: BorderRadius.circular(12),
                             ),
                           ),
                           validator: (v) => (v == null || v.trim().isEmpty)
@@ -353,7 +363,7 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
                           decoration: InputDecoration(
                             labelText: 'Street',
                             border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12)
+                              borderRadius: BorderRadius.circular(12),
                             ),
                           ),
                           validator: (v) => (v == null || v.trim().isEmpty)
@@ -371,7 +381,7 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
                                 decoration: InputDecoration(
                                   labelText: 'Building number',
                                   border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(12)
+                                    borderRadius: BorderRadius.circular(12),
                                   ),
                                 ),
                                 validator: (v) =>
@@ -387,7 +397,7 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
                                 decoration: InputDecoration(
                                   labelText: 'Floor',
                                   border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(12)
+                                    borderRadius: BorderRadius.circular(12),
                                   ),
                                 ),
                                 keyboardType: TextInputType.number,
@@ -410,7 +420,7 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
                           decoration: InputDecoration(
                             labelText: 'Apartment number',
                             border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12)
+                              borderRadius: BorderRadius.circular(12),
                             ),
                           ),
                           keyboardType: TextInputType.number,
@@ -431,6 +441,11 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
 
                 // ---------------- AMENITIES ----------------
                 Card(
+                  elevation: 12, 
+                  shadowColor: Colors.black,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(screenWidth * 0.03),
+                  ),
                   child: Padding(
                     padding: EdgeInsets.all(screenWidth * 0.03),
                     child: Column(
@@ -456,7 +471,7 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
                                 decoration: InputDecoration(
                                   labelText: 'Bedrooms',
                                   border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(12)
+                                    borderRadius: BorderRadius.circular(12),
                                   ),
                                 ),
                                 items: nums
@@ -478,7 +493,7 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
                                 decoration: InputDecoration(
                                   labelText: 'Bathrooms',
                                   border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(12)
+                                    borderRadius: BorderRadius.circular(12),
                                   ),
                                 ),
                                 items: nums
@@ -504,7 +519,7 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
                           decoration: InputDecoration(
                             labelText: 'Area (m²)',
                             border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12)
+                              borderRadius: BorderRadius.circular(12),
                             ),
                           ),
                           keyboardType: const TextInputType.numberWithOptions(
@@ -532,6 +547,11 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
 
                 // ---------------- DESCRIPTION + PRICE ----------------
                 Card(
+                  elevation: 12, 
+                  shadowColor: Colors.black,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(screenWidth * 0.03),
+                  ),
                   child: Padding(
                     padding: EdgeInsets.all(screenWidth * 0.03),
                     child: Column(
@@ -541,7 +561,7 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
                           decoration: InputDecoration(
                             labelText: 'Rent price per night',
                             border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12)
+                              borderRadius: BorderRadius.circular(12),
                             ),
                           ),
                           keyboardType: const TextInputType.numberWithOptions(
@@ -567,7 +587,7 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
                           decoration: InputDecoration(
                             labelText: 'Description',
                             border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12)
+                              borderRadius: BorderRadius.circular(12),
                             ),
                             alignLabelWithHint: true,
                           ),

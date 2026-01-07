@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:project/models/Apartment.dart';
 import 'package:project/widgets/apartment_widget.dart';
 import 'package:project/widgets/filter_button.dart';
@@ -6,28 +7,35 @@ import 'package:project/widgets/location_filter_button.dart';
 import 'package:super_cupertino_navigation_bar/super_cupertino_navigation_bar.dart';
 
 import '../models/Governorates.dart';
+import '../providers/apartmentsProvider.dart';
 
-class SearchScreen extends StatefulWidget {
+class SearchScreen extends ConsumerStatefulWidget {
   const SearchScreen({super.key});
 
   @override
-  State<SearchScreen> createState() => _SearchScreenState();
+  ConsumerState<SearchScreen> createState() => _SearchScreenState();
 }
 
-class _SearchScreenState extends State<SearchScreen> {
+class _SearchScreenState extends ConsumerState<SearchScreen> {
 
   // the filters values to be used later
   int? selectedGovNum;
   String? selectedCity;
   int? selectedCityIndex;
-  String? priceValue;
-  String? rateValue;
+  int? priceValue;
+  int? minPrice;
+  int? maxPrice;
+  int? rateValue;
+  int? minRate;
+  int? maxRate;
 
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
+
+    final apartments = ref.watch(ApartmentsProvider);
 
     return Scaffold(
       backgroundColor: cs.onPrimary,
@@ -52,8 +60,8 @@ class _SearchScreenState extends State<SearchScreen> {
           actions: Container(
             margin: EdgeInsets.only(right: 20, top: 10),
             child: ImageIcon(
-              AssetImage('assets/icons/filter_icon.png'),
-              size: 24,
+              AssetImage('assets/icons/bell_icon.png'),
+              size: 25,
               color: cs.primary,
             ),
           ),
@@ -116,8 +124,22 @@ class _SearchScreenState extends State<SearchScreen> {
                     selectedGov: selectedGovNum,
                     selectedCity: selectedCity,
                     selectedCityIndex: selectedCityIndex,
-                    onSheetClosed: () {
+                    onSheetClosed: (selectedGov, selectedCity) {
+                      setState(() {
+                        selectedGovNum = selectedGov;
+                        this.selectedCity = selectedCity;
+                      });
+
                       print("sheet closed!! we should link here");
+                      print("$selectedGovNum       $selectedCity");
+                      ref.read(ApartmentsProvider.notifier).fetchApartments(
+                          dataMap: {
+                            'governorate' : selectedGovNum,
+                            'city' : selectedCity,
+                            'min_price' : minPrice,
+                            'max_price' : maxPrice,
+                          }
+                      );
                     },
                   ),
 
@@ -125,12 +147,34 @@ class _SearchScreenState extends State<SearchScreen> {
                     value: priceValue,
                     label: "Price",
                     options: [
-                      "Less than 1000\$",
-                      "Between 1000\$ and 2500\$",
-                      "More than 2500\$ ",
+                      "Less than 100\$",
+                      "Between 100\$ and 250\$",
+                      "More than 250\$ ",
                     ],
-                    onSelected: () {
-                      print("changed -----");
+                    onSelected: (index) {
+                      setState(() {
+                        priceValue = index;
+
+                        if (index == 0) {
+                          minPrice = 0;
+                          maxPrice = 100;
+                        } else if (index == 1) {
+                          minPrice = 100;
+                          maxPrice = 250;
+                        } else if (index == 2) {
+                          minPrice = 250;
+                          maxPrice = 500; // this should be infinity
+                        }
+                      });
+                      print ("$minPrice          $maxPrice");
+                      ref.read(ApartmentsProvider.notifier).fetchApartments(
+                          dataMap: {
+                            'governorate' : selectedGovNum,
+                            'city' : selectedCity,
+                            'min_price' : minPrice,
+                            'max_price' : maxPrice,
+                          }
+                      );
                     },
                   ),
 
@@ -138,8 +182,8 @@ class _SearchScreenState extends State<SearchScreen> {
                     value: rateValue,
                     label: "Rating",
                     options: ["Less than ☆☆☆", "Between ☆☆ and ☆☆☆☆"],
-                    onSelected: () {
-                      print("changed -----");
+                    onSelected: (index) {
+                      print("changed ----- $index");
                     },
                   ),
                 ],
@@ -151,26 +195,33 @@ class _SearchScreenState extends State<SearchScreen> {
           border: Border(bottom: BorderSide(color: cs.onPrimary, width: 0)),
         ),
 
-        body: ListView.builder(
-          itemCount: 5,
-          itemBuilder: (context, index) {
-            return ApartmentWidget(
-              apartment: Apartment(
-                governorate: 0,
-                city: "here",
-                street: "rfe",
-                building_number: "32",
-                floor: 3,
-                apartment_number: 1,
-                number_of_bedrooms: 2,
-                number_of_bathrooms: 1,
-                area_sq_meters: 100,
-                description_en: "Beautiful apartment",
-                rent_price_per_night: 100.0,
-              ),
-              height: 200,
-            );
-          },
+        body: apartments.when(
+            loading: () {
+              return Container(
+                alignment: Alignment.center,
+                height: 50,
+                child: CircularProgressIndicator(),
+              );
+            },
+            error: (_, __) {
+              return Center(child: Text("there's an error, try again later :(")) ;
+            },
+            data: (list){
+              if (list.isEmpty)
+                return Center(
+                  child: Text("No apartment matches your search"),
+                );
+              
+              return ListView.builder(
+                itemCount: list.length,
+                itemBuilder: (context, index) {
+                  return ApartmentWidget(
+                    apartment: list[index] ,
+                    height: 200,
+                  );
+                },
+              );
+            },
         ),
       ),
     );
@@ -204,7 +255,20 @@ class _SearchScreenState extends State<SearchScreen> {
             selectedCity = null;
             selectedCityIndex = null;
             priceValue = null;
-            priceValue = null;
+            minPrice = null;
+            maxPrice = null;
+            rateValue = null;
+            minRate = null;
+            maxRate = null;
+
+            ref.read(ApartmentsProvider.notifier).fetchApartments(
+                dataMap: {
+                  'governorate' : selectedGovNum,
+                  'city' : selectedCity,
+                  'min_price' : minPrice,
+                  'max_price' : maxPrice,
+                }
+            );
 
             // to refresh everything
             setState(() {

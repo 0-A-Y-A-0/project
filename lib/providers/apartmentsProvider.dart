@@ -1,100 +1,75 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:project/providers/dio_provider.dart';
-import 'package:project/models/Apartment.dart';
-import 'package:dio/dio.dart';
+import 'package:project/models/Governorates.dart';
+import '../models/Apartment.dart';
+import 'dio_provider.dart';
 
-// this should be async notifier ... easier
-// the whole class should be edited
-class ApartmentsNotifier extends Notifier<AsyncValue<List<Apartment>>> {
+class ApartmentsNotifier extends AsyncNotifier<List<Apartment>> {
   @override
-  AsyncValue<List<Apartment>> build() {
-    // load once when provider is first created
-    Future.microtask(loadApartments);
-    return const AsyncLoading();
-  }
-
-  Future<List<Apartment>> _getApartmentsList() async {
+  Future<List<Apartment>> build() async {
     final dio = ref.read(dioProvider);
-    final res = await dio.get('/apartments');
 
-    final raw = res.data;
+    final response = await dio.get('/apartments/filter');
 
-    // backend can return [ ... ] OR { data: [ ... ] }
-    final List list =
-        (raw is Map && raw['data'] is List) ? raw['data'] as List : raw as List;
+    final List list = response.data;
 
-    // return list
-    //     .map((e) => Apartment.fromJson(Map<String, dynamic>.from(e)))
-    //     .toList();
+    return list.map<Apartment>((json) {
+      final address = json['address'] ?? {};
 
-    return [];
+      return Apartment(
+        id: json['apartment_id'],
+        governorate: Governorates.governorates[address['governorate']],
+        city: address['city'],
+        street: address['street'],
+        rent_price_per_night: double.parse(json['price_per_night'].toString()),
+        photos: json['assets'] == null ? [] : [json['assets']],
+      );
+    }).toList();
+    // return fetchApartments(dataMap: {});
   }
 
-  Future<void> loadApartments() async {
+  Future<void> fetchApartments({
+    required Map<String, dynamic> dataMap,
+  }) async {
     state = const AsyncLoading();
-    state = await AsyncValue.guard(() async {
-      return await _getApartmentsList();
-    });
+    print("loading..............");
+
+    final dio = ref.read(dioProvider);
+
+    final response = await dio.get(
+      '/apartments/filter',
+      queryParameters: dataMap,
+    );
+
+    final List list = response.data;
+
+    state = AsyncData(
+      list.map<Apartment>((json) {
+        final address = json['address'];
+
+        return Apartment(
+          id: json['apartment_id'],
+          governorate: Governorates.governorates[address['governorate']],
+          city: address['city'],
+          street: address['street'],
+          rent_price_per_night:
+          double.parse(json['price_per_night'].toString()),
+          photos: json['assets'] == null
+              ? []
+              : (json['assets'] is List
+              ? List<String>.from(json['assets'])
+              : [json['assets'].toString()]),
+        );
+      }).toList(),
+    );
+
+    print("done.................");
   }
 
-  Future<void> refresh() => loadApartments();
 
-  Future<void> createApartment(FormData payload) async {
-    final oldList = state.asData?.value;
 
-    // keep current list visible while sending request
-    if (oldList != null) {
-      state = AsyncData(oldList);
-    }
-
-    final result = await AsyncValue.guard(() async {
-      final dio = ref.read(dioProvider);
-
-      // create
-      await dio.post('/apartments/create', data: payload);
-
-      // then reload list
-      return await _getApartmentsList();
-    });
-
-    // if create failed, keep old list visible
-    if (result.hasError && oldList != null) {
-      state = AsyncData(oldList);
-      return;
-    }
-
-    state = result;
-  }
 }
 
-final apartmentsProvider =
-NotifierProvider<ApartmentsNotifier, AsyncValue<List<Apartment>>>(//very lovely provider gives built in error loading and success
+final ApartmentsProvider =
+AsyncNotifierProvider<ApartmentsNotifier, List<Apartment>>(
   ApartmentsNotifier.new,
 );
-
-
-
-
-
-// import 'package:flutter_riverpod/flutter_riverpod.dart';
-// import 'package:project/providers/dio_provider.dart';
-// import '../../models/apartment.dart';
-
-// final apartmentsListProvider = FutureProvider<List<Apartment>>((ref) async {
-//   final dio = ref.read(dioProvider);
-//   final res = await dio.get('/apartments'); // endpoint
-//   final data = (res.data as List);
-//   return data.map((e) => Apartment.fromJson(e as Map<String, dynamic>)).toList();
-// });
-
-//this is how we use it in our screen :)
-// final apartmentsList = ref.watch(apartmentsListProvider);
-
-// return apartmentsList.when(
-//   loading: () => //widget to show loading,
-//   error: (e, _) => //widget to show error,
-//   data: (list) => ListView.builder(
-//     itemCount: list.length,
-//     itemBuilder: (_, i) => ListTile(title: Text(list[i].title)),
-//   ),
-// );

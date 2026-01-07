@@ -40,11 +40,20 @@ class _ApartmentWidgetState extends State<ApartmentWidget> {
                 child: Stack(
                   children: [
                     // the apartment image
-                    Image.asset(
-                      widget.apartment.photos.isEmpty ? "assets/images/apartments/test.jpg" : widget.apartment.photos[0],
+                    Image.network(
+                      widget.apartment.photos.isEmpty ? "assets/images/apartments/test.jpg" : "http://10.0.2.2:8000/storage/${widget.apartment.photos[0]}",
                       width: double.infinity,
                       height: screenHeight * 0.3,
                       fit: BoxFit.cover,
+
+                        errorBuilder: (_, __, ___) {
+                          return Image.asset(
+                            'assets/images/apartments/test.jpg',
+                            width: double.infinity,
+                            height: screenHeight * 0.3,
+                            fit: BoxFit.cover,
+                          );
+                        }
                     ),
 
                     // the gradiant
@@ -91,29 +100,33 @@ class _ApartmentWidgetState extends State<ApartmentWidget> {
                       // this tells the widget where to start from
                       bottom: 5,
                       left: 15,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            widget.apartment.makeAddress(),
-                            style: TextStyle(
-                                color: cs.onPrimary,
-                                fontWeight: FontWeight.w900,
-                                fontSize: screenWidth * 0.045,
-                                fontFamily: 'BellotaText',
+                      child: SizedBox(
+                        width: screenWidth * 0.55,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              widget.apartment.makeAddress(),
+                              style: TextStyle(
+                                  color: cs.onPrimary,
+                                  fontWeight: FontWeight.w900,
+                                  fontSize: screenWidth * 0.045,
+                                  fontFamily: 'BellotaText',
+                              ),
+                              overflow: TextOverflow.ellipsis,
                             ),
-                          ),
 
-                          Text(
-                            "${widget.apartment.rent_price_per_night} \$",
-                            style: TextStyle(
-                                color: cs.onPrimary,
-                                fontWeight: FontWeight.w700,
-                                fontSize: screenWidth * 0.045,
-                                fontFamily: 'BellotaText',
-                            ),
-                          )
-                        ],
+                            Text(
+                              "${widget.apartment.rent_price_per_night} \$",
+                              style: TextStyle(
+                                  color: cs.onPrimary,
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: screenWidth * 0.045,
+                                  fontFamily: 'BellotaText',
+                              ),
+                            )
+                          ],
+                        ),
                       )
                     ),
 

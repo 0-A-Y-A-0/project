@@ -19,6 +19,10 @@ class ProfileScreen extends ConsumerWidget {
     final screenHeight = MediaQuery.of(context).size.height;
 
     final user = ref.watch(UserProvider);
+    final imageUrl = user?.photo_url != null
+        ? 'http://10.0.2.2:8000/storage/${user!.photo_url}'
+        : null;
+
 
     return Scaffold(
       backgroundColor: cs.onPrimary,
@@ -32,7 +36,7 @@ class ProfileScreen extends ConsumerWidget {
               Container(
                 height: screenHeight / 4,
                 width: screenHeight / 4,
-                margin: EdgeInsets.only(left: 10, right: 15),
+                margin: EdgeInsets.only(left: screenWidth * 0.02, right: screenWidth * 0.03),
 
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
@@ -47,8 +51,19 @@ class ProfileScreen extends ConsumerWidget {
                 ),
 
                 child: ClipOval(
-                  child: Image.asset(
-                    user?.photo_url ?? 'assets/images/apartments/test.jpg',
+                  child: imageUrl != null
+                      ? Image.network(
+                    imageUrl,
+                    fit: BoxFit.cover,
+                    errorBuilder: (_, __, ___) {
+                      return Image.asset(
+                        'assets/images/apartments/test.jpg',
+                        fit: BoxFit.cover,
+                      );
+                    },
+                  )
+                      : Image.asset(
+                    'assets/images/apartments/test.jpg',
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -226,7 +241,7 @@ class ProfileScreen extends ConsumerWidget {
                   ),
 
                     Positioned.fill(
-                      right: 15, // the right gap
+                      right: screenWidth * 0.03, // the right gap
                       bottom: 2,
                       top: 1,
                       child: Material(

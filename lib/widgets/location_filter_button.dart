@@ -18,7 +18,8 @@ class LocationFilterButton extends ConsumerStatefulWidget {
   int? selectedGov;
   String? selectedCity;
   int? selectedCityIndex;
-  final VoidCallback? onSheetClosed; // the function that will be done after the sheet is closed (linking)
+  final void Function(int? selectedGov, String? selectedCity)? onSheetClosed;
+  // the function that will be done after the sheet is closed (linking)
 
   @override
   ConsumerState<LocationFilterButton> createState() =>
@@ -27,19 +28,6 @@ class LocationFilterButton extends ConsumerStatefulWidget {
 
 class _LocationFilterButtonState extends ConsumerState<LocationFilterButton> {
   final List<String> governorates = Governorates.governorates;
-
-  // we should not use widget. ... so we do this
-  int? _selectedGov;
-  String? _selectedCity;
-  int? _selectedCityIndex;
-
-  @override
-  void initState() {
-    super.initState();
-    _selectedGov = widget.selectedGov;
-    _selectedCity = widget.selectedCity;
-    _selectedCityIndex = widget.selectedCityIndex;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +43,7 @@ class _LocationFilterButtonState extends ConsumerState<LocationFilterButton> {
         style: OutlinedButton.styleFrom(
           backgroundColor: cs.onPrimary.withAlpha(180),
           side: BorderSide(
-            color: _selectedGov != null
+            color: widget.selectedGov != null
                 ? cs.primary.withAlpha(200) // is selected => visible border
                 : Colors.transparent,
             width: 1.5,
@@ -114,7 +102,7 @@ class _LocationFilterButtonState extends ConsumerState<LocationFilterButton> {
             return Consumer(// to make the stateful widget stateful
               builder: (context, ref, _) {
 
-                final cities = ref.watch(CitiesProvider(_selectedGov));
+                final cities = ref.watch(CitiesProvider(widget.selectedGov));
                 return Container(
                   // i forced the height so it doesn't appear too big
                   height: screenHeight * 0.26,
@@ -124,7 +112,7 @@ class _LocationFilterButtonState extends ConsumerState<LocationFilterButton> {
 
                       // Gov dropdown
                       DropdownButtonFormField(
-                        initialValue: _selectedGov,
+                        initialValue: widget.selectedGov,
 
                         // hint: Text("Select governorate"),
                         decoration: InputDecoration(
@@ -149,9 +137,9 @@ class _LocationFilterButtonState extends ConsumerState<LocationFilterButton> {
 
                           // updating the sheet state
                           setModalState(() {
-                            _selectedCity = null;
-                            _selectedCityIndex = null;
-                            _selectedGov = value;
+                            widget.selectedCity = null;
+                            widget.selectedCityIndex = null;
+                            widget.selectedGov = value;
                           });
 
                           // updating the button state
@@ -165,18 +153,18 @@ class _LocationFilterButtonState extends ConsumerState<LocationFilterButton> {
                       DropdownButtonFormField<String?>(
                         // this forces the widget to refresh each time selectedGov changes
                         // without it an error will happen when we select a city then select another gov
-                        key: ValueKey(_selectedGov),
+                        key: ValueKey(widget.selectedGov),
                         initialValue: cities.when(
                           data: (list) {
-                            if (_selectedCity == null) return null;
-                            if (!list.contains(_selectedCity)) return null;
-                            return _selectedCity;
+                            if (widget.selectedCity == null) return null;
+                            if (!list.contains(widget.selectedCity)) return null;
+                            return widget.selectedCity;
                           },
                           loading: () => null,
                           error: (_, __) => null,
                         ),
 
-                        hint: _selectedGov == null
+                        hint: widget.selectedGov == null
                             ? Text(
                                 "Select governorate first",
                                 style: TextStyle(
@@ -209,14 +197,14 @@ class _LocationFilterButtonState extends ConsumerState<LocationFilterButton> {
 
                         // here we should add ... if isLoading => (){} (do nothing
                         onChanged:
-                            (_selectedGov == null || cities.isLoading)
+                            (widget.selectedGov == null || cities.isLoading)
                             ? null
                             : (val) {
                               if (val == null) return;
 
                                 setState(() {
-                                  _selectedCity = val;
-                                  _selectedCityIndex=  cities.value!.indexOf(val);
+                                  widget.selectedCity = val;
+                                  widget.selectedCityIndex =  cities.value!.indexOf(val);
                                 });
 
                                 // to take the city index
@@ -232,7 +220,9 @@ class _LocationFilterButtonState extends ConsumerState<LocationFilterButton> {
       },
     ).then((_) {
       // this is after the sheet closes
-      widget.onSheetClosed!();
+      if (widget.selectedGov != null && widget.onSheetClosed != null) {
+        widget.onSheetClosed?.call(widget.selectedGov, widget.selectedCity);
+      }
     });
   }
 }

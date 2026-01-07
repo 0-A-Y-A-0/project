@@ -116,15 +116,15 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
     // await ref.read(apartmentsProvider.notifier).createApartment(formData);
 
     //  check provider state (error or success)
-    final st = ref.read(apartmentsProvider);
+    // final st = ref.read(apartmentsProvider);
     if (!mounted) return;
 
-    if (st.hasError) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Error: ${st.error}')));
-      return;
-    }
+    // if (st.hasError) {
+    //   ScaffoldMessenger.of(
+    //     context,
+    //   ).showSnackBar(SnackBar(content: Text('Error: ${st.error}')));
+    //   return;
+    // }
 
     //  success
     ScaffoldMessenger.of(
@@ -354,7 +354,16 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
 
                         // City
                         DropdownButtonFormField<int>(
-                          initialValue: _city,
+                          key: ValueKey(_gov),
+                          initialValue: cities.when(
+                            data: (list) {
+                              if (_city == null) return null;
+                              if (!list.contains(_city)) return null;
+                              return _city;
+                            },
+                            loading: () => null,
+                            error: (_, __) => null,
+                          ),
                           decoration: InputDecoration(
                             labelText: _gov == null ? "Select a governorate first"
                                 : cities.isLoading ? "Loading..."

@@ -41,7 +41,7 @@ class _MainScreenState extends State<MainScreen> {
         createBarIcon(iconPath: 'assets/icons/chat_icon.png', activeColor: cs.primary, inactiveColor: cs.tertiary.withAlpha(125)),
         createBarIcon(iconPath: 'assets/icons/search_icon.png', activeColor: cs.primary, inactiveColor: cs.tertiary.withAlpha(125)),
         createBarIcon(iconPath: 'assets/icons/add_icon.png', activeColor: cs.primary, inactiveColor: cs.tertiary.withAlpha(125)),
-        createBarIcon(iconPath: 'assets/icons/fav_icon.png', activeColor: cs.primary, inactiveColor: cs.tertiary.withAlpha(125)),
+        createBarIcon(iconPath: 'assets/icons/key_icon.png', activeColor: cs.primary, inactiveColor: cs.tertiary.withAlpha(125)),
         createBarIcon(iconPath: 'assets/icons/profile_icon.png', activeColor: cs.primary, inactiveColor: cs.tertiary.withAlpha(125)),
       ],
       navBarStyle: NavBarStyle.style12, // the style we chose (the one with dots)

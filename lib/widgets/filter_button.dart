@@ -13,9 +13,9 @@ class FilterButton extends StatefulWidget {
 
   final String label; // the filter name
   final List<String> options;
-  final void Function() onSelected; // to link with providers
+  final void Function(int selectedIndex) onSelected; // to link with providers
 
-  String? value; // we pass the value from the parent so we can use it freely
+  int? value; // we pass the value from the parent so we can use it freely
 
   @override
   State<FilterButton> createState() => _FilterButtonState();
@@ -126,13 +126,15 @@ class _FilterButtonState extends State<FilterButton> {
 
                 //
                 onTap: () {
+                  print("changed to $index");
+
                   setState(() {
-                    widget.value = option; // it makes it not null => button active
+                    widget.value = index;// it makes it not null => button active
                   });
 
                   // here we do the function we sent (the linking part)
                   // we send the option to the function to use it
-                  widget.onSelected();
+                  widget.onSelected(index);
 
                   // to close the sheet after we chose anything
                   Navigator.pop(context);

@@ -103,7 +103,7 @@ class _ApartmentWidgetState extends State<ApartmentWidget> {
                       child: SizedBox(
                         width: screenWidth * 0.55,
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               widget.apartment.makeAddress(),
@@ -141,7 +141,7 @@ class _ApartmentWidgetState extends State<ApartmentWidget> {
                               onTap: (){
                                 print("clicked -----------------------------");
                                 PersistentNavBarNavigator.pushNewScreen(context,
-                                    screen: ApartmentDetailsScreen(apartment: widget.apartment),
+                                    screen: ApartmentDetailsScreen(apartmentId: widget.apartment.id),
                                 withNavBar: false );// to hide the navigation bar);
                               },
                               // splashColor: cs.secondary.withAlpha(50),

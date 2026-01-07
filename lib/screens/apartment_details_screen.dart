@@ -1,18 +1,20 @@
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:project/components/theme.dart';
 import 'package:project/models/Apartment.dart';
+import 'package:project/providers/apartmentDetailsProvider.dart';
 import 'package:tab_container/tab_container.dart';
 
-class ApartmentDetailsScreen extends StatefulWidget {
-  const ApartmentDetailsScreen({super.key, required this.apartment});
-  final Apartment apartment;
+class ApartmentDetailsScreen extends ConsumerStatefulWidget {
+  const ApartmentDetailsScreen({super.key, required this.apartmentId});
+  final int apartmentId;
 
   @override
-  State<ApartmentDetailsScreen> createState() => _ApartmentDetailsScreenState();
+  ConsumerState<ApartmentDetailsScreen> createState() => _ApartmentDetailsScreenState();
 }
 
-class _ApartmentDetailsScreenState extends State<ApartmentDetailsScreen>
+class _ApartmentDetailsScreenState extends ConsumerState<ApartmentDetailsScreen>
     with SingleTickerProviderStateMixin {
 
   // to add a tab :
@@ -35,6 +37,12 @@ class _ApartmentDetailsScreenState extends State<ApartmentDetailsScreen>
     _tabController.addListener(() {
       setState(() {}); // rebuild when tab changes
     });
+
+    Future.microtask(() {
+      ref
+          .read(ApartmentDetailsProvider.notifier)
+          .fetchApartmentDetails(widget.apartmentId);
+    });
   }
 
   @override
@@ -46,9 +54,18 @@ class _ApartmentDetailsScreenState extends State<ApartmentDetailsScreen>
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme ;
-
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
+
+    final apartment = ref.watch(ApartmentDetailsProvider);
+    // ref.read(ApartmentDetailsProvider.notifier).fetchApartmentDetails(widget.apartmentId);
+
+    if (apartment.value != null){
+      print(apartment.value!.governorate);
+      print(apartment.value!.city);
+      print(apartment.value!.street);
+      print(apartment.value!.description_en);
+    }
 
     return Scaffold(
       backgroundColor: cs.onPrimary,
@@ -56,7 +73,11 @@ class _ApartmentDetailsScreenState extends State<ApartmentDetailsScreen>
         backgroundColor: cs.onPrimary,
         toolbarHeight: screenHeight * 0.06,
       ),
-      body: Column(
+      body: apartment.isLoading ? Container(
+            alignment: Alignment.center,
+            child: CircularProgressIndicator(),
+          )
+          : Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // the photos
@@ -65,17 +86,26 @@ class _ApartmentDetailsScreenState extends State<ApartmentDetailsScreen>
             height: screenHeight * 0.33,
             child: Swiper(
               // similar to the listview builder
-              itemCount: 5, // it should be list.length
+              itemCount: apartment.value!.photos.length, // it should be list.length
               itemBuilder: (context, index) {
                 return ClipRRect(
                   // borderRadius: BorderRadius.circular(16),
-                  child: Image.asset(
+                  child: Image.network(
                     // we should pass the pics list here
-                        "assets/images/apartments/test.jpg",
-                        width: double.infinity,
-                        height: screenHeight * 0.33,
-                        fit: BoxFit.cover,
-                      ),
+                    "http://10.0.2.2:8000/storage/${apartment.value!.photos[index]}",
+                    width: double.infinity,
+                    height: screenHeight * 0.33,
+                    fit: BoxFit.cover,
+
+                      errorBuilder: (_, __, ___) {
+                        return Image.asset(
+                          'assets/images/apartments/test.jpg',
+                          width: double.infinity,
+                          height: screenHeight * 0.33,
+                          fit: BoxFit.cover,
+                        );
+                      }
+                  ),
                 );
               },
 
@@ -111,7 +141,7 @@ class _ApartmentDetailsScreenState extends State<ApartmentDetailsScreen>
             margin: EdgeInsets.only(top: 10, left: 8, right: 8),
             width: double.infinity,
             height: screenHeight * 0.5,
-            
+
             child: TabContainer(
               controller: _tabController,
 

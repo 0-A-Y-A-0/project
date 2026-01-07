@@ -18,7 +18,7 @@ class SearchScreen extends ConsumerStatefulWidget {
 
 class _SearchScreenState extends ConsumerState<SearchScreen> {
 
-  // the filters values to be used later
+  // the filters values
   int? selectedGovNum;
   String? selectedCity;
   int? selectedCityIndex;
@@ -125,13 +125,16 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                     selectedCity: selectedCity,
                     selectedCityIndex: selectedCityIndex,
                     onSheetClosed: (selectedGov, selectedCity) {
+
+                      // updating the values
                       setState(() {
                         selectedGovNum = selectedGov;
                         this.selectedCity = selectedCity;
                       });
 
-                      print("sheet closed!! we should link here");
                       print("$selectedGovNum       $selectedCity");
+
+                      // refreshing
                       ref.read(ApartmentsProvider.notifier).fetchApartments(
                           dataMap: {
                             'governorate' : selectedGovNum,
@@ -152,6 +155,8 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                       "More than 250\$ ",
                     ],
                     onSelected: (index) {
+
+                      // setting the values
                       setState(() {
                         priceValue = index;
 
@@ -166,7 +171,10 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                           maxPrice = 500; // this should be infinity
                         }
                       });
+
                       print ("$minPrice          $maxPrice");
+
+                      // refreshing
                       ref.read(ApartmentsProvider.notifier).fetchApartments(
                           dataMap: {
                             'governorate' : selectedGovNum,

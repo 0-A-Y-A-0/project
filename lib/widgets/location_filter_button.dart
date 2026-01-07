@@ -219,7 +219,7 @@ class _LocationFilterButtonState extends ConsumerState<LocationFilterButton> {
         );
       },
     ).then((_) {
-      // this is after the sheet closes
+      // this is after the sheet closes and only when the user changes a thing
       if (widget.selectedGov != null && widget.onSheetClosed != null) {
         widget.onSheetClosed?.call(widget.selectedGov, widget.selectedCity);
       }

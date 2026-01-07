@@ -9,6 +9,7 @@ import 'package:project/models/Apartment.dart';
 import 'package:project/models/Governorates.dart';
 import 'package:project/providers/apartmentsProvider.dart';
 
+import '../providers/addApartmentProvider.dart';
 import '../providers/cities_provider.dart';
 
 class AddApartmentScreen extends ConsumerStatefulWidget {
@@ -19,6 +20,9 @@ class AddApartmentScreen extends ConsumerStatefulWidget {
 }
 
 class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
+
+  bool _isSubmitting = false;
+
   // Form key so we can validate all fields together in one go (let's goo)(form widget is used below)
   final _formKey = GlobalKey<FormState>();
 
@@ -76,80 +80,96 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
   Future<void> _submit() async {
     final ok = _formKey.currentState?.validate() ?? false;
     if (!ok) return;
-    final floor = int.parse(_floorCtrl.text.trim());
-    final aptNum = int.parse(_aptNumCtrl.text.trim());
 
-    // area can be typed as 120.5, we store it as int in model
-    final areaAsInt = double.parse(_areaCtrl.text.trim()).round();
-    final price = double.parse(_priceCtrl.text.trim());
+    setState(() => _isSubmitting = true);
 
-    // create Apartment model
-    // final apartment = Apartment(
-    //   govIndex: _gov!,
-    //   city: _city!,
-    //   street: _streetCtrl.text.trim(),
-    //   building_number: _buildingCtrl.text.trim(),
-    //   floor: floor,
-    //   apartment_number: aptNum,
-    //   number_of_bedrooms: _bedrooms!,
-    //   number_of_bathrooms: _bathrooms!,
-    //   area_sq_meters: areaAsInt,
-    //   description_en: _descCtrl.text.trim(),
-    //   rent_price_per_night: price,
-    // );
+    try{
+      print ("inside try");
+      // final formData = FormData.fromMap({
+      //   'governorate': _gov,
+      //   'city': _city,
+      //   'street': _streetCtrl.text.trim(),
+      //   'building_number': _buildingCtrl.text.trim(),
+      //   'floor': int.parse(_floorCtrl.text.trim()),
+      //   'apartment_number': int.parse(_aptNumCtrl.text.trim()),
+      //   'number_of_bedrooms': _bedrooms,
+      //   'number_of_bathrooms': _bathrooms,
+      //   'area_sq_meters': double.parse(_areaCtrl.text.trim()).round(),
+      //   'rent_price_per_night': double.parse(_priceCtrl.text.trim()),
+      //   'description_en': _descCtrl.text.trim(),
+      //   'description_ar': _descCtrl.text.trim(),
+      //   'has_balcony': 0,
+      //   'assets': [
+      //     for (var xfile in _images)
+      //       await MultipartFile.fromFile(xfile.path, filename: xfile.name)
+      //   ],
+      // });
 
-    // should be edited
+      final formData = FormData();
 
-    // final dataMap = <String, dynamic>{...apartment.toJson()};
-    //
-    // for (int i = 0; i < _images.length; i++) {
-    //   final x = _images[i];
-    //   dataMap['asset[$i]'] = await MultipartFile.fromFile(
-    //     x.path,
-    //     filename: x.name,
-    //   );
-    // }
-    //
-    // final formData = FormData.fromMap(dataMap);
-    //
-    // // send to backend using provider
-    // await ref.read(apartmentsProvider.notifier).createApartment(formData);
+      formData.fields.addAll([
+        MapEntry('governorate', _gov.toString()),
+        MapEntry('city', _city.toString()),
+        MapEntry('street', _streetCtrl.text.trim()),
+        MapEntry('building_number', _buildingCtrl.text.trim()),
+        MapEntry('floor', _floorCtrl.text.trim()),
+        MapEntry('apartment_number', _aptNumCtrl.text.trim()),
+        MapEntry('number_of_bedrooms', _bedrooms.toString()),
+        MapEntry('number_of_bathrooms', _bathrooms.toString()),
+        MapEntry('area_sq_meters', _areaCtrl.text.trim()),
+        MapEntry('rent_price_per_night', _priceCtrl.text.trim()),
+        MapEntry('description_en', _descCtrl.text.trim()),
+        MapEntry('description_ar', _descCtrl.text.trim()),
+        MapEntry('has_balcony', 'true'),
+      ]);
 
-    //  check provider state (error or success)
-    // final st = ref.read(apartmentsProvider);
-    if (!mounted) return;
+      for (int i = 0; i < _images.length; i++) {
+        formData.files.add(
+          MapEntry(
+            'assets[]', // THIS matters
+            await MultipartFile.fromFile(
+              _images[i].path,
+              filename: _images[i].name,
+            ),
+          ),
+        );
+      }
 
-    // if (st.hasError) {
-    //   ScaffoldMessenger.of(
-    //     context,
-    //   ).showSnackBar(SnackBar(content: Text('Error: ${st.error}')));
-    //   return;
-    // }
+      final result = await ref.read(AddApartmentProvider(formData).future);
 
-    //  success
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(const SnackBar(content: Text('Apartment added')));
+      print("done inside the try/////////////////////////////");
+      //  success
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Apartment added')));
 
-    //  clear fields
-    setState(() {
-      _gov = null;
-      _city = null;
-      _bedrooms = null;
-      _bathrooms = null;
-      _images.clear();
-    });
+      //  clear fields
+      setState(() {
+        _gov = null;
+        _city = null;
+        _bedrooms = null;
+        _bathrooms = null;
+        _images.clear();
+      });
 
-    _streetCtrl.clear();
-    _buildingCtrl.clear();
-    _floorCtrl.clear();
-    _aptNumCtrl.clear();
-    _areaCtrl.clear();
-    _descCtrl.clear();
-    _priceCtrl.clear();
+      _streetCtrl.clear();
+      _buildingCtrl.clear();
+      _floorCtrl.clear();
+      _aptNumCtrl.clear();
+      _areaCtrl.clear();
+      _descCtrl.clear();
+      _priceCtrl.clear();
 
-    // close keyboard
-    FocusManager.instance.primaryFocus?.unfocus();
+      // close keyboard
+      FocusManager.instance.primaryFocus?.unfocus();
+    }catch(e){
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(e.toString())));
+    }finally {
+      if (mounted) {
+        setState(() => _isSubmitting = false);
+      }
+    }
   }
 
   @override
@@ -641,9 +661,10 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
                       backgroundColor: cs.primary,
                       foregroundColor: cs.onPrimary,
                     ),
-                    onPressed: _submit,
+                    onPressed: _isSubmitting ? null : _submit,
                     child: Text(
-                      'Add Apartment',
+                      _isSubmitting ? "Loading...."
+                      : 'Add Apartment',
                       style: TextStyle(
                         fontSize: screenWidth * 0.05,
                         fontFamily: 'Monoglyceride',

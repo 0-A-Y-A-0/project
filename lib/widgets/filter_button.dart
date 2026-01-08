@@ -27,7 +27,7 @@ class _FilterButtonState extends State<FilterButton> {
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Padding(
-      padding: EdgeInsets.only(left: 10),
+      padding: EdgeInsetsDirectional.only(start: screenWidth * 0.02),
 
       child: OutlinedButton(
         // the style .. nothing to talk about here
@@ -91,7 +91,7 @@ class _FilterButtonState extends State<FilterButton> {
         return Container(
           // i forced the height so it doesn't appear too big
           height: screenHeight * 0.1 * widget.options.length, // 0.1 is the size of the tile (after testing oc :) )
-          padding: EdgeInsets.only(right: 10, left: 10, top: 10),
+          padding: EdgeInsetsDirectional.fromSTEB(screenWidth * 0.02, screenHeight * 0.015, screenWidth * 0.02, 0),//instead of EdgeInsets.only(right: 10, left: 10, top: 10),
 
           child: ListView.separated(
             separatorBuilder: (_, __) => Divider(

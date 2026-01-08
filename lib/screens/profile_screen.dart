@@ -12,6 +12,12 @@ class ProfileScreen extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
+    final isRtl = Directionality.of(context) == TextDirection.rtl;
+     final logoutIconPath = isRtl
+        ? "assets/icons/rtl_log_out_icon.png"
+        // ? "assets/icons/rtl_forward_icon.png"
+        : "assets/icons/log_out_icon.png";
+
     return Scaffold(
       backgroundColor: cs.onPrimary,
       body: ListView(
@@ -24,8 +30,7 @@ class ProfileScreen extends StatelessWidget {
               Container(
                 height: screenHeight / 4,
                 width: screenHeight / 4,
-                margin: EdgeInsets.only(left: 10, right: 15),
-
+                margin: EdgeInsetsDirectional.only(start: 10, end: 15),
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(color: cs.secondary, width: 2),
@@ -177,7 +182,8 @@ class ProfileScreen extends StatelessWidget {
                         )
                     ),
 
-                    Spacer(flex: 1,),
+                    // Spacer(flex: 1,),
+                    SizedBox(width: screenWidth * 0.6,),
 
                     ThemeToggle(),
                   ],
@@ -192,30 +198,36 @@ class ProfileScreen extends StatelessWidget {
                     Padding(
                     padding: EdgeInsets.only(top: 10, bottom: 10),
                     child: Row(
+                    
+                      
                       children: [
                         ImageIcon(
-                          AssetImage("assets/icons/log_out_icon.png"),
+                          AssetImage(logoutIconPath),
                           color: cs.primary.withAlpha(200),
                           size: screenWidth * 0.07,
                         ),
 
                         Spacer(flex: 1,),
 
-                        Text(
-                            "Log Out",
-                            style: TextStyle(
-                              color: cs.primary,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 17,
-                              fontFamily: 'BellotaText',
-                            )
+                        Align(
+                          alignment: AlignmentDirectional.centerStart,
+                          child: Text(
+                              "Log Out",
+                              style: TextStyle(
+                                color: cs.primary,
+                                fontWeight: FontWeight.w400,
+                                fontSize: 17,
+                                fontFamily: 'BellotaText',
+                              )
+                          ),
                         ),
-
-                        Spacer(flex: 11,),
+                        // SizedBox(width: screenWidth * 0.02),
+                        Spacer(flex: 20,),
                       ],
                     ),
                   ),
 
+                    
                     Positioned.fill(
                       right: 15, // the right gap
                       bottom: 2,
@@ -304,9 +316,9 @@ class ProfileScreen extends StatelessWidget {
 
   Padding createText({required Color color, required String text}) {
     return Padding(
-      padding: const EdgeInsets.only(left: 10),
+      padding: const EdgeInsetsDirectional.only(start: 15),
       child: Align(
-        alignment: Alignment.centerLeft,
+        alignment: AlignmentDirectional.centerStart,
         child: Text(
           text,
           style: TextStyle(
@@ -315,7 +327,7 @@ class ProfileScreen extends StatelessWidget {
             fontSize: 17,
             fontFamily: 'Monoglyceride',
           ),
-          textAlign: TextAlign.end,
+          textAlign: TextAlign.start,
         ),
       ),
     );

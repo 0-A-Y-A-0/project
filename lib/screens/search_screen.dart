@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:project/generated/l10n/app_localizations.dart';
 import 'package:project/models/Apartment.dart';
 import 'package:project/widgets/apartment_widget.dart';
 import 'package:project/widgets/filter_button.dart';
 import 'package:project/widgets/location_filter_button.dart';
 import 'package:super_cupertino_navigation_bar/super_cupertino_navigation_bar.dart';
+
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -26,7 +28,7 @@ class _SearchScreenState extends State<SearchScreen> {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
-    final isRtl = Directionality.of(context) == TextDirection.rtl;
+    AppLocalizations t = AppLocalizations.of(context)!;
 
     return Scaffold(
       backgroundColor: cs.onPrimary,
@@ -38,7 +40,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
           // a fixed title
           title: Text(
-            "My App",
+            t.appName,
             style: TextStyle(
               color: cs.primary,
               fontSize: 30,
@@ -59,6 +61,8 @@ class _SearchScreenState extends State<SearchScreen> {
 
           // the search bar ... 🙂
           searchBar: SuperSearchBar(
+            placeholderText: t.search,
+            cancelButtonText: t.cancel,
             scrollBehavior: SearchBarScrollBehavior.pinned,
             // here we change the behaviour
             animationBehavior: SearchBarAnimationBehavior.steady,
@@ -90,7 +94,7 @@ class _SearchScreenState extends State<SearchScreen> {
           // so i disabled it
           largeTitle: SuperLargeTitle(
             enabled: false,
-            largeTitle: "Our App",
+            largeTitle:t.ourApp,
             textStyle: TextStyle(
               color: cs.primary,
               fontSize: 30,
@@ -104,7 +108,6 @@ class _SearchScreenState extends State<SearchScreen> {
             height: screenHeight * 0.08,
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
-              reverse: isRtl,//starts from "start" side in rtl because row somehow already understands rtl ltr
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 // spacing: 4,
@@ -122,11 +125,11 @@ class _SearchScreenState extends State<SearchScreen> {
 
                   FilterButton(
                     value: priceValue,
-                    label: "Price",
+                    label: t.price,
                     options: [
-                      "Less than 1000\$",
-                      "Between 1000\$ and 2500\$",
-                      "More than 2500\$ ",
+                      t.priceOptionLessThan1000,
+                      t.priceOptionBetween1000And2500,
+                      t.priceOptionMoreThan2500,
                     ],
                     onSelected: () {
                       print("changed -----");
@@ -135,8 +138,8 @@ class _SearchScreenState extends State<SearchScreen> {
 
                   FilterButton(
                     value: rateValue,
-                    label: "Rating",
-                    options: ["Less than ☆☆☆", "Between ☆☆ and ☆☆☆☆"],
+                    label: t.rating,
+                    options: [t.ratingOptionLessThan3, t.ratingOptionBetween2And4],
                     onSelected: () {
                       print("changed -----");
                     },
@@ -190,7 +193,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 borderRadius: BorderRadius.circular(12)),
           ),
           child: Text(
-            "Clear filters",
+            AppLocalizations.of(context)!.clearFilters,
             style: TextStyle(
               color: Theme.of(context).colorScheme.primary.withAlpha(130),
               fontWeight: FontWeight.w600,

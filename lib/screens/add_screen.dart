@@ -308,7 +308,7 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
                     child: Column(
                       children: [
                         Align(
-                          alignment: Alignment.centerLeft,
+                          alignment: AlignmentDirectional.centerStart,
                           child: Text(
                             'Address',
                             style: TextStyle(
@@ -451,7 +451,7 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
                     child: Column(
                       children: [
                         Align(
-                          alignment: Alignment.centerLeft,
+                          alignment: AlignmentDirectional.centerStart,
                           child: Text(
                             'Amenities',
                             style: TextStyle(

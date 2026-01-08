@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:project/generated/l10n/app_localizations.dart';
 import 'package:project/providers/auth_provide.dart';
 import 'package:project/widgets/my_text_field.dart';
 import '../models/AuthState.dart';
@@ -22,6 +23,7 @@ class SignInScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final signIn = ref.watch(AuthNotifierProvider); // for rebuilding ui
+    final AppLocalizations t = AppLocalizations.of(context)!;
     ref.listen<AuthState>(AuthNotifierProvider, (previous, next) {
       // to react when the state changes
       if (next.status == AuthStatus.completed) {
@@ -35,8 +37,8 @@ class SignInScreen extends ConsumerWidget {
         // Show a pop up with error message
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Text(
-              'ERROR !!! Try again later',
+            content: Text(
+              t.auth_errorTryLater,
               style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
@@ -53,8 +55,8 @@ class SignInScreen extends ConsumerWidget {
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Text(
-              'Your account has been saved successfully, wait till the admin review it then sign in',
+            content: Text(
+              t.auth_waitingReview,
               style: TextStyle(
                 color: Colors.black,
                 fontWeight: FontWeight.bold,
@@ -73,8 +75,8 @@ class SignInScreen extends ConsumerWidget {
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Text(
-              'The admin accepted your account! you can sign in',
+            content: Text(
+              t.auth_adminAccepted,
               style: TextStyle(
                 color: Color.fromARGB(255, 0, 0, 0),
                 fontWeight: FontWeight.bold,
@@ -125,7 +127,7 @@ class SignInScreen extends ConsumerWidget {
                 SizedBox(height: 100 * screenHeight / 1920),
 
                 Text(
-                  "Sign in",
+                  t.signin_button,
                   style: TextStyle(
                     color: cs.onPrimary,
                     fontSize: screenWidth * 0.15,
@@ -136,7 +138,7 @@ class SignInScreen extends ConsumerWidget {
                 SizedBox(height: screenHeight * 0.11),
 
                 Text(
-                  "Phone Number",
+                  t.signin_phoneLabel,
                   style: TextStyle(
                     color: cs.onSurface,
                     fontWeight: FontWeight.w700,
@@ -155,7 +157,7 @@ class SignInScreen extends ConsumerWidget {
                 SizedBox(height: screenHeight * 0.013),
 
                 Text(
-                  "Password",
+                  t.signin_passwordLabel,
                   style: TextStyle(
                     color: cs.onSurface,
                     fontWeight: FontWeight.w700,
@@ -173,7 +175,7 @@ class SignInScreen extends ConsumerWidget {
                 SizedBox(height: screenHeight * 0.02),
 
                 PrimaryButton(
-                  label: signIn.status == AuthStatus.loading ? "Loading ..." : "Sign In",
+                  label: signIn.status == AuthStatus.loading ? t.signin_loading : t.signin_button,
                   onPressed: () {
                     final phone = _phoneCtrl.text.trim();
                     final countryCode = phone.length >= 4 ? phone.substring(0, 4) : phone;
@@ -193,7 +195,7 @@ class SignInScreen extends ConsumerWidget {
                 SizedBox(height: screenHeight * 0.02),
 
                 Text(
-                  "Forgot password?",
+                  t.signin_forgotPassword,
                   style: TextStyle(
                     fontWeight: FontWeight.w700,
                     fontSize: screenWidth * 0.04,
@@ -209,9 +211,9 @@ class SignInScreen extends ConsumerWidget {
                       fontSize: screenHeight * 0.021,
                     ),
                     children: [
-                      const TextSpan(text: "Don't have an account?\nregister  "),
+                      TextSpan(text: t.signin_noAccount),
                       TextSpan(
-                        text: "here",
+                        text: t.signin_here,
                         style: TextStyle(
                           color: cs.secondary,
                           decoration: TextDecoration.underline,

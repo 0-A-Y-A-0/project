@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../generated/l10n/app_localizations.dart';
 import '../providers/cities_provider.dart';
 
 class LocationFilterButton extends ConsumerStatefulWidget {
@@ -44,9 +45,10 @@ class _LocationFilterButtonState extends ConsumerState<LocationFilterButton> {
     final cs = Theme.of(context).colorScheme;
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
+    final AppLocalizations t = AppLocalizations.of(context)!;
 
     return Padding(
-      padding: EdgeInsets.only(left: 10),
+      padding: EdgeInsetsDirectional.only(start: screenWidth * 0.02), //instead of EdgeInsets.only(left: 10),
 
       child: OutlinedButton(
         // the style .. nothing to talk about here
@@ -80,7 +82,7 @@ class _LocationFilterButtonState extends ConsumerState<LocationFilterButton> {
             SizedBox(width: screenWidth * 0.02),
 
             Text(
-              "Location",
+              t.location,
               style: TextStyle(
                 color: cs.primary,
                 fontWeight: FontWeight.w600,
@@ -106,6 +108,8 @@ class _LocationFilterButtonState extends ConsumerState<LocationFilterButton> {
       builder: (context) {
         final cs = Theme.of(context).colorScheme;
         final screenHeight = MediaQuery.of(context).size.height;
+        final screenWidth = MediaQuery.of(context).size.width;
+        final AppLocalizations t = AppLocalizations.of(context)!;
 
         return StatefulBuilder( // to make the widget stateful
           builder: (context, setModalState) { // setState is the state of the sheet
@@ -116,7 +120,8 @@ class _LocationFilterButtonState extends ConsumerState<LocationFilterButton> {
                 return Container(
                   // i forced the height so it doesn't appear too big
                   height: screenHeight * 0.26,
-                  padding: EdgeInsets.only(right: 10, left: 10, top: 15),
+                  padding: EdgeInsetsDirectional.only(start: 10, end: 10, top: 15),
+                  //EdgeInsetsDirectional.fromSTEB(screenWidth * 0.02, screenHeight * 0.015, screenWidth * 0.02, 0),
                   child: Column(
                     children: [
 
@@ -126,7 +131,7 @@ class _LocationFilterButtonState extends ConsumerState<LocationFilterButton> {
 
                         // hint: Text("Select governorate"),
                         decoration: InputDecoration(
-                          labelText: 'Governorate',
+                          labelText: t.governorate,
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
@@ -164,16 +169,16 @@ class _LocationFilterButtonState extends ConsumerState<LocationFilterButton> {
 
                         hint: widget.selectedGov == null
                             ? Text(
-                                "Select governorate first",
+                                t.selectGovernorateFirst,
                                 style: TextStyle(
                                   color: cs.primary.withAlpha(100),
                                 ),
                               )
                             : cities.isLoading
-                            ? Text("Loading...")
+                            ? Text(t.loading)
                             : null,
                         decoration: InputDecoration(
-                          labelText: "City",
+                          labelText: t.city,
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),

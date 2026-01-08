@@ -7,6 +7,7 @@ import 'package:project/screens/main_screen.dart';
 import 'package:project/screens/register_first_screen.dart';
 import 'package:project/screens/sign_in_screen.dart';
 import 'package:project/components/theme.dart';
+import 'package:project/generated/l10n/app_localizations.dart';
 
 void main() {
   runApp(const ProviderScope(child: watashiWaSta()));
@@ -26,15 +27,18 @@ class watashiWaSta extends ConsumerWidget {
       themeMode: theme,
       
        locale: locale,
-      supportedLocales: const [
-        Locale('en'),
-        Locale('ar'),
-      ],
-      localizationsDelegates: const [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
+
+       localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      // supportedLocales: const [
+      //   Locale('en'),
+      //   Locale('ar'),
+      // ],
+      // localizationsDelegates: const [
+      //   GlobalMaterialLocalizations.delegate,
+      //   GlobalWidgetsLocalizations.delegate,
+      //   GlobalCupertinoLocalizations.delegate,
+      // ],
       
        // consuming the theme provider let's go!
       routes: {

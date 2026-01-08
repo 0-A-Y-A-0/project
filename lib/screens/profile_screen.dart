@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:project/widgets/primary_button.dart';
@@ -24,6 +22,12 @@ class ProfileScreen extends ConsumerWidget {
         : null;
 
 
+    final isRtl = Directionality.of(context) == TextDirection.rtl;
+     final logoutIconPath = isRtl
+        ? "assets/icons/rtl_log_out_icon.png"
+        : "assets/icons/log_out_icon.png";
+
+
     return Scaffold(
       backgroundColor: cs.onPrimary,
       body: ListView(
@@ -36,7 +40,7 @@ class ProfileScreen extends ConsumerWidget {
               Container(
                 height: screenHeight / 4,
                 width: screenHeight / 4,
-                margin: EdgeInsets.only(left: screenWidth * 0.02, right: screenWidth * 0.03),
+                margin: EdgeInsetsDirectional.only(start: screenWidth * 0.02, end: screenWidth * 0.03),
 
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
@@ -201,7 +205,8 @@ class ProfileScreen extends ConsumerWidget {
                         )
                     ),
 
-                    Spacer(flex: 1,),
+                    // Spacer(flex: 1,),
+                    SizedBox(width: screenWidth * 0.6,),
 
                     ThemeToggle(),
                   ],
@@ -216,30 +221,36 @@ class ProfileScreen extends ConsumerWidget {
                     Padding(
                     padding: EdgeInsets.only(top: 10, bottom: 10),
                     child: Row(
+                    
+                      
                       children: [
                         ImageIcon(
-                          AssetImage("assets/icons/log_out_icon.png"),
+                          AssetImage(logoutIconPath),
                           color: cs.primary.withAlpha(200),
                           size: screenWidth * 0.07,
                         ),
 
                         Spacer(flex: 1,),
 
-                        Text(
-                            "Log Out",
-                            style: TextStyle(
-                              color: cs.primary,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 17,
-                              fontFamily: 'BellotaText',
-                            )
+                        Align(
+                          alignment: AlignmentDirectional.centerStart,
+                          child: Text(
+                              "Log Out",
+                              style: TextStyle(
+                                color: cs.primary,
+                                fontWeight: FontWeight.w400,
+                                fontSize: 17,
+                                fontFamily: 'BellotaText',
+                              )
+                          ),
                         ),
-
-                        Spacer(flex: 11,),
+                        // SizedBox(width: screenWidth * 0.02),
+                        Spacer(flex: 20,),
                       ],
                     ),
                   ),
 
+                    
                     Positioned.fill(
                       right: screenWidth * 0.03, // the right gap
                       bottom: 2,
@@ -328,9 +339,9 @@ class ProfileScreen extends ConsumerWidget {
 
   Padding createText({required Color color, required String text}) {
     return Padding(
-      padding: const EdgeInsets.only(left: 10),
+      padding: const EdgeInsetsDirectional.only(start: 15),
       child: Align(
-        alignment: Alignment.centerLeft,
+        alignment: AlignmentDirectional.centerStart,
         child: Text(
           text,
           style: TextStyle(
@@ -339,7 +350,7 @@ class ProfileScreen extends ConsumerWidget {
             fontSize: 17,
             fontFamily: 'Monoglyceride',
           ),
-          textAlign: TextAlign.end,
+          textAlign: TextAlign.start,
         ),
       ),
     );

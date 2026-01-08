@@ -58,13 +58,13 @@ class _ApartmentWidgetState extends State<ApartmentWidget> {
                     ),
 
                     // the gradiant
-                    Positioned(
+                    PositionedDirectional(
                       // this tells the widget where to start from ... so
                       bottom: 0,
-                      right: 0,
-                      left: 0,
+                      end: 0,
+                      start: 0,
                       child: Container(
-                        alignment: AlignmentGeometry.bottomLeft,
+                        alignment: AlignmentDirectional.bottomStart,
                         width: double.infinity,
                         height: screenHeight * 0.3 / 1.5,
                         decoration: BoxDecoration(
@@ -82,8 +82,8 @@ class _ApartmentWidgetState extends State<ApartmentWidget> {
                       width: double.infinity,
                       height: screenHeight * 0.3,
                       decoration: BoxDecoration(
-                        border: Border(
-                          left: BorderSide(
+                        border: BorderDirectional(//instead of border
+                          start: BorderSide(
                             color: cs.brightness == Brightness.light
                                 ? cs.secondary
                                 : Color.alphaBlend(
@@ -97,37 +97,34 @@ class _ApartmentWidgetState extends State<ApartmentWidget> {
                     ),
 
                     // the text
-                    Positioned(
+                    PositionedDirectional( //added directional
                       // this tells the widget where to start from
                       bottom: 5,
-                      left: 15,
-                      child: SizedBox(
-                        width: screenWidth * 0.55,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              widget.apartment.makeAddress(),
-                              style: TextStyle(
-                                  color: cs.onPrimary,
-                                  fontWeight: FontWeight.w900,
-                                  fontSize: screenWidth * 0.045,
-                                  fontFamily: 'BellotaText',
-                              ),
-                              overflow: TextOverflow.ellipsis,
+                      start:  15,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            widget.apartment.makeAddress(),
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                                color: cs.onPrimary,
+                                fontWeight: FontWeight.w900,
+                                fontSize: screenWidth * 0.045,
+                                fontFamily: 'BellotaText',
                             ),
-
-                            Text(
-                              "${widget.apartment.rent_price_per_night} \$",
-                              style: TextStyle(
-                                  color: cs.onPrimary,
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: screenWidth * 0.045,
-                                  fontFamily: 'BellotaText',
-                              ),
-                            )
-                          ],
-                        ),
+                          ),
+                          Text(
+                            "${widget.apartment.rent_price_per_night} \$",
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                                color: cs.onPrimary,
+                                fontWeight: FontWeight.w700,
+                                fontSize: screenWidth * 0.045,
+                                fontFamily: 'BellotaText',
+                            ),
+                          )
+                        ],
                       )
                     ),
 
@@ -149,9 +146,9 @@ class _ApartmentWidgetState extends State<ApartmentWidget> {
                       )),
                     ),
 
-                    Positioned(
+                    PositionedDirectional(
                       bottom: 0,
-                      right: 15,
+                      end: 15,
                       child: Row(
                         spacing: 0,
                       children: [

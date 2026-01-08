@@ -5,7 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:project/screens/register_second_screen.dart';
 import 'package:project/widgets/my_text_field.dart';
 
-import '../providers/auth_provide.dart';
+// import '../providers/auth_provide.dart';
 import '../widgets/primary_button.dart';
 
 class RegisterFirstScreen extends ConsumerWidget {
@@ -16,7 +16,7 @@ class RegisterFirstScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final register = ref.watch(AuthNotifierProvider);
+    // final register = ref.watch(AuthNotifierProvider);
 
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;

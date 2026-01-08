@@ -12,11 +12,13 @@ class ThemeToggle extends ConsumerWidget {
     final cs = Theme.of(context).colorScheme;
     final themeMode = ref.watch(ThemeNotifierProvider);
     final notifier = ref.read(ThemeNotifierProvider.notifier);
+    final screenWidth = MediaQuery.of(context).size.width;
+
 
     return Padding(
-      padding: EdgeInsets.only(top: 4, bottom: 4, right: 10),
+      padding: EdgeInsetsDirectional.only(top: 4, bottom: 4, start: screenWidth * 0.025),
       child: Align(
-        alignment: Alignment.centerRight,
+        alignment: AlignmentDirectional.centerStart,
         child: CupertinoSwitch(
           value: themeMode == ThemeMode.light,
           onChanged: (_) {

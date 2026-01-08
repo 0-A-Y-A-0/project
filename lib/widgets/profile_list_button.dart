@@ -11,7 +11,12 @@ class ListButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme ;
     final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
+
+    final isRtl = Directionality.of(context) == TextDirection.rtl; //to change icon
+
+    final forwardIconPath = isRtl
+        ? "assets/icons/rtl_forward_icon.png"
+        : "assets/icons/forward_icon.png";
 
     return Row(
       children: [
@@ -21,24 +26,27 @@ class ListButton extends StatelessWidget {
           size: screenWidth * 0.07,
         ),
 
-        Spacer(flex: 1,),
+        SizedBox(width: screenWidth * 0.03),
 
-        Text(
-            text,
-            style: TextStyle(
-              color: cs.primary,
-              fontWeight: FontWeight.w500,
-              fontSize: 17,
-              fontFamily: 'BellotaText',
-            )
+        Align(
+          alignment: AlignmentDirectional.centerStart,
+          child: Text(
+              text,
+              style: TextStyle(
+                color: cs.primary,
+                fontWeight: FontWeight.w500,
+                fontSize: 17,
+                fontFamily: 'BellotaText',
+              )
+          ),
         ),
 
-        Spacer(flex: 10,),
+        Spacer(flex: 10),
 
         IconButton(
           onPressed: onPressed,
           icon: ImageIcon(
-            AssetImage("assets/icons/forward_icon.png"),
+            AssetImage(forwardIconPath),
             size: screenWidth * 0.05,
             color: cs.primary.withAlpha(200),
           ),

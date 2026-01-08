@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:project/generated/l10n/app_localizations.dart';
 import 'package:project/models/Apartment.dart';
 import 'package:project/widgets/apartment_widget.dart';
 import 'package:project/widgets/filter_button.dart';
@@ -10,6 +11,7 @@ import '../models/Governorates.dart';
 import '../providers/apartmentsProvider.dart';
 
 class SearchScreen extends ConsumerStatefulWidget {
+
   const SearchScreen({super.key});
 
   @override
@@ -36,6 +38,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
     final screenHeight = MediaQuery.of(context).size.height;
 
     final apartments = ref.watch(ApartmentsProvider);
+    AppLocalizations t = AppLocalizations.of(context)!;
 
     return Scaffold(
       backgroundColor: cs.onPrimary,
@@ -47,7 +50,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
 
           // a fixed title
           title: Text(
-            "My App",
+            t.appName,
             style: TextStyle(
               color: cs.primary,
               fontSize: 30,
@@ -58,7 +61,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
 
           // the icon next to the title
           actions: Container(
-            margin: EdgeInsets.only(right: 20, top: 10),
+            margin: EdgeInsetsDirectional.only(end: screenWidth * 0.06, top: screenHeight * 0.007),
             child: ImageIcon(
               AssetImage('assets/icons/bell_icon.png'),
               size: 25,
@@ -68,6 +71,8 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
 
           // the search bar ... 🙂
           searchBar: SuperSearchBar(
+            placeholderText: t.search,
+            cancelButtonText: t.cancel,
             scrollBehavior: SearchBarScrollBehavior.pinned,
             // here we change the behaviour
             animationBehavior: SearchBarAnimationBehavior.steady,
@@ -99,7 +104,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
           // so i disabled it
           largeTitle: SuperLargeTitle(
             enabled: false,
-            largeTitle: "Our App",
+            largeTitle:t.ourApp,
             textStyle: TextStyle(
               color: cs.primary,
               fontSize: 30,
@@ -118,7 +123,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                 // spacing: 4,
                 children: [
 
-                  createClearButton(),
+                  createClearButton(screenWidth),//so it uses media query
 
                   LocationFilterButton(
                     selectedGov: selectedGovNum,
@@ -148,11 +153,11 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
 
                   FilterButton(
                     value: priceValue,
-                    label: "Price",
+                    label: t.price,
                     options: [
-                      "Less than 100\$",
-                      "Between 100\$ and 250\$",
-                      "More than 250\$ ",
+                      t.priceOptionLessThan1000,
+                      t.priceOptionBetween1000And2500,
+                      t.priceOptionMoreThan2500,
                     ],
                     onSelected: (index) {
 
@@ -188,9 +193,9 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
 
                   FilterButton(
                     value: rateValue,
-                    label: "Rating",
-                    options: ["Less than ☆☆☆", "Between ☆☆ and ☆☆☆☆"],
-                    onSelected: (index) {
+                    label: t.rating,
+                    options: [t.ratingOptionLessThan3, t.ratingOptionBetween2And4],
+                      onSelected: (index) {
                       print("changed ----- $index");
                     },
                   ),
@@ -235,9 +240,9 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
     );
   }
 
-  Padding createClearButton(){
+  Padding createClearButton(double screenWidth){
     return Padding(
-        padding: EdgeInsets.only(left: 10),
+        padding: EdgeInsetsDirectional.only(start: screenWidth * 0.06),
 
         child: OutlinedButton(
           style: OutlinedButton.styleFrom(
@@ -250,7 +255,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                 borderRadius: BorderRadius.circular(12)),
           ),
           child: Text(
-            "Clear filters",
+            AppLocalizations.of(context)!.clearFilters,
             style: TextStyle(
               color: Theme.of(context).colorScheme.primary.withAlpha(130),
               fontWeight: FontWeight.w600,

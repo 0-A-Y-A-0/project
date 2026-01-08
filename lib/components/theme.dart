@@ -17,7 +17,7 @@ class AppTheme {
       tertiary: dustyRose,
       surface: beige,
       onSurface: tootie,
-      error: Color.fromARGB(255, 172, 19, 8), //same here
+      error: Color.fromARGB(255, 165, 15, 15), //same here
       onError: Colors.white, //same here
     );
 

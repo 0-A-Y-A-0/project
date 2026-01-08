@@ -13,8 +13,8 @@ class ListContainer extends StatelessWidget {
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Container(
-        margin: EdgeInsets.all(10),
-        padding: EdgeInsets.only(left: 15),
+        margin: EdgeInsets.all(screenWidth * 0.025),
+        padding: EdgeInsetsDirectional.only(start: screenWidth * 0.025,),
         decoration: BoxDecoration(
           color: cs.onPrimary,
           borderRadius: BorderRadius.circular(16),

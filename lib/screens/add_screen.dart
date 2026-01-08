@@ -28,7 +28,7 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
 
   // dropdown values
   int? _gov;
-  int? _city;
+  String? _city;
   int? _bedrooms;
   int? _bathrooms;
 
@@ -120,13 +120,13 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
         MapEntry('rent_price_per_night', _priceCtrl.text.trim()),
         MapEntry('description_en', _descCtrl.text.trim()),
         MapEntry('description_ar', _descCtrl.text.trim()),
-        MapEntry('has_balcony', 'true'),
+        MapEntry('has_balcony', '0'),
       ]);
 
       for (int i = 0; i < _images.length; i++) {
         formData.files.add(
           MapEntry(
-            'assets[]', // THIS matters
+            'assets[$i]',
             await MultipartFile.fromFile(
               _images[i].path,
               filename: _images[i].name,
@@ -144,21 +144,21 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
       ).showSnackBar(const SnackBar(content: Text('Apartment added')));
 
       //  clear fields
-      setState(() {
-        _gov = null;
-        _city = null;
-        _bedrooms = null;
-        _bathrooms = null;
-        _images.clear();
-      });
-
-      _streetCtrl.clear();
-      _buildingCtrl.clear();
-      _floorCtrl.clear();
-      _aptNumCtrl.clear();
-      _areaCtrl.clear();
-      _descCtrl.clear();
-      _priceCtrl.clear();
+      // setState(() {
+      //   _gov = null;
+      //   _city = null;
+      //   _bedrooms = null;
+      //   _bathrooms = null;
+      //   _images.clear();
+      // });
+      //
+      // _streetCtrl.clear();
+      // _buildingCtrl.clear();
+      // _floorCtrl.clear();
+      // _aptNumCtrl.clear();
+      // _areaCtrl.clear();
+      // _descCtrl.clear();
+      // _priceCtrl.clear();
 
       // close keyboard
       FocusManager.instance.primaryFocus?.unfocus();
@@ -373,7 +373,7 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
                         SizedBox(height: screenHeight * 0.02),
 
                         // City
-                        DropdownButtonFormField<int>(
+                        DropdownButtonFormField<String>(
                           key: ValueKey(_gov),
                           initialValue: cities.when(
                             data: (list) {
@@ -396,7 +396,7 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
                               data: (cities) => List.generate(
                                 cities.length,
                                     (i) => DropdownMenuItem(
-                                  value: i,
+                                  value: cities[i],
                                   child: Text(cities[i]),
                                 ),
                               ),
@@ -661,7 +661,7 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
                       backgroundColor: cs.primary,
                       foregroundColor: cs.onPrimary,
                     ),
-                    onPressed: _isSubmitting ? null : _submit,
+                    onPressed: _submit,
                     child: Text(
                       _isSubmitting ? "Loading...."
                       : 'Add Apartment',

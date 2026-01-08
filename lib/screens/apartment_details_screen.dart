@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:project/components/theme.dart';
 import 'package:project/models/Apartment.dart';
 import 'package:project/providers/apartmentDetailsProvider.dart';
+import 'package:project/screens/rating_tab.dart';
 import 'package:tab_container/tab_container.dart';
 
 class ApartmentDetailsScreen extends ConsumerStatefulWidget {
@@ -193,7 +194,7 @@ class _ApartmentDetailsScreenState extends ConsumerState<ApartmentDetailsScreen>
 
               children: [
                 Text('info'),
-                Text('rating'),
+                RatingTab(),
                 Text('calendar'),
                 Text('map + location'),
                 Text('more'),

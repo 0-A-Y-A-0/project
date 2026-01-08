@@ -45,6 +45,7 @@ dependencies:
   card_swiper: ^3.0.1
   tab_container: ^3.5.3
   flutter_native_splash: ^2.4.7
+  flutter_rating_bar: ^4.0.1
 
 dev_dependencies:
   flutter_test:

@@ -85,25 +85,6 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
 
     try{
       print ("inside try");
-      // final formData = FormData.fromMap({
-      //   'governorate': _gov,
-      //   'city': _city,
-      //   'street': _streetCtrl.text.trim(),
-      //   'building_number': _buildingCtrl.text.trim(),
-      //   'floor': int.parse(_floorCtrl.text.trim()),
-      //   'apartment_number': int.parse(_aptNumCtrl.text.trim()),
-      //   'number_of_bedrooms': _bedrooms,
-      //   'number_of_bathrooms': _bathrooms,
-      //   'area_sq_meters': double.parse(_areaCtrl.text.trim()).round(),
-      //   'rent_price_per_night': double.parse(_priceCtrl.text.trim()),
-      //   'description_en': _descCtrl.text.trim(),
-      //   'description_ar': _descCtrl.text.trim(),
-      //   'has_balcony': 0,
-      //   'assets': [
-      //     for (var xfile in _images)
-      //       await MultipartFile.fromFile(xfile.path, filename: xfile.name)
-      //   ],
-      // });
 
       final formData = FormData();
 
@@ -144,21 +125,21 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
       ).showSnackBar(const SnackBar(content: Text('Apartment added')));
 
       //  clear fields
-      // setState(() {
-      //   _gov = null;
-      //   _city = null;
-      //   _bedrooms = null;
-      //   _bathrooms = null;
-      //   _images.clear();
-      // });
-      //
-      // _streetCtrl.clear();
-      // _buildingCtrl.clear();
-      // _floorCtrl.clear();
-      // _aptNumCtrl.clear();
-      // _areaCtrl.clear();
-      // _descCtrl.clear();
-      // _priceCtrl.clear();
+      setState(() {
+        _gov = null;
+        _city = null;
+        _bedrooms = null;
+        _bathrooms = null;
+        _images.clear();
+      });
+
+      _streetCtrl.clear();
+      _buildingCtrl.clear();
+      _floorCtrl.clear();
+      _aptNumCtrl.clear();
+      _areaCtrl.clear();
+      _descCtrl.clear();
+      _priceCtrl.clear();
 
       // close keyboard
       FocusManager.instance.primaryFocus?.unfocus();
@@ -681,7 +662,7 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
                       backgroundColor: cs.primary,
                       foregroundColor: cs.onPrimary,
                     ),
-                    onPressed: _submit,
+                    onPressed: _isSubmitting ? null : _submit,
                     child: Text(
                       _isSubmitting ? "Loading...."
                       : 'Add Apartment',

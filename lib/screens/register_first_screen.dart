@@ -36,7 +36,7 @@ class RegisterFirstScreen extends ConsumerWidget {
     onTap: () => FocusScope.of(context).unfocus(),//for unfocusing from textfields
     child: Stack(
       children: [
-        Positioned.fill(
+        SizedBox.expand( // to make it fit all sizes
           child: SvgPicture.asset(bgAsset, fit: BoxFit.cover),
         ),
 

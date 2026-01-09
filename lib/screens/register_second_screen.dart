@@ -11,6 +11,7 @@ import 'package:project/widgets/date_text_field.dart';
 import 'package:project/widgets/primary_button.dart';
 import 'package:project/widgets/upload_box.dart';
 
+import '../generated/l10n/app_localizations.dart';
 import '../models/AuthState.dart';
 import '../providers/auth_provide.dart';
 
@@ -144,7 +145,36 @@ class _RegisterSecondScreenState extends ConsumerState<RegisterSecondScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations t = AppLocalizations.of(context)!;
+
     final register = ref.watch(AuthNotifierProvider);
+    ref.listen<AuthState>(AuthNotifierProvider, (previous, next) {
+      // to react when the state changes
+      if (next.status == AuthStatus.error) {
+        print("error error from lstener");
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        // Show a pop up with error message
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              t.auth_errorTryLater,
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            backgroundColor: Colors.red,
+            behavior: SnackBarBehavior.floating,
+            margin: const EdgeInsets.all(8),
+            duration: Duration(seconds: 3),
+          ),
+        );
+      } else if (next.status == AuthStatus.waiting) {
+        print("waiting");
+
+        Navigator.pushReplacementNamed(context, 'SignInPage');
+      }
+    });
 
     final cs = Theme.of(context).colorScheme;
     final isDark = cs.brightness == Brightness.dark;
@@ -160,7 +190,7 @@ class _RegisterSecondScreenState extends ConsumerState<RegisterSecondScreen> {
       // resizeToAvoidBottomInset: true,
       body: Stack(
         children: [
-          Positioned.fill(child: SvgPicture.asset(bgAsset, fit: BoxFit.fill)),
+          SizedBox.expand(child: SvgPicture.asset(bgAsset, fit: BoxFit.fill)),
           SingleChildScrollView(
             padding: EdgeInsets.symmetric(
               horizontal: screenWidth * 0.05,
@@ -241,7 +271,8 @@ class _RegisterSecondScreenState extends ConsumerState<RegisterSecondScreen> {
                   label: register.status == AuthStatus.loading
                       ? "Loading ..."
                       : "Register",
-                  onPressed: () async {
+                  onPressed: register.status == AuthStatus.loading ? null :
+                      () async {
                     print(widget.firstName);
                     print(widget.lastName);
                     print(widget.password);
@@ -283,7 +314,7 @@ class _RegisterSecondScreenState extends ConsumerState<RegisterSecondScreen> {
                             ),
                           },
                         );
-                    Navigator.pushReplacementNamed(context, 'SignInPage');
+
                   },
                 ),
                 SizedBox(height: screenHeight * 0.05),
@@ -302,8 +333,7 @@ class _RegisterSecondScreenState extends ConsumerState<RegisterSecondScreen> {
                           decoration: TextDecoration.underline,
                           fontWeight: FontWeight.w700,
                         ),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () {
+                        recognizer: TapGestureRecognizer()..onTap = () {
                             //well change this to provider things
                             Navigator.pushNamed(context, "SignInPage");
                           },

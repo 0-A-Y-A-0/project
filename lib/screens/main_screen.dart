@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:project/screens/add_screen.dart';
 import 'package:project/screens/chat_screen.dart';
@@ -6,14 +7,17 @@ import 'package:project/screens/fav_screen.dart';
 import 'package:project/screens/profile_screen.dart';
 import 'package:project/screens/search_screen.dart';
 
-class MainScreen extends StatefulWidget {
+import '../models/AuthState.dart';
+import '../providers/auth_provide.dart';
+
+class MainScreen extends ConsumerStatefulWidget {
   const MainScreen({super.key});
 
   @override
-  State<MainScreen> createState() => _MainScreenState();
+  ConsumerState<MainScreen> createState() => _MainScreenState();
 }
 
-class _MainScreenState extends State<MainScreen> {
+class _MainScreenState extends ConsumerState<MainScreen> {
   // we set the initial tab (1 = search page)
   final PersistentTabController _controller =
   PersistentTabController(initialIndex: 1);
@@ -32,6 +36,14 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme ;
+
+    ref.listen<AuthState>(AuthNotifierProvider, (previous, next) {
+      // to react when logged out
+      if (next.status == AuthStatus.initial) {
+        print("error error from lstener");
+        Navigator.pushReplacementNamed(context, 'SignInPage');
+      }
+    });
 
     return PersistentTabView(
       context,

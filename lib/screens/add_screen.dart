@@ -434,6 +434,10 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                 ),
+                                keyboardType: TextInputType.number,
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.digitsOnly,
+                                ],
                                 validator: (v) =>
                                     (v == null || v.trim().isEmpty)
                                     ? 'Required'

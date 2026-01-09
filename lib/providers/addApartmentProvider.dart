@@ -7,11 +7,6 @@ import 'dio_provider.dart';
 
 final AddApartmentProvider = FutureProvider.family<void, FormData>((ref, formData) async {
 
-  // taking the user token
-  final user = ref.read(UserProvider);
-  final token = user?.token;
-  print(user?.token);
-
   try{
     final dio = ref.read(dioProvider);
 
@@ -21,14 +16,7 @@ final AddApartmentProvider = FutureProvider.family<void, FormData>((ref, formDat
     print("to the back ---------------------");
     final response = await dio.post(
       '/apartments/create',
-      data: formData,
-      options: Options(
-        contentType: 'multipart/form-data',
-        headers: {
-          'Authorization': 'Bearer $token'
-        },
-      ),
-    );
+      data: formData,);
     print("done sending-----------------------------------");
 
     // 422 validation

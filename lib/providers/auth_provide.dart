@@ -151,24 +151,16 @@ class AuthNotifier extends Notifier<AuthState> {
 
     _pollingTimer?.cancel();
 
-    final user = ref.read(UserProvider);
-    final token = user?.token;
-
     try {
       final dio = ref.read(dioProvider);
 
-      final response = await dio.post('/user/logout',
-        options: Options(
-          headers: {
-            'Authorization': 'Bearer $token'
-          },
-        ),
-      );
-
+      final response = await dio.post('/user/logout',);
 
       // we change the status => jump to the sign in screen
       state = AuthState(status: AuthStatus.initial);
       ref.read(UserProvider.notifier).clearUser();
+
+      print ("you're out");
 
     } catch (e) {
       print("logout unknown error");

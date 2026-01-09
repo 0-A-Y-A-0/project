@@ -102,16 +102,20 @@ class _ApartmentWidgetState extends State<ApartmentWidget> {
                       bottom: 5,
                       start:  15,
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            widget.apartment.makeAddress(),
-                            textAlign: TextAlign.start,
-                            style: TextStyle(
-                                color: cs.onPrimary,
-                                fontWeight: FontWeight.w900,
-                                fontSize: screenWidth * 0.045,
-                                fontFamily: 'BellotaText',
+                          SizedBox(
+                            width: screenWidth * 0.55,
+                            child: Text(
+                              widget.apartment.makeAddress(),
+                              textAlign: TextAlign.start,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                  color: cs.onPrimary,
+                                  fontWeight: FontWeight.w900,
+                                  fontSize: screenWidth * 0.045,
+                                  fontFamily: 'BellotaText',
+                              ),
                             ),
                           ),
                           Text(

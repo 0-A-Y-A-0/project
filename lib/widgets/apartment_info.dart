@@ -26,7 +26,7 @@ class ApartmentInfo extends StatelessWidget {
 
     return SafeArea(
       child: SingleChildScrollView(
-        padding: EdgeInsets.all(screenWidth * 0.032),
+        padding: EdgeInsets.only(top : screenWidth * 0.032, left: screenWidth * 0.015, right: screenWidth * 0.015), // all
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -216,7 +216,7 @@ class Card extends StatelessWidget {
       decoration: BoxDecoration(
         color: cs.surface,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: cs.outlineVariant.withAlpha(150)),
+        border: Border.all(color: Colors.transparent), // cs.outlineVariant.withAlpha(150)
       ),
       child: child,
     );

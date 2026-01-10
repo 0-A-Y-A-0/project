@@ -18,6 +18,7 @@ final dioProvider = Provider<Dio>((ref) {
       onRequest: (options, handler) {
         final user = ref.read(UserProvider);
         final token = user?.token;
+        print("token              $token");
 
         if (token != null && token.isNotEmpty) {
           options.headers['Authorization'] = 'Bearer $token';

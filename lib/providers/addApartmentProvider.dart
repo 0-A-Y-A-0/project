@@ -10,6 +10,7 @@ final AddApartmentProvider = FutureProvider.family<void, FormData>((ref, formDat
   // taking the user token
   final user = ref.read(UserProvider);
   final token = user?.token;
+  
   print(user?.token);
 
   try{

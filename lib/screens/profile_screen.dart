@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:project/generated/l10n/app_localizations.dart';
+import 'package:project/widgets/langToggle.dart';
 import 'package:project/widgets/primary_button.dart';
 import 'package:project/widgets/profile_list_button.dart';
 import 'package:project/widgets/profile_list_container.dart';
@@ -15,18 +17,17 @@ class ProfileScreen extends ConsumerWidget {
     final cs = Theme.of(context).colorScheme;
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
+    final AppLocalizations t = AppLocalizations.of(context)!;
 
     final user = ref.watch(UserProvider);
     final imageUrl = user?.photo_url != null
         ? 'http://10.0.2.2:8000/storage/${user!.photo_url}'
         : null;
 
-
     final isRtl = Directionality.of(context) == TextDirection.rtl;
-     final logoutIconPath = isRtl
+    final logoutIconPath = isRtl
         ? "assets/icons/rtl_log_out_icon.png"
         : "assets/icons/log_out_icon.png";
-
 
     return Scaffold(
       backgroundColor: cs.onPrimary,
@@ -40,14 +41,19 @@ class ProfileScreen extends ConsumerWidget {
               Container(
                 height: screenHeight / 4,
                 width: screenHeight / 4,
-                margin: EdgeInsetsDirectional.only(start: screenWidth * 0.02, end: screenWidth * 0.03),
+                margin: EdgeInsetsDirectional.only(
+                  start: screenWidth * 0.02,
+                  end: screenWidth * 0.03,
+                ),
 
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(color: cs.secondary, width: 2),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withAlpha(cs.brightness == Brightness.dark ? 100 : 60),
+                      color: Colors.black.withAlpha(
+                        cs.brightness == Brightness.dark ? 100 : 60,
+                      ),
                       blurRadius: screenWidth * 0.05,
                       offset: Offset(0, 0),
                     ),
@@ -57,19 +63,19 @@ class ProfileScreen extends ConsumerWidget {
                 child: ClipOval(
                   child: imageUrl != null
                       ? Image.network(
-                    imageUrl,
-                    fit: BoxFit.cover,
-                    errorBuilder: (_, __, ___) {
-                      return Image.asset(
-                        'assets/images/apartments/test.jpg',
-                        fit: BoxFit.cover,
-                      );
-                    },
-                  )
+                          imageUrl,
+                          fit: BoxFit.cover,
+                          errorBuilder: (_, __, ___) {
+                            return Image.asset(
+                              'assets/images/apartments/test.jpg',
+                              fit: BoxFit.cover,
+                            );
+                          },
+                        )
                       : Image.asset(
-                    'assets/images/apartments/test.jpg',
-                    fit: BoxFit.cover,
-                  ),
+                          'assets/images/apartments/test.jpg',
+                          fit: BoxFit.cover,
+                        ),
                 ),
               ),
 
@@ -96,7 +102,7 @@ class ProfileScreen extends ConsumerWidget {
                     // we have to force a width so the text wrap works ... remove it if you want to see yellow flags 🚧
                     width: screenWidth * 0.46,
                     child: Text(
-                      user!.bio! ,
+                      user!.bio!,
                       // "this is me testing the overflow text wrap i don't know what im writing i just want to fill some space and bla bla bla bla i hope its more than two lines now are you open mindu?",
                       style: TextStyle(
                         color: cs.primary,
@@ -119,17 +125,20 @@ class ProfileScreen extends ConsumerWidget {
                     width: screenWidth * 0.45,
                     child: ElevatedButton.icon(
                       style: ElevatedButton.styleFrom(
-                        side: BorderSide(width: 1.5, color: cs.primary.withAlpha(150)),
+                        side: BorderSide(
+                          width: 1.5,
+                          color: cs.primary.withAlpha(150),
+                        ),
                         backgroundColor: cs.onPrimary,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                      
+
                       icon: Icon(Icons.edit, color: cs.primary.withAlpha(200)),
-                      
+
                       label: Text(
-                        "Edit Profile",
+                        t.editProfile,
                         style: TextStyle(
                           color: cs.primary,
                           fontWeight: FontWeight.w400,
@@ -148,12 +157,12 @@ class ProfileScreen extends ConsumerWidget {
           SizedBox(height: screenHeight * 0.04),
 
           // History
-          createText(color: cs.primary.withAlpha(150), text: "History"),
+          createText(color: cs.primary.withAlpha(150), text: t.history),
           ListContainer(
             child: Column(
               children: [
                 ListButton(
-                  text: "My apartments",
+                  text: t.myApartments,
                   iconPath: 'assets/icons/apartment_icon.png',
                   onPressed: () {
                     print("clicked");
@@ -161,11 +170,13 @@ class ProfileScreen extends ConsumerWidget {
                 ),
 
                 createDivider(
-                    cs.brightness == Brightness.dark ? Colors.grey.withAlpha(50) : Colors.grey.withAlpha(150)
+                  cs.brightness == Brightness.dark
+                      ? Colors.grey.withAlpha(50)
+                      : Colors.grey.withAlpha(150),
                 ),
 
                 ListButton(
-                  text: "Favorites",
+                  text: t.favorites,
                   iconPath: 'assets/icons/fav_icon.png',
                   onPressed: () {
                     print("clicked");
@@ -173,11 +184,13 @@ class ProfileScreen extends ConsumerWidget {
                 ),
 
                 createDivider(
-                    cs.brightness == Brightness.dark ? Colors.grey.withAlpha(50) : Colors.grey.withAlpha(150)
+                  cs.brightness == Brightness.dark
+                      ? Colors.grey.withAlpha(50)
+                      : Colors.grey.withAlpha(150),
                 ),
 
                 ListButton(
-                  text: "Rental history",
+                  text: t.rentalHistory,
                   iconPath: 'assets/icons/history_icon.png',
                   onPressed: () {
                     print("clicked");
@@ -189,96 +202,121 @@ class ProfileScreen extends ConsumerWidget {
 
           // App
           // im sorry i was too lazy to tidy this up
-          createText(color: cs.primary.withAlpha(150), text: "App"),
+          createText(color: cs.primary.withAlpha(150), text: t.app),
           ListContainer(
             child: Column(
               children: [
                 Row(
                   children: [
                     Text(
-                        "Theme",
-                        style: TextStyle(
-                          color: cs.primary,
-                          fontWeight: FontWeight.w400,
-                          fontSize: 17,
-                          fontFamily: 'BellotaText',
-                        )
+                      t.theme,
+                      style: TextStyle(
+                        color: cs.primary,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 17,
+                        fontFamily: 'BellotaText',
+                      ),
                     ),
 
                     // Spacer(flex: 1,),
-                    SizedBox(width: screenWidth * 0.6,),
+                    SizedBox(width: screenWidth * 0.6),
 
                     ThemeToggle(),
                   ],
                 ),
 
                 createDivider(
-                    cs.brightness == Brightness.dark ? Colors.grey.withAlpha(50) : Colors.grey.withAlpha(150)
+                  cs.brightness == Brightness.dark
+                      ? Colors.grey.withAlpha(50)
+                      : Colors.grey.withAlpha(150),
+                ),
+
+                Row(
+                  children: [
+                    Text(
+                      t.profile_language,
+                      style: TextStyle(
+                        color: cs.primary,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 17,
+                        fontFamily: 'BellotaText',
+                      ),
+                    ),
+
+                    SizedBox(width: isRtl ? screenWidth * 0.615 : screenWidth * 0.521),
+
+                    const LanguageToggle(),
+                  ],
+                ),
+
+                createDivider(
+                  cs.brightness == Brightness.dark
+                      ? Colors.grey.withAlpha(50)
+                      : Colors.grey.withAlpha(150),
                 ),
 
                 Stack(
                   children: [
                     Padding(
-                    padding: EdgeInsets.only(top: 10, bottom: 10),
-                    child: Row(
-                    
-                      
-                      children: [
-                        ImageIcon(
-                          AssetImage(logoutIconPath),
-                          color: cs.primary.withAlpha(200),
-                          size: screenWidth * 0.07,
-                        ),
+                      padding: EdgeInsets.only(top: 10, bottom: 10),
+                      child: Row(
+                        children: [
+                          ImageIcon(
+                            AssetImage(logoutIconPath),
+                            color: cs.primary.withAlpha(200),
+                            size: screenWidth * 0.07,
+                          ),
 
-                        Spacer(flex: 1,),
+                          Spacer(flex: 1),
 
-                        Align(
-                          alignment: AlignmentDirectional.centerStart,
-                          child: Text(
-                              "Log Out",
+                          Align(
+                            alignment: AlignmentDirectional.centerStart,
+                            child: Text(
+                              t.logout,
                               style: TextStyle(
                                 color: cs.primary,
                                 fontWeight: FontWeight.w400,
                                 fontSize: 17,
                                 fontFamily: 'BellotaText',
-                              )
+                              ),
+                            ),
                           ),
-                        ),
-                        // SizedBox(width: screenWidth * 0.02),
-                        Spacer(flex: 20,),
-                      ],
+                          // SizedBox(width: screenWidth * 0.02),
+                          Spacer(flex: 20),
+                        ],
+                      ),
                     ),
-                  ),
 
-                    
                     Positioned.fill(
                       right: screenWidth * 0.03, // the right gap
                       bottom: 2,
                       top: 1,
                       child: Material(
-                          color: Colors.transparent,
-                          borderRadius: BorderRadius.circular(16),
-                          child: InkWell(
-                            onTap: (){
-                              print("clicked -----------------------------");
-                            },
-                            splashColor: cs.primary.withAlpha(50), // to make the splash color matchy matchy
-                          )
+                        color: Colors.transparent,
+                        borderRadius: BorderRadius.circular(16),
+                        child: InkWell(
+                          onTap: () {
+                            print("clicked -----------------------------");
+                          },
+                          splashColor: cs.primary.withAlpha(
+                            50,
+                          ), // to make the splash color matchy matchy
+                        ),
                       ),
                     ),
-                  ]
-                )
+                  ],
+                ),
               ],
             ),
           ),
 
           // Help
-          createText(color: cs.primary.withAlpha(150), text: "Help"),
+          createText(color: cs.primary.withAlpha(150), text: t.help),
           ListContainer(
             child: Column(
               children: [
                 ListButton(
-                  text: "Send feedback",
+                  text: t.sendFeedback,
                   iconPath: 'assets/icons/send_icon.png',
                   onPressed: () {
                     print("clicked");
@@ -286,11 +324,13 @@ class ProfileScreen extends ConsumerWidget {
                 ),
 
                 createDivider(
-                    cs.brightness == Brightness.dark ? Colors.grey.withAlpha(50) : Colors.grey.withAlpha(150)
+                  cs.brightness == Brightness.dark
+                      ? Colors.grey.withAlpha(50)
+                      : Colors.grey.withAlpha(150),
                 ),
 
                 ListButton(
-                  text: "Privacy Policy",
+                  text: t.privacyPolicy,
                   iconPath: 'assets/icons/security_icon.png',
                   onPressed: () {
                     print("clicked");
@@ -298,11 +338,13 @@ class ProfileScreen extends ConsumerWidget {
                 ),
 
                 createDivider(
-                    cs.brightness == Brightness.dark ? Colors.grey.withAlpha(50) : Colors.grey.withAlpha(150)
+                  cs.brightness == Brightness.dark
+                      ? Colors.grey.withAlpha(50)
+                      : Colors.grey.withAlpha(150),
                 ),
 
                 ListButton(
-                  text: "About us",
+                  text: t.aboutUs,
                   iconPath: 'assets/icons/info_icon.png',
                   onPressed: () {
                     print("clicked");
@@ -314,7 +356,7 @@ class ProfileScreen extends ConsumerWidget {
 
           // the most important part
           Text(
-            "my app v2.3.5 (12548)",
+            t.profile_version,
             style: TextStyle(
               color: cs.primary.withAlpha(120),
               fontWeight: FontWeight.w400,
@@ -329,12 +371,7 @@ class ProfileScreen extends ConsumerWidget {
   }
 
   Divider createDivider(Color color) {
-    return Divider(
-      height: 5,
-      thickness: 1,
-      color: color,
-      endIndent: 15,
-    );
+    return Divider(height: 5, thickness: 1, color: color, endIndent: 15);
   }
 
   Padding createText({required Color color, required String text}) {

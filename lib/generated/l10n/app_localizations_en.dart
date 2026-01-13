@@ -144,10 +144,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get signin_title => 'Sign in';
 
   @override
-  String get signin_phoneLabel => 'Phone Number';
+  String get phoneLabel => 'Phone Number';
 
   @override
-  String get signin_passwordLabel => 'Password';
+  String get passwordLabel => 'Password';
 
   @override
   String get signin_button => 'Sign In';
@@ -162,7 +162,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get signin_noAccount => 'Don\'t have an account?\nregister  ';
 
   @override
-  String get signin_here => 'here';
+  String get here => 'here';
 
   @override
   String get auth_errorTryLater => 'ERROR !!! Try again later';
@@ -174,4 +174,272 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get auth_adminAccepted =>
       'The admin accepted your account! you can sign in';
+
+  @override
+  String get register_title => 'Register';
+
+  @override
+  String get register_firstNameLabel => 'First Name';
+
+  @override
+  String get register_firstNameHint => 'first name';
+
+  @override
+  String get register_lastNameLabel => 'Last Name';
+
+  @override
+  String get register_lastNameHint => 'last name';
+
+  @override
+  String get register_continue => 'Continue';
+
+  @override
+  String get register_haveAccount => 'Already have an account?\nsign in ';
+
+  @override
+  String get register2_birthdateLabel => 'Birthdate';
+
+  @override
+  String get register2_birthdateHint => 'dd/mm/yyyy';
+
+  @override
+  String get register2_birthdateHelp => 'Select birthdate';
+
+  @override
+  String get register2_profilePictureLabel => 'Profile picture';
+
+  @override
+  String get register2_idPictureLabel => 'ID picture';
+
+  @override
+  String get register2_pickCamera => 'Camera';
+
+  @override
+  String get register2_pickGallery => 'Gallery';
+
+  @override
+  String get register_button => 'Register';
+
+  @override
+  String get addApt_title => 'Add Apartment';
+
+  @override
+  String get common_loading => 'Loading...';
+
+  @override
+  String get addApt_added => 'Apartment added';
+
+  @override
+  String get addApt_photos => 'Photos';
+
+  @override
+  String get common_gallery => 'Gallery';
+
+  @override
+  String get common_camera => 'Camera';
+
+  @override
+  String get addApt_addUpTo5Images => 'Add up to 5 images';
+
+  @override
+  String get addApt_address => 'Address';
+
+  @override
+  String get addApt_amenities => 'Amenities';
+
+  @override
+  String get field_governorate => 'Governorate';
+
+  @override
+  String get field_city => 'City';
+
+  @override
+  String get field_street => 'Street';
+
+  @override
+  String get field_buildingNumber => 'Building number';
+
+  @override
+  String get field_floor => 'Floor';
+
+  @override
+  String get field_apartmentNumber => 'Apartment number';
+
+  @override
+  String get field_bedrooms => 'Bedrooms';
+
+  @override
+  String get field_bathrooms => 'Bathrooms';
+
+  @override
+  String get field_area => 'Area (m²)';
+
+  @override
+  String get field_rentPricePerNight => 'Rent price per night';
+
+  @override
+  String get field_description => 'Description';
+
+  @override
+  String get hint_selectGovernorateFirst => 'Select a governorate first';
+
+  @override
+  String get error_selectGovernorate => 'Select a governorate';
+
+  @override
+  String get error_selectCity => 'Select a city';
+
+  @override
+  String get error_streetRequired => 'Street is required';
+
+  @override
+  String get error_required => 'Required';
+
+  @override
+  String get error_enterNumber => 'Enter number';
+
+  @override
+  String get error_mustBeGreaterThanZero => 'Must be > 0';
+
+  @override
+  String get error_select => 'Select';
+
+  @override
+  String get error_descriptionRequired => 'Description required';
+
+  @override
+  String get profile_editProfile => 'Edit Profile';
+
+  @override
+  String get profile_history => 'History';
+
+  @override
+  String get profile_myApartments => 'My apartments';
+
+  @override
+  String get profile_favorites => 'Favorites';
+
+  @override
+  String get profile_rentalHistory => 'Rental history';
+
+  @override
+  String get profile_app => 'App';
+
+  @override
+  String get profile_theme => 'Theme';
+
+  @override
+  String get profile_language => 'Language';
+
+  @override
+  String get profile_logout => 'Log Out';
+
+  @override
+  String get profile_help => 'Help';
+
+  @override
+  String get profile_sendFeedback => 'Send feedback';
+
+  @override
+  String get profile_privacyPolicy => 'Privacy Policy';
+
+  @override
+  String get profile_aboutUs => 'About us';
+
+  @override
+  String get profile_version => 'my app v2.3.5 (12548)';
+
+  @override
+  String get apartment_building => 'Building';
+
+  @override
+  String get apartment_apartment => 'Apartment';
+
+  @override
+  String get apartment_street => 'Street';
+
+  @override
+  String get apartment_perNight => 'per night';
+
+  @override
+  String apartment_floorNumber(Object floor) {
+    return 'Floor $floor';
+  }
+
+  @override
+  String get apartment_descriptionTitle => 'Description';
+
+  @override
+  String get apartment_aboutOwner => 'About Owner';
+
+  @override
+  String get rating_addReviewOptional => 'Add a review (optional)';
+
+  @override
+  String get rating_postReview => 'Post your review';
+
+  @override
+  String get rating_noWrittenReview => 'No written review';
+
+  @override
+  String get booking_note =>
+      'Note: Please double-check that the dates you enter are not highlighted as unavailable on the calendar page.';
+
+  @override
+  String get booking_from => 'From';
+
+  @override
+  String get booking_to => 'To';
+
+  @override
+  String get booking_selectDate => 'Select date';
+
+  @override
+  String get booking_payment => 'Payment';
+
+  @override
+  String get booking_cardNumber => 'Card number';
+
+  @override
+  String get booking_cardHint => '0000 0000 0000 0000';
+
+  @override
+  String get booking_cardRequired => 'Card number is required';
+
+  @override
+  String get booking_cardMustBe16 => 'Card number must be 16 digits';
+
+  @override
+  String get booking_requestBooking => 'Request booking';
+
+  @override
+  String get booking_selectStartDate => 'Select start date';
+
+  @override
+  String get booking_selectEndDate => 'Select end date';
+
+  @override
+  String get booking_snack_selectBothDates =>
+      'Please select both From and To dates.';
+
+  @override
+  String get booking_snack_submitted => 'Booking request submitted!';
+
+  @override
+  String get booking_snack_failed => 'Failed to submit booking: ';
+
+  @override
+  String get datePicker_year => 'Year';
+
+  @override
+  String get datePicker_month => 'Month';
+
+  @override
+  String get datePicker_day => 'Day';
+
+  @override
+  String get common_cancel => 'Cancel';
+
+  @override
+  String get common_ok => 'OK';
 }

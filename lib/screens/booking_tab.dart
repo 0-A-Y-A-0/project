@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:project/generated/l10n/app_localizations.dart';
 
 class BookingScreen extends StatefulWidget {
   const BookingScreen({super.key});
@@ -33,7 +34,7 @@ class _BookingScreenState extends State<BookingScreen> {
   Future<void> _pickFrom() async {
     final picked = await showListDatePicker(
       context: context,
-      title: 'Select start date',
+      title: AppLocalizations.of(context)!.booking_selectStartDate,
       initialDate: _fromDate,
     );
     if (picked == null) return;
@@ -44,7 +45,7 @@ class _BookingScreenState extends State<BookingScreen> {
   Future<void> _pickTo() async {
     final picked = await showListDatePicker(
       context: context,
-      title: 'Select end date',
+      title:  AppLocalizations.of(context)!.booking_selectEndDate,
       initialDate: _toDate,
     );
     if (picked == null) return;
@@ -57,17 +58,16 @@ class _BookingScreenState extends State<BookingScreen> {
     required DateTime to,
     required String cardNumber,
   }) async {
-    // TODO: Replace with backend request.
+    // we'll replace with backend request.
   }
 
   Future<void> _submit() async {
     FocusScope.of(context).unfocus();
     if (_isSubmitting) return;
 
-    // ✅ ONLY check if they are filled
     if (_fromDate == null || _toDate == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please select both From and To dates.')),
+        SnackBar(content: Text(AppLocalizations.of(context)!.booking_snack_selectBothDates)),
       );
       return;
     }
@@ -86,12 +86,12 @@ class _BookingScreenState extends State<BookingScreen> {
 
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Booking request submitted!')),
+        SnackBar(content: Text(AppLocalizations.of(context)!.booking_snack_submitted)),
       );
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to submit booking: $e')),
+        SnackBar(content: Text(AppLocalizations.of(context)!.booking_snack_failed)),
       );
     } finally {
       if (mounted) setState(() => _isSubmitting = false);
@@ -102,6 +102,8 @@ class _BookingScreenState extends State<BookingScreen> {
   Widget build(BuildContext context) {
     final fromText = _formatDate(_fromDate);
     final toText = _formatDate(_toDate);
+
+    final AppLocalizations t = AppLocalizations.of(context)!;
 
     return SafeArea(
       child: Form(
@@ -115,28 +117,28 @@ class _BookingScreenState extends State<BookingScreen> {
                 color: Theme.of(context).colorScheme.surfaceContainerHighest,
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: const Text(
-                'Note: Please double-check that the dates you enter are not highlighted as unavailable on the calendar page.',
+              child: Text(
+                t.booking_note,
               ),
             ),
             const SizedBox(height: 16),
 
             _DateField(
-              label: 'From',
-              valueText: fromText.isEmpty ? 'Select date' : fromText,
+              label: t.booking_from,
+              valueText: fromText.isEmpty ? t.booking_selectDate : fromText,
               onTap: _isSubmitting ? null : _pickFrom,
             ),
             const SizedBox(height: 12),
             _DateField(
-              label: 'To',
-              valueText: toText.isEmpty ? 'Select date' : toText,
+              label: t.booking_to,
+              valueText: toText.isEmpty ? t.booking_selectDate : toText,
               onTap: _isSubmitting ? null : _pickTo,
             ),
 
             const SizedBox(height: 24),
 
             Text(
-              'Payment',
+              t.booking_payment,
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: 12),
@@ -150,15 +152,15 @@ class _BookingScreenState extends State<BookingScreen> {
                 FilteringTextInputFormatter.digitsOnly,
                 _CardNumberFormatter(),
               ],
-              decoration: const InputDecoration(
-                labelText: 'Card number',
+              decoration:  InputDecoration(
+                labelText: t.booking_cardNumber,
                 hintText: '0000 0000 0000 0000',
                 border: OutlineInputBorder(),
               ),
               validator: (v) {
                 final digits = (v ?? '').replaceAll(' ', '');
-                if (digits.isEmpty) return 'Card number is required';
-                if (digits.length < 16) return 'Card number must be 16 digits';
+                if (digits.isEmpty) return t.booking_cardRequired;
+                if (digits.length < 16) return t.booking_cardMustBe16;
                 return null;
               },
             ),
@@ -173,7 +175,7 @@ class _BookingScreenState extends State<BookingScreen> {
                       height: 18,
                       child: CircularProgressIndicator(strokeWidth: 2),
                     )
-                  : const Text('Request booking'),
+                  : Text(t.booking_requestBooking),
             ),
           ],
         ),
@@ -266,6 +268,7 @@ Future<DateTime?> showListDatePicker({
         builder: (ctx, setState) {
           final maxDay = daysInMonth(year, month);
           final days = List<int>.generate(maxDay, (i) => i + 1);
+          final AppLocalizations t = AppLocalizations.of(context)!;
 
           return AlertDialog(
             title: Text(title),
@@ -284,7 +287,7 @@ Future<DateTime?> showListDatePicker({
                           if (v == null) return;
                           setState(() => year = v);
                         },
-                        decoration: const InputDecoration(labelText: 'Year'),
+                        decoration: InputDecoration(labelText: t.datePicker_year),
                       ),
                     ),
                     const SizedBox(width: 12),
@@ -301,7 +304,7 @@ Future<DateTime?> showListDatePicker({
                           if (v == null) return;
                           setState(() => month = v);
                         },
-                        decoration: const InputDecoration(labelText: 'Month'),
+                        decoration: InputDecoration(labelText: t.datePicker_month),
                       ),
                     ),
                   ],
@@ -319,18 +322,18 @@ Future<DateTime?> showListDatePicker({
                     if (v == null) return;
                     setState(() => day = v);
                   },
-                  decoration: const InputDecoration(labelText: 'Day'),
+                  decoration: InputDecoration(labelText: t.datePicker_day),
                 ),
               ],
             ),
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(ctx),
-                child: const Text('Cancel'),
+                child: Text(AppLocalizations.of(context)!.cancel),
               ),
               FilledButton(
                 onPressed: () => Navigator.pop(ctx, current()),
-                child: const Text('OK'),
+                child: Text(AppLocalizations.of(context)!.common_ok),
               ),
             ],
           );

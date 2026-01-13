@@ -95,10 +95,15 @@ class SignInScreen extends ConsumerWidget {
     final screenHeight = MediaQuery.of(context).size.height;
 
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final isRtl = Directionality.of(context) == TextDirection.rtl;
 
-    final bgAsset = isDark
-        ? 'assets/images/backgrounds/signin_dark_bg.svg'
-        : 'assets/images/backgrounds/signin_light_bg.svg';
+
+    final bgAsset = switch ((isRtl, isDark)) {
+      (false, false) => 'assets/images/backgrounds/signin_light_bg.svg',
+      (false, true) => 'assets/images/backgrounds/signin_dark_bg.svg',
+      (true, false) => 'assets/images/backgrounds/rtl_signin_light_bg.svg',
+      (true, true) => 'assets/images/backgrounds/rtl_signin_dark_bg.svg',
+    };
     //to put the correct bg
 
     final cs = Theme.of(context).colorScheme;
@@ -130,15 +135,15 @@ class SignInScreen extends ConsumerWidget {
                   t.signin_button,
                   style: TextStyle(
                     color: cs.onPrimary,
-                    fontSize: screenWidth * 0.15,
+                    fontSize: isRtl ? screenWidth * 0.085 : screenWidth * 0.15,
                     fontFamily: 'Monoglyceride',
                   ),
                 ),
 
-                SizedBox(height: screenHeight * 0.075),
+                SizedBox(height: isRtl ? screenHeight * 0.11 : screenHeight * 0.075),
 
                 Text(
-                  t.signin_phoneLabel,
+                  t.phoneLabel,
                   style: TextStyle(
                     color: cs.onSurface,
                     fontWeight: FontWeight.w700,
@@ -147,17 +152,20 @@ class SignInScreen extends ConsumerWidget {
                 ),
                 SizedBox(height: screenHeight * 0.003),
 
-                MyTextField(
-                  controller: _phoneCtrl,
-                  hintText: "+963-000-000-000",
-                  keyboardType: TextInputType.phone,
-                  maxLength: 13,
+                Directionality(
+                  textDirection: TextDirection.ltr,
+                  child: MyTextField(
+                    controller: _phoneCtrl,
+                    hintText: "+963-000-000-000",
+                    keyboardType: TextInputType.phone,
+                    maxLength: 13,
+                  ),
                 ),
 
                 SizedBox(height: screenHeight * 0.013),
 
                 Text(
-                  t.signin_passwordLabel,
+                  t.passwordLabel,
                   style: TextStyle(
                     color: cs.onSurface,
                     fontWeight: FontWeight.w700,
@@ -213,7 +221,7 @@ class SignInScreen extends ConsumerWidget {
                     children: [
                       TextSpan(text: t.signin_noAccount),
                       TextSpan(
-                        text: t.signin_here,
+                        text: t.here,
                         style: TextStyle(
                           color: cs.secondary,
                           decoration: TextDecoration.underline,

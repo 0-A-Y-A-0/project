@@ -368,17 +368,17 @@ abstract class AppLocalizations {
   /// **'Sign in'**
   String get signin_title;
 
-  /// No description provided for @signin_phoneLabel.
+  /// No description provided for @phoneLabel.
   ///
   /// In en, this message translates to:
   /// **'Phone Number'**
-  String get signin_phoneLabel;
+  String get phoneLabel;
 
-  /// No description provided for @signin_passwordLabel.
+  /// No description provided for @passwordLabel.
   ///
   /// In en, this message translates to:
   /// **'Password'**
-  String get signin_passwordLabel;
+  String get passwordLabel;
 
   /// No description provided for @signin_button.
   ///
@@ -404,11 +404,11 @@ abstract class AppLocalizations {
   /// **'Don\'t have an account?\nregister  '**
   String get signin_noAccount;
 
-  /// No description provided for @signin_here.
+  /// No description provided for @here.
   ///
   /// In en, this message translates to:
   /// **'here'**
-  String get signin_here;
+  String get here;
 
   /// No description provided for @auth_errorTryLater.
   ///
@@ -427,6 +427,534 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The admin accepted your account! you can sign in'**
   String get auth_adminAccepted;
+
+  /// No description provided for @register_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Register'**
+  String get register_title;
+
+  /// No description provided for @register_firstNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'First Name'**
+  String get register_firstNameLabel;
+
+  /// No description provided for @register_firstNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'first name'**
+  String get register_firstNameHint;
+
+  /// No description provided for @register_lastNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Last Name'**
+  String get register_lastNameLabel;
+
+  /// No description provided for @register_lastNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'last name'**
+  String get register_lastNameHint;
+
+  /// No description provided for @register_continue.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get register_continue;
+
+  /// No description provided for @register_haveAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Already have an account?\nsign in '**
+  String get register_haveAccount;
+
+  /// No description provided for @register2_birthdateLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Birthdate'**
+  String get register2_birthdateLabel;
+
+  /// No description provided for @register2_birthdateHint.
+  ///
+  /// In en, this message translates to:
+  /// **'dd/mm/yyyy'**
+  String get register2_birthdateHint;
+
+  /// No description provided for @register2_birthdateHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Select birthdate'**
+  String get register2_birthdateHelp;
+
+  /// No description provided for @register2_profilePictureLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile picture'**
+  String get register2_profilePictureLabel;
+
+  /// No description provided for @register2_idPictureLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'ID picture'**
+  String get register2_idPictureLabel;
+
+  /// No description provided for @register2_pickCamera.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera'**
+  String get register2_pickCamera;
+
+  /// No description provided for @register2_pickGallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Gallery'**
+  String get register2_pickGallery;
+
+  /// No description provided for @register_button.
+  ///
+  /// In en, this message translates to:
+  /// **'Register'**
+  String get register_button;
+
+  /// No description provided for @addApt_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Apartment'**
+  String get addApt_title;
+
+  /// No description provided for @common_loading.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading...'**
+  String get common_loading;
+
+  /// No description provided for @addApt_added.
+  ///
+  /// In en, this message translates to:
+  /// **'Apartment added'**
+  String get addApt_added;
+
+  /// No description provided for @addApt_photos.
+  ///
+  /// In en, this message translates to:
+  /// **'Photos'**
+  String get addApt_photos;
+
+  /// No description provided for @common_gallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Gallery'**
+  String get common_gallery;
+
+  /// No description provided for @common_camera.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera'**
+  String get common_camera;
+
+  /// No description provided for @addApt_addUpTo5Images.
+  ///
+  /// In en, this message translates to:
+  /// **'Add up to 5 images'**
+  String get addApt_addUpTo5Images;
+
+  /// No description provided for @addApt_address.
+  ///
+  /// In en, this message translates to:
+  /// **'Address'**
+  String get addApt_address;
+
+  /// No description provided for @addApt_amenities.
+  ///
+  /// In en, this message translates to:
+  /// **'Amenities'**
+  String get addApt_amenities;
+
+  /// No description provided for @field_governorate.
+  ///
+  /// In en, this message translates to:
+  /// **'Governorate'**
+  String get field_governorate;
+
+  /// No description provided for @field_city.
+  ///
+  /// In en, this message translates to:
+  /// **'City'**
+  String get field_city;
+
+  /// No description provided for @field_street.
+  ///
+  /// In en, this message translates to:
+  /// **'Street'**
+  String get field_street;
+
+  /// No description provided for @field_buildingNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Building number'**
+  String get field_buildingNumber;
+
+  /// No description provided for @field_floor.
+  ///
+  /// In en, this message translates to:
+  /// **'Floor'**
+  String get field_floor;
+
+  /// No description provided for @field_apartmentNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Apartment number'**
+  String get field_apartmentNumber;
+
+  /// No description provided for @field_bedrooms.
+  ///
+  /// In en, this message translates to:
+  /// **'Bedrooms'**
+  String get field_bedrooms;
+
+  /// No description provided for @field_bathrooms.
+  ///
+  /// In en, this message translates to:
+  /// **'Bathrooms'**
+  String get field_bathrooms;
+
+  /// No description provided for @field_area.
+  ///
+  /// In en, this message translates to:
+  /// **'Area (m²)'**
+  String get field_area;
+
+  /// No description provided for @field_rentPricePerNight.
+  ///
+  /// In en, this message translates to:
+  /// **'Rent price per night'**
+  String get field_rentPricePerNight;
+
+  /// No description provided for @field_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get field_description;
+
+  /// No description provided for @hint_selectGovernorateFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Select a governorate first'**
+  String get hint_selectGovernorateFirst;
+
+  /// No description provided for @error_selectGovernorate.
+  ///
+  /// In en, this message translates to:
+  /// **'Select a governorate'**
+  String get error_selectGovernorate;
+
+  /// No description provided for @error_selectCity.
+  ///
+  /// In en, this message translates to:
+  /// **'Select a city'**
+  String get error_selectCity;
+
+  /// No description provided for @error_streetRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Street is required'**
+  String get error_streetRequired;
+
+  /// No description provided for @error_required.
+  ///
+  /// In en, this message translates to:
+  /// **'Required'**
+  String get error_required;
+
+  /// No description provided for @error_enterNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter number'**
+  String get error_enterNumber;
+
+  /// No description provided for @error_mustBeGreaterThanZero.
+  ///
+  /// In en, this message translates to:
+  /// **'Must be > 0'**
+  String get error_mustBeGreaterThanZero;
+
+  /// No description provided for @error_select.
+  ///
+  /// In en, this message translates to:
+  /// **'Select'**
+  String get error_select;
+
+  /// No description provided for @error_descriptionRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Description required'**
+  String get error_descriptionRequired;
+
+  /// No description provided for @profile_editProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Profile'**
+  String get profile_editProfile;
+
+  /// No description provided for @profile_history.
+  ///
+  /// In en, this message translates to:
+  /// **'History'**
+  String get profile_history;
+
+  /// No description provided for @profile_myApartments.
+  ///
+  /// In en, this message translates to:
+  /// **'My apartments'**
+  String get profile_myApartments;
+
+  /// No description provided for @profile_favorites.
+  ///
+  /// In en, this message translates to:
+  /// **'Favorites'**
+  String get profile_favorites;
+
+  /// No description provided for @profile_rentalHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Rental history'**
+  String get profile_rentalHistory;
+
+  /// No description provided for @profile_app.
+  ///
+  /// In en, this message translates to:
+  /// **'App'**
+  String get profile_app;
+
+  /// No description provided for @profile_theme.
+  ///
+  /// In en, this message translates to:
+  /// **'Theme'**
+  String get profile_theme;
+
+  /// No description provided for @profile_language.
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get profile_language;
+
+  /// No description provided for @profile_logout.
+  ///
+  /// In en, this message translates to:
+  /// **'Log Out'**
+  String get profile_logout;
+
+  /// No description provided for @profile_help.
+  ///
+  /// In en, this message translates to:
+  /// **'Help'**
+  String get profile_help;
+
+  /// No description provided for @profile_sendFeedback.
+  ///
+  /// In en, this message translates to:
+  /// **'Send feedback'**
+  String get profile_sendFeedback;
+
+  /// No description provided for @profile_privacyPolicy.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy Policy'**
+  String get profile_privacyPolicy;
+
+  /// No description provided for @profile_aboutUs.
+  ///
+  /// In en, this message translates to:
+  /// **'About us'**
+  String get profile_aboutUs;
+
+  /// No description provided for @profile_version.
+  ///
+  /// In en, this message translates to:
+  /// **'my app v2.3.5 (12548)'**
+  String get profile_version;
+
+  /// No description provided for @apartment_building.
+  ///
+  /// In en, this message translates to:
+  /// **'Building'**
+  String get apartment_building;
+
+  /// No description provided for @apartment_apartment.
+  ///
+  /// In en, this message translates to:
+  /// **'Apartment'**
+  String get apartment_apartment;
+
+  /// No description provided for @apartment_street.
+  ///
+  /// In en, this message translates to:
+  /// **'Street'**
+  String get apartment_street;
+
+  /// No description provided for @apartment_perNight.
+  ///
+  /// In en, this message translates to:
+  /// **'per night'**
+  String get apartment_perNight;
+
+  /// No description provided for @apartment_floorNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Floor {floor}'**
+  String apartment_floorNumber(Object floor);
+
+  /// No description provided for @apartment_descriptionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get apartment_descriptionTitle;
+
+  /// No description provided for @apartment_aboutOwner.
+  ///
+  /// In en, this message translates to:
+  /// **'About Owner'**
+  String get apartment_aboutOwner;
+
+  /// No description provided for @rating_addReviewOptional.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a review (optional)'**
+  String get rating_addReviewOptional;
+
+  /// No description provided for @rating_postReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Post your review'**
+  String get rating_postReview;
+
+  /// No description provided for @rating_noWrittenReview.
+  ///
+  /// In en, this message translates to:
+  /// **'No written review'**
+  String get rating_noWrittenReview;
+
+  /// No description provided for @booking_note.
+  ///
+  /// In en, this message translates to:
+  /// **'Note: Please double-check that the dates you enter are not highlighted as unavailable on the calendar page.'**
+  String get booking_note;
+
+  /// No description provided for @booking_from.
+  ///
+  /// In en, this message translates to:
+  /// **'From'**
+  String get booking_from;
+
+  /// No description provided for @booking_to.
+  ///
+  /// In en, this message translates to:
+  /// **'To'**
+  String get booking_to;
+
+  /// No description provided for @booking_selectDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Select date'**
+  String get booking_selectDate;
+
+  /// No description provided for @booking_payment.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment'**
+  String get booking_payment;
+
+  /// No description provided for @booking_cardNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Card number'**
+  String get booking_cardNumber;
+
+  /// No description provided for @booking_cardHint.
+  ///
+  /// In en, this message translates to:
+  /// **'0000 0000 0000 0000'**
+  String get booking_cardHint;
+
+  /// No description provided for @booking_cardRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Card number is required'**
+  String get booking_cardRequired;
+
+  /// No description provided for @booking_cardMustBe16.
+  ///
+  /// In en, this message translates to:
+  /// **'Card number must be 16 digits'**
+  String get booking_cardMustBe16;
+
+  /// No description provided for @booking_requestBooking.
+  ///
+  /// In en, this message translates to:
+  /// **'Request booking'**
+  String get booking_requestBooking;
+
+  /// No description provided for @booking_selectStartDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Select start date'**
+  String get booking_selectStartDate;
+
+  /// No description provided for @booking_selectEndDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Select end date'**
+  String get booking_selectEndDate;
+
+  /// No description provided for @booking_snack_selectBothDates.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select both From and To dates.'**
+  String get booking_snack_selectBothDates;
+
+  /// No description provided for @booking_snack_submitted.
+  ///
+  /// In en, this message translates to:
+  /// **'Booking request submitted!'**
+  String get booking_snack_submitted;
+
+  /// No description provided for @booking_snack_failed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to submit booking: '**
+  String get booking_snack_failed;
+
+  /// No description provided for @datePicker_year.
+  ///
+  /// In en, this message translates to:
+  /// **'Year'**
+  String get datePicker_year;
+
+  /// No description provided for @datePicker_month.
+  ///
+  /// In en, this message translates to:
+  /// **'Month'**
+  String get datePicker_month;
+
+  /// No description provided for @datePicker_day.
+  ///
+  /// In en, this message translates to:
+  /// **'Day'**
+  String get datePicker_day;
+
+  /// No description provided for @common_cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get common_cancel;
+
+  /// No description provided for @common_ok.
+  ///
+  /// In en, this message translates to:
+  /// **'OK'**
+  String get common_ok;
 }
 
 class _AppLocalizationsDelegate

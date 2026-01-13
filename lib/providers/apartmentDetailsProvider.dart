@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/Apartment.dart';
 import '../models/Governorates.dart';
@@ -25,6 +26,7 @@ class ApartmentDetailsNotifier extends AsyncNotifier<Apartment> {
     final address = data['address'] ?? {};
     final details = data['details'] ?? {};
     final assets = data['assets'] as List<dynamic>? ?? [];
+    final rentals = (data['rentals'] as List<dynamic>?) ?? [];
 
     final apartment = Apartment(
       id: data['id'] as int,
@@ -40,6 +42,13 @@ class ApartmentDetailsNotifier extends AsyncNotifier<Apartment> {
       description_en: details['description_en'] as String,
       rent_price_per_night: double.tryParse(details['rent_price_per_night'].toString()) ?? 0.0,
       photos: assets.map<String>((e) => e['asset_url'] as String).toList(),
+      rentals: rentals.map<DateTimeRange>((e) {
+        final start = DateTime.parse(e['start_date'] as String);
+        final end = DateTime.parse(e['end_date'] as String);
+        return DateTimeRange(start: start, end: end);
+      }).toList(),
+      owner_name: data['owner_name'] as String,
+      owner_photo_url: data['owner_photo_url'] as String,
     );
 
 

@@ -39,7 +39,7 @@ class AppTheme {
       tertiary: dustyRose,
       surface: tootie,    
       onSurface: beige,   
-      error: Color.fromARGB(255, 161, 16, 6),
+      error: Color.fromARGB(255, 255, 78, 66),
       onError: Colors.black,
     );
 

@@ -6,7 +6,7 @@ import 'package:project/models/Apartment.dart';
 import 'package:project/providers/apartmentDetailsProvider.dart';
 import 'package:project/screens/rating_tab.dart';
 import 'package:project/widgets/apartment_info.dart';
-import 'package:project/widgets/booking_fields.dart';
+import 'package:project/screens/booking_tab.dart';
 import 'package:project/widgets/calender_show_only.dart';
 import 'package:tab_container/tab_container.dart';
 
@@ -223,22 +223,27 @@ class _ApartmentDetailsScreenState extends ConsumerState<ApartmentDetailsScreen>
               ],
 
               children: [
-                ApartmentInfo(apartment: Apartment(
-                    id: 2,
-                    governorate: Governorates.governorates[0],
-                    city: "Mazzeh", street: "street",
-                    building_number: "44",
-                    floor: 4,
-                    apartment_number: 4,
-                    number_of_bedrooms: 3,
-                    number_of_bathrooms: 2,
-                    area_sq_meters: 160,
-                    description_en: " beautidul and amazing",
-                    rent_price_per_night: 456.3)
+                ApartmentInfo(apartment:
+                 Apartment(
+                    id: apartment.value!.id,
+                    governorate: apartment.value!.governorate,
+                    city: apartment.value!.city, street: apartment.value!.street,
+                    building_number: apartment.value!.building_number,
+                    floor: apartment.value!.floor,
+                    apartment_number: apartment.value!.apartment_number,
+                    number_of_bedrooms: apartment.value!.number_of_bedrooms,
+                    number_of_bathrooms: apartment.value!.number_of_bathrooms,
+                    area_sq_meters: apartment.value!.area_sq_meters,
+                    description_en: apartment.value!.description_en,
+                    rent_price_per_night: apartment.value!.rent_price_per_night,
+                    rentals: apartment.value!.rentals,
+                    owner_name: apartment.value!.owner_name,
+                    owner_photo_url: apartment.value!.owner_photo_url, 
+                    )
                 ),
                 RatingTab(),
                 TakenDaysCalendar(
-                  takenRanges: taken,
+                  takenRanges: apartment.value!.rentals,
                   firstDate: DateTime(2025, 1, 1),
                   lastDate: DateTime(2026, 12, 31),
                 ),

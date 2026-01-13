@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:project/generated/l10n/app_localizations.dart';
 import 'package:project/widgets/date_text_field.dart';
 import 'package:project/widgets/primary_button.dart';
 import 'package:project/widgets/upload_box.dart';
@@ -91,12 +92,12 @@ class _RegisterSecondScreenState extends ConsumerState<RegisterSecondScreen> {
             children: [
               ListTile(
                 leading: Icon(Icons.photo_camera, color: cs.onSurface),
-                title: Text('Camera', style: TextStyle(color: cs.onSurface)),
+                title: Text(AppLocalizations.of(context)!.register2_pickCamera, style: TextStyle(color: cs.onSurface)),
                 onTap: () => Navigator.pop(context, ImageSource.camera),
               ),
               ListTile(
                 leading: Icon(Icons.photo_library, color: cs.onSurface),
-                title: Text('Gallery', style: TextStyle(color: cs.onSurface)),
+                title: Text(AppLocalizations.of(context)!.register2_pickGallery, style: TextStyle(color: cs.onSurface)),
                 onTap: () => Navigator.pop(context, ImageSource.gallery),
               ),
             ],
@@ -151,11 +152,15 @@ class _RegisterSecondScreenState extends ConsumerState<RegisterSecondScreen> {
 
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
+    final isRtl = Localizations.localeOf(context).languageCode == 'ar';
+    final AppLocalizations t = AppLocalizations.of(context)!;
 
-    final bgAsset = isDark
-        ? 'assets/images/backgrounds/register_dark_bg.svg'
-        : 'assets/images/backgrounds/register_light_bg.svg';
-
+   final bgAsset = switch ((isRtl, isDark)) {
+      (false, false) => 'assets/images/backgrounds/register_light_bg.svg',
+      (false, true) => 'assets/images/backgrounds/register_dark_bg.svg',
+      (true, false) => 'assets/images/backgrounds/rtl_register_light_bg.svg',
+      (true, true) => 'assets/images/backgrounds/rtl_register_dark_bg.svg',
+    };
     return Scaffold(
       // resizeToAvoidBottomInset: true,
       body: Stack(
@@ -172,19 +177,19 @@ class _RegisterSecondScreenState extends ConsumerState<RegisterSecondScreen> {
                 SizedBox(height: 100 * screenHeight / 1920),
 
                 Text(
-                  "Register",
+                  t.register_title,
                   style: TextStyle(
                     color: cs.onPrimary,
-                    fontSize: screenWidth * 0.15,
+                    fontSize: isRtl ? screenWidth * 0.1 : screenWidth * 0.15,
                     fontFamily: 'Monoglyceride',
                   ),
                 ),
 
-                SizedBox(height: screenHeight * 0.05),
+                SizedBox(height: isRtl ? screenWidth * 0.13 : screenWidth * 0.05),
 
                 // Birthdate label
                 Text(
-                  "Birthdate",
+                  t.register2_birthdateLabel,
                   style: TextStyle(
                     color: cs.onSurface,
                     fontWeight: FontWeight.w700,
@@ -195,7 +200,7 @@ class _RegisterSecondScreenState extends ConsumerState<RegisterSecondScreen> {
 
                 MyDateField(
                   controller: _birthdateCtrl,
-                  hintText: "dd/mm/yyyy",
+                  hintText: t.register2_birthdateHint,
                   onTap: _pickBirthdate,
                 ),
 
@@ -203,7 +208,7 @@ class _RegisterSecondScreenState extends ConsumerState<RegisterSecondScreen> {
 
                 // Profile picture
                 Text(
-                  "profile picture",
+                  t.register2_profilePictureLabel,
                   style: TextStyle(
                     color: cs.onSurface,
                     fontWeight: FontWeight.w700,
@@ -220,7 +225,7 @@ class _RegisterSecondScreenState extends ConsumerState<RegisterSecondScreen> {
 
                 // ID picture
                 Text(
-                  "ID picture",
+                  t.register2_idPictureLabel,
                   style: TextStyle(
                     color: cs.onSurface,
                     fontWeight: FontWeight.w700,
@@ -239,8 +244,8 @@ class _RegisterSecondScreenState extends ConsumerState<RegisterSecondScreen> {
                 PrimaryButton(
                   // change the text if it's loading
                   label: register.status == AuthStatus.loading
-                      ? "Loading ..."
-                      : "Register",
+                      ? t.loading
+                      : t.register_title,
                   onPressed: () async {
                     print(widget.firstName);
                     print(widget.lastName);
@@ -294,9 +299,9 @@ class _RegisterSecondScreenState extends ConsumerState<RegisterSecondScreen> {
                       fontSize: screenHeight * 0.021,
                     ),
                     children: [
-                      const TextSpan(text: "Already have an account?\nsign in  "),
+                       TextSpan(text: t.register_haveAccount),
                       TextSpan(
-                        text: "here",
+                        text: t.here,
                         style: TextStyle(
                           color: cs.secondary,
                           decoration: TextDecoration.underline,

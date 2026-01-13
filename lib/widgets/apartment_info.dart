@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project/generated/l10n/app_localizations.dart';
 import 'package:project/models/Apartment.dart';
 
 class ApartmentInfo extends StatelessWidget {
@@ -18,11 +19,15 @@ class ApartmentInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = Theme.of(context).textTheme;
+    final th = Theme.of(context).textTheme;
     final cs = Theme.of(context).colorScheme;
+    final AppLocalizations t = AppLocalizations.of(context)!;
 
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
+    final imageUrl = apartment.owner_photo_url != null
+        ? 'http://10.0.2.2:8000/storage/${apartment.owner_photo_url}'
+        : null;
 
     return SafeArea(
       child: SingleChildScrollView(
@@ -37,7 +42,7 @@ class ApartmentInfo extends StatelessWidget {
                   // price
                   RichText(
                     text: TextSpan(
-                      style: t.headlineSmall?.copyWith(
+                      style: th.headlineSmall?.copyWith(
                         color: cs.onSurface,
                         fontWeight: FontWeight.w900,
                       ),
@@ -48,8 +53,8 @@ class ApartmentInfo extends StatelessWidget {
                               '${apartment.rent_price_per_night.toStringAsFixed(2)}\$',
                         ),
                         TextSpan(
-                          text: '  per night',
-                          style: t.bodySmall?.copyWith(
+                          text: '  ${t.apartment_perNight}',
+                          style: th.bodySmall?.copyWith(
                             color: cs.onSurfaceVariant,
                             fontWeight: FontWeight.w600,
                           ),
@@ -63,7 +68,7 @@ class ApartmentInfo extends StatelessWidget {
                   // address
                   Text(
                     '${apartment.makeAddress()} • ${apartment.apartment_number}',
-                    style: t.bodyMedium?.copyWith(color: cs.onSurfaceVariant),
+                    style: th.bodyMedium?.copyWith(color: cs.onSurfaceVariant),
                   ),
 
                   SizedBox(height: screenHeight * 0.015),
@@ -89,7 +94,7 @@ class ApartmentInfo extends StatelessWidget {
                       ),
                       Chip(
                         icon: Icons.stairs_outlined,
-                        text: 'Floor ${apartment.floor}',
+                        text: t.apartment_floorNumber(apartment.floor),
                       ),
                     ],
                   ),
@@ -102,10 +107,13 @@ class ApartmentInfo extends StatelessWidget {
             Card(
               child: Column(
                 children: [
-                  RowItem('Building', apartment.building_number),
-                  RowItem('Apartment', '${apartment.apartment_number}'),
-                  RowItem('City', apartment.city),
-                  RowItem('Street', apartment.street),
+                  RowItem(t.apartment_building, apartment.building_number),
+                  RowItem(
+                    t.apartment_apartment,
+                    '${apartment.apartment_number}',
+                  ),
+                  RowItem(t.city, apartment.city),
+                  RowItem(t.apartment_street, apartment.street),
                 ],
               ),
             ),
@@ -117,15 +125,17 @@ class ApartmentInfo extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Description',
-                    style: t.titleMedium?.copyWith(fontWeight: FontWeight.w800),
+                    t.apartment_descriptionTitle,
+                    style: th.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w800,
+                    ),
                   ),
                   SizedBox(height: screenHeight * 0.005),
                   Text(
                     apartment.description_en.isEmpty
                         ? '-'
                         : apartment.description_en,
-                    style: t.bodyMedium?.copyWith(
+                    style: th.bodyMedium?.copyWith(
                       color: cs.onSurfaceVariant,
                       height: screenHeight * 0.005,
                     ),
@@ -142,23 +152,39 @@ class ApartmentInfo extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'About Owner',
-                    style: t.titleMedium?.copyWith(fontWeight: FontWeight.w800),
+                    t.apartment_aboutOwner,
+                    style: th.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w800,
+                    ),
                   ),
                   SizedBox(height: screenHeight * 0.01),
                   Row(
                     children: [
-                        SizedBox(width: screenWidth * 0.03),
+                      SizedBox(width: screenWidth * 0.03),
                       CircleAvatar(
-                        radius: screenWidth * 0.08,
-                        backgroundColor: cs.onPrimary,
-                        child: CircleAvatar(
-                          radius: screenWidth * 0.08,
-                          // hereeeeeeeee user.pic
-                          backgroundImage: AssetImage('assets/images/apartments/test.jpg'),
+                        radius: screenWidth * 0.075,
+                        backgroundColor: Colors.transparent,
+                        child: ClipOval(
+                          child: SizedBox(
+                            width: screenWidth * 0.15,
+                            height: screenWidth * 0.15,
+                            child:
+                                (imageUrl != null &&
+                                    imageUrl.trim().isNotEmpty)
+                                ? Image.network(
+                                    imageUrl,
+                                    fit: BoxFit.cover,
+                                    errorBuilder: (_, __, ___) => Image.asset(
+                                      'assets/images/apartments/test.jpg',
+                                      fit: BoxFit.cover,
+                                    ),
+                                  )
+                                : Image.asset(
+                                    'assets/images/apartments/test.jpg',
+                                    fit: BoxFit.cover,
+                                  ),
+                          ),
                         ),
-
-                        //Icon(Icons.person, color: cs.primary, size: screenWidth * 0.1),
                       ),
                       SizedBox(width: screenWidth * 0.085),
                       Column(
@@ -166,8 +192,8 @@ class ApartmentInfo extends StatelessWidget {
                         children: [
                           Text(
                             //user name
-                            "Mohammad Hassan Jaalouk",
-                            style: t.bodyMedium?.copyWith(
+                            apartment.owner_name,
+                            style: th.bodyMedium?.copyWith(
                               fontWeight: FontWeight.w700,
                             ),
                           ),
@@ -175,15 +201,14 @@ class ApartmentInfo extends StatelessWidget {
                             width: screenWidth * 0.5,
                             //bio although it wont be better than this one
                             child: Text(
-                              "this is Hasan he is very mja3lak here we are introducing the amazing owner of this amazing apartment",
-                              style: t.bodySmall?.copyWith(
+                              "this is ${apartment.owner_name}, the owner of this amazing apartment",
+                              style: th.bodySmall?.copyWith(
                                 color: cs.onSurfaceVariant,
                               ),
                             ),
                           ),
                         ],
                       ),
-                      
                     ],
                   ),
                   SizedBox(height: screenHeight * 0.018),

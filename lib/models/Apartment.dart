@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:project/models/Governorates.dart';
 
 class Apartment {
@@ -14,6 +15,9 @@ class Apartment {
   final String description_en;
   final double rent_price_per_night;
   final List<String> photos;
+  final List<DateTimeRange> rentals;
+  final String owner_name;
+  final String owner_photo_url;
 
   Apartment({
     required this.id,
@@ -29,6 +33,9 @@ class Apartment {
     this.description_en = '',
     required this.rent_price_per_night,
     this.photos = const [],
+    this.rentals = const [],
+    this.owner_name = '',
+    this.owner_photo_url = '',
   });
 
   // factory Apartment.fromJson(Map<String, dynamic> json) {

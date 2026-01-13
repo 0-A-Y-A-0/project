@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:project/generated/l10n/app_localizations.dart';
 
 class AddRating extends StatefulWidget {
   const AddRating({super.key});
@@ -19,6 +20,7 @@ class _AddRatingState extends State<AddRating> {
     final cs = Theme.of(context).colorScheme;
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
+    final AppLocalizations t = AppLocalizations.of(context)!;
 
     return Column(
       children: [
@@ -49,19 +51,19 @@ class _AddRatingState extends State<AddRating> {
         SizedBox(height: 10,),
 
         _hasRated
-            ? _buildSubmittedReview(cs)
-            : _buildReviewForm(cs, screenWidth),
+            ? _buildSubmittedReview(cs, t)
+            : _buildReviewForm(cs, screenWidth,t),
       ],
     );
   }
 
-  Widget _buildReviewForm(ColorScheme cs, double screenWidth) {
+  Widget _buildReviewForm(ColorScheme cs, double screenWidth  , AppLocalizations t) {
     return Column(
       children: [
         TextFormField(
           controller: _reviewCtrl,
           decoration: InputDecoration(
-            labelText: 'Add a review (optional)',
+            labelText: t.rating_addReviewOptional,
             labelStyle: TextStyle(
               color: cs.onPrimary,
               fontWeight: FontWeight.w600,
@@ -108,7 +110,7 @@ class _AddRatingState extends State<AddRating> {
               ),
             ),
             child: Text(
-              'Post your review',
+              t.rating_postReview,
               style: TextStyle(
                 color: cs.onPrimary,
                 fontSize: screenWidth * 0.05,
@@ -121,7 +123,7 @@ class _AddRatingState extends State<AddRating> {
     );
   }
 
-  Widget _buildSubmittedReview(ColorScheme cs) {
+  Widget _buildSubmittedReview(ColorScheme cs, AppLocalizations t) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(12),
@@ -135,7 +137,7 @@ class _AddRatingState extends State<AddRating> {
       ),
       child: Text(
         _reviewCtrl.text.isEmpty
-            ? 'No written review'
+            ? t.rating_noWrittenReview
             : _reviewCtrl.text,
         style: TextStyle(
           color: cs.onPrimary,

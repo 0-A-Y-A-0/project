@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:project/generated/l10n/app_localizations.dart';
 
 import 'package:project/models/Apartment.dart';
 import 'package:project/models/Governorates.dart';
@@ -85,27 +86,27 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
 
     try{
       print ("inside try");
-      // final formData = FormData.fromMap({
-      //   'governorate': _gov,
-      //   'city': _city,
-      //   'street': _streetCtrl.text.trim(),
-      //   'building_number': _buildingCtrl.text.trim(),
-      //   'floor': int.parse(_floorCtrl.text.trim()),
-      //   'apartment_number': int.parse(_aptNumCtrl.text.trim()),
-      //   'number_of_bedrooms': _bedrooms,
-      //   'number_of_bathrooms': _bathrooms,
-      //   'area_sq_meters': double.parse(_areaCtrl.text.trim()).round(),
-      //   'rent_price_per_night': double.parse(_priceCtrl.text.trim()),
-      //   'description_en': _descCtrl.text.trim(),
-      //   'description_ar': _descCtrl.text.trim(),
-      //   'has_balcony': 0,
-      //   'assets': [
-      //     for (var xfile in _images)
-      //       await MultipartFile.fromFile(xfile.path, filename: xfile.name)
-      //   ],
-      // });
+      final formData = FormData.fromMap({
+        'governorate': _gov,
+        'city': _city,
+        'street': _streetCtrl.text.trim(),
+        'building_number': _buildingCtrl.text.trim(),
+        'floor': int.parse(_floorCtrl.text.trim()),
+        'apartment_number': int.parse(_aptNumCtrl.text.trim()),
+        'number_of_bedrooms': _bedrooms,
+        'number_of_bathrooms': _bathrooms,
+        'area_sq_meters': double.parse(_areaCtrl.text.trim()).round(),
+        'rent_price_per_night': double.parse(_priceCtrl.text.trim()),
+        'description_en': _descCtrl.text.trim(),
+        'description_ar': _descCtrl.text.trim(),
+        'has_balcony': 0,
+        'assets': [
+          for (var xfile in _images)
+            await MultipartFile.fromFile(xfile.path, filename: xfile.name)
+        ],
+      });
 
-      final formData = FormData();
+      // final formData = FormData();
 
       formData.fields.addAll([
         MapEntry('governorate', _gov.toString()),
@@ -144,21 +145,21 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
       ).showSnackBar(const SnackBar(content: Text('Apartment added')));
 
       //  clear fields
-      // setState(() {
-      //   _gov = null;
-      //   _city = null;
-      //   _bedrooms = null;
-      //   _bathrooms = null;
-      //   _images.clear();
-      // });
-      //
-      // _streetCtrl.clear();
-      // _buildingCtrl.clear();
-      // _floorCtrl.clear();
-      // _aptNumCtrl.clear();
-      // _areaCtrl.clear();
-      // _descCtrl.clear();
-      // _priceCtrl.clear();
+      setState(() {
+        _gov = null;
+        _city = null;
+        _bedrooms = null;
+        _bathrooms = null;
+        _images.clear();
+      });
+      
+      _streetCtrl.clear();
+      _buildingCtrl.clear();
+      _floorCtrl.clear();
+      _aptNumCtrl.clear();
+      _areaCtrl.clear();
+      _descCtrl.clear();
+      _priceCtrl.clear();
 
       // close keyboard
       FocusManager.instance.primaryFocus?.unfocus();
@@ -178,6 +179,7 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
 
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
+    final AppLocalizations t = AppLocalizations.of(context)!;
 
     // For bedrooms/bathrooms dropdown
     final nums = List<int>.generate(10, (i) => i + 1);
@@ -188,7 +190,7 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
       appBar: AppBar(
         title: Center(
           child: Text(
-            "Add Apartment",
+            t.addApt_title,
             style: TextStyle(
               color: cs.primary,
               fontSize: screenWidth * 0.065,
@@ -220,7 +222,7 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         Text(
-                          'Photos',
+                          t.addApt_photos,
                           style: TextStyle(
                             fontSize: screenWidth * 0.04,
                             fontWeight: FontWeight.w600,
@@ -235,7 +237,7 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
                               child: OutlinedButton.icon(
                                 onPressed: _pickImages,
                                 icon: const Icon(Icons.photo_library_outlined),
-                                label: const Text('Gallery'),
+                                label: Text(t.common_gallery),
                               ),
                             ),
                             SizedBox(width: screenWidth * 0.02),
@@ -243,7 +245,7 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
                               child: OutlinedButton.icon(
                                 onPressed: _takePhoto,
                                 icon: const Icon(Icons.photo_camera_outlined),
-                                label: const Text('Camera'),
+                                label: Text(t.common_camera),
                               ),
                             ),
                           ],
@@ -260,11 +262,11 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
                               ),
                               borderRadius: BorderRadius.circular(12),
                             ),
-                            child: const Row(
+                            child: Row(
                               children: [
                                 Icon(Icons.image_outlined),
                                 SizedBox(width: 10),
-                                Expanded(child: Text('Add up to 5 images')),
+                                Expanded(child: Text(t.addApt_addUpTo5Images)),
                               ],
                             ),
                           )
@@ -338,7 +340,7 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
                         Align(
                           alignment: AlignmentDirectional.centerStart,
                           child: Text(
-                            'Address',
+                            t.addApt_address,
                             style: TextStyle(
                               fontSize: screenWidth * 0.04,
                               fontWeight: FontWeight.w600,
@@ -351,7 +353,7 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
                         DropdownButtonFormField<int>(
                           initialValue: _gov,
                           decoration: InputDecoration(
-                            labelText: 'Governorate',
+                            labelText: t.governorate,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),
@@ -378,7 +380,7 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
                             setState(() {});
                           },
                           validator: (v) =>
-                              v == null ? 'Select a governorate' : null,
+                              v == null ? t.error_selectGovernorate : null,
                         ),
                         SizedBox(height: screenHeight * 0.02),
 
@@ -395,9 +397,9 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
                             error: (_, __) => null,
                           ),
                           decoration: InputDecoration(
-                            labelText: _gov == null ? "Select a governorate first"
-                                : cities.isLoading ? "Loading..."
-                                : 'City',
+                            labelText: _gov == null ? t.selectGovernorateFirst
+                                : cities.isLoading ? t.loading
+                                : t.city,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),
@@ -422,7 +424,7 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
                               });
                             },
                           validator: (v) =>
-                          v == null ? 'Select a city' : null,
+                          v == null ? t.error_selectCity : null,
                         ),
                         SizedBox(height: screenHeight * 0.02),
 
@@ -430,13 +432,13 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
                         TextFormField(
                           controller: _streetCtrl,
                           decoration: InputDecoration(
-                            labelText: 'Street',
+                            labelText: t.field_street,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),
                           ),
                           validator: (v) => (v == null || v.trim().isEmpty)
-                              ? 'Street is required'
+                              ? t.error_streetRequired
                               : null,
                         ),
                         SizedBox(height: screenHeight * 0.02),
@@ -448,14 +450,14 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
                               child: TextFormField(
                                 controller: _buildingCtrl,
                                 decoration: InputDecoration(
-                                  labelText: 'Building number',
+                                  labelText: t.field_buildingNumber,
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                 ),
                                 validator: (v) =>
                                     (v == null || v.trim().isEmpty)
-                                    ? 'Required'
+                                    ? t.error_required
                                     : null,
                               ),
                             ),
@@ -464,7 +466,7 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
                               child: TextFormField(
                                 controller: _floorCtrl,
                                 decoration: InputDecoration(
-                                  labelText: 'Floor',
+                                  labelText: t.field_floor,
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(12),
                                   ),
@@ -475,7 +477,7 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
                                 ],
                                 validator: (v) =>
                                     int.tryParse((v ?? '').trim()) == null
-                                    ? 'Enter number'
+                                    ? t.error_enterNumber
                                     : null,
                               ),
                             ),
@@ -487,7 +489,7 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
                         TextFormField(
                           controller: _aptNumCtrl,
                           decoration: InputDecoration(
-                            labelText: 'Apartment number',
+                            labelText: t.field_apartmentNumber,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),
@@ -498,7 +500,7 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
                           ],
                           validator: (v) =>
                               int.tryParse((v ?? '').trim()) == null
-                              ? 'Enter number'
+                              ? t.error_enterNumber
                               : null,
                         ),
                       ],
@@ -522,7 +524,7 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
                         Align(
                           alignment: AlignmentDirectional.centerStart,
                           child: Text(
-                            'Amenities',
+                            t.addApt_amenities,
                             style: TextStyle(
                               fontSize: screenWidth * 0.04,
                               fontWeight: FontWeight.w600,
@@ -538,7 +540,7 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
                               child: DropdownButtonFormField<int>(
                                 initialValue: _bedrooms,
                                 decoration: InputDecoration(
-                                  labelText: 'Bedrooms',
+                                  labelText: t.field_bedrooms,
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(12),
                                   ),
@@ -552,7 +554,7 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
                                     )
                                     .toList(),
                                 onChanged: (v) => setState(() => _bedrooms = v),
-                                validator: (v) => v == null ? 'Select' : null,
+                                validator: (v) => v == null ? t.error_select : null,
                               ),
                             ),
                             const SizedBox(width: 12),
@@ -560,7 +562,7 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
                               child: DropdownButtonFormField<int>(
                                 initialValue: _bathrooms,
                                 decoration: InputDecoration(
-                                  labelText: 'Bathrooms',
+                                  labelText: t.field_bathrooms,
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(12),
                                   ),
@@ -575,7 +577,7 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
                                     .toList(),
                                 onChanged: (v) =>
                                     setState(() => _bathrooms = v),
-                                validator: (v) => v == null ? 'Select' : null,
+                                validator: (v) => v == null ? t.error_select : null,
                               ),
                             ),
                           ],
@@ -586,7 +588,7 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
                         TextFormField(
                           controller: _areaCtrl,
                           decoration: InputDecoration(
-                            labelText: 'Area (m²)',
+                            labelText: t.field_area,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),
@@ -602,8 +604,8 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
                           validator: (v) {
                             final s = (v ?? '').trim();
                             final n = double.tryParse(s);
-                            if (n == null) return 'Enter number';
-                            if (n <= 0) return 'Must be > 0';
+                            if (n == null) return t.error_enterNumber;
+                            if (n <= 0) return t.error_mustBeGreaterThanZero;
                             return null;
                           },
                         ),
@@ -628,7 +630,7 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
                         TextFormField(
                           controller: _priceCtrl,
                           decoration: InputDecoration(
-                            labelText: 'Rent price per night',
+                            labelText: t.price,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),
@@ -644,8 +646,8 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
                           validator: (v) {
                             final s = (v ?? '').trim();
                             final n = double.tryParse(s);
-                            if (n == null) return 'Enter number';
-                            if (n <= 0) return 'Must be > 0';
+                            if (n == null) return t.error_enterNumber;
+                            if (n <= 0) return t.error_mustBeGreaterThanZero;
                             return null;
                           },
                         ),
@@ -654,7 +656,7 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
                         TextFormField(
                           controller: _descCtrl,
                           decoration: InputDecoration(
-                            labelText: 'Description',
+                            labelText: t.field_description,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),
@@ -663,7 +665,7 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
                           minLines: 4,
                           maxLines: 8,
                           validator: (v) => (v == null || v.trim().isEmpty)
-                              ? 'Description required'
+                              ? t.error_descriptionRequired
                               : null,
                         ),
                       ],
@@ -683,8 +685,8 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
                     ),
                     onPressed: _submit,
                     child: Text(
-                      _isSubmitting ? "Loading...."
-                      : 'Add Apartment',
+                      _isSubmitting ? t.loading
+                      : t.addApt_title,
                       style: TextStyle(
                         fontSize: screenWidth * 0.05,
                         fontFamily: 'Monoglyceride',

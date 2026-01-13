@@ -1,25 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:project/models/Apartment.dart';
 import 'package:project/screens/apartment_details_screen.dart';
 
-class ApartmentWidget extends StatefulWidget {
+import '../providers/favorites_provider.dart';
+
+class ApartmentWidget extends ConsumerStatefulWidget {
   ApartmentWidget({super.key, required this.apartment, this.height = 200});
 
   final Apartment apartment ;
   final double height;
 
   @override
-  State<ApartmentWidget> createState() => _ApartmentWidgetState();
+  ConsumerState<ApartmentWidget> createState() => _ApartmentWidgetState();
 }
 
-class _ApartmentWidgetState extends State<ApartmentWidget> {
-    bool isFav = false; // just for testing ... it should be removed in the future
+class _ApartmentWidgetState extends ConsumerState<ApartmentWidget> {
+  bool _isToggling = false; // like loading ... loading works for the whole provider not for the toggling method
+
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme ;
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
+
+    // listening to the fav provider
+    final favorites = ref.watch(FavoritesProvider);
+    final isFav = favorites.maybeWhen(
+      data: (list) => list.any((a) => a.id == widget.apartment.id),
+      orElse: () => false,
+    );
 
     return
       Container(
@@ -102,16 +113,20 @@ class _ApartmentWidgetState extends State<ApartmentWidget> {
                       bottom: 5,
                       start:  15,
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            widget.apartment.makeAddress(),
-                            textAlign: TextAlign.start,
-                            style: TextStyle(
-                                color: cs.onPrimary,
-                                fontWeight: FontWeight.w900,
-                                fontSize: screenWidth * 0.045,
-                                fontFamily: 'BellotaText',
+                          SizedBox(
+                            width: screenWidth * 0.55,
+                            child: Text(
+                              widget.apartment.makeAddress(),
+                              textAlign: TextAlign.start,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                  color: cs.onPrimary,
+                                  fontWeight: FontWeight.w900,
+                                  fontSize: screenWidth * 0.045,
+                                  fontFamily: 'BellotaText',
+                              ),
                             ),
                           ),
                           Text(
@@ -160,14 +175,30 @@ class _ApartmentWidgetState extends State<ApartmentWidget> {
                             ),
                         ),
 
-                        IconButton(onPressed: (){
-                          // just for testing ...
-                          setState(() {
-                            isFav = !isFav; // toggle favorite
-                          });
-                          print(isFav);
-                        },
-                            icon: ImageIcon(
+                        IconButton(
+                          onPressed: _isToggling
+                              ? null
+                              : () async {
+                            setState(() => _isToggling = true);
+
+                            await ref
+                                .read(FavoritesProvider.notifier)
+                                .toggleFavorite(widget.apartment.id);
+
+                            if (mounted) {
+                              setState(() => _isToggling = false);
+                            }
+                          },
+                            icon: _isToggling
+                                ? SizedBox(
+                              width: screenWidth * 0.05,
+                              height: screenWidth * 0.05,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: cs.onPrimary,
+                              ),
+                            )
+                            : ImageIcon(
                               // also for testing
                               AssetImage(isFav
                                   ? 'assets/icons/filled_heart_icon.png'

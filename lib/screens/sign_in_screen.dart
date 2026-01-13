@@ -24,14 +24,14 @@ class SignInScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final signIn = ref.watch(AuthNotifierProvider); // for rebuilding ui
     final AppLocalizations t = AppLocalizations.of(context)!;
-    ref.listen<AuthState>(AuthNotifierProvider, (previous, next) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       // to react when the state changes
-      if (next.status == AuthStatus.completed) {
+      if (signIn.status == AuthStatus.completed) {
         print("completed");
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
         // Navigate to search screen
         Navigator.pushReplacementNamed(context, 'MainScreen');
-      } else if (next.status == AuthStatus.error) {
+      } else if (signIn.status == AuthStatus.error) {
         print("error error from lstener");
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
         // Show a pop up with error message
@@ -50,7 +50,7 @@ class SignInScreen extends ConsumerWidget {
             duration: Duration(seconds: 3),
           ),
         );
-      } else if (next.status == AuthStatus.waiting) {
+      } else if (signIn.status == AuthStatus.waiting) {
         print("waiting");
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar(
@@ -68,8 +68,7 @@ class SignInScreen extends ConsumerWidget {
             duration: Duration(days: 1),
           ),
         );
-        ref.read(AuthNotifierProvider.notifier).startPolling();
-      } else if (next.status == AuthStatus.accepted) {
+      } else if (signIn.status == AuthStatus.accepted) {
         ref.read(AuthNotifierProvider.notifier).stopPolling();
         print("accepted");
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -109,12 +108,12 @@ class SignInScreen extends ConsumerWidget {
     final cs = Theme.of(context).colorScheme;
 
     return Scaffold(
-  resizeToAvoidBottomInset: true,
+  resizeToAvoidBottomInset: false, // true
   body: GestureDetector(
     onTap: () => FocusScope.of(context).unfocus(),
     child: Stack(
       children: [
-        Positioned.fill(
+        SizedBox.expand(
           child: SvgPicture.asset(bgAsset, fit: BoxFit.fill),
         ),
 
@@ -124,7 +123,7 @@ class SignInScreen extends ConsumerWidget {
               screenWidth * 0.05,
               screenHeight * 0.02,
               screenWidth * 0.05,
-              screenHeight * 0.02 + MediaQuery.of(context).viewInsets.bottom,
+              screenHeight * 0.02 , // + MediaQuery.of(context).viewInsets.bottom
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -184,7 +183,8 @@ class SignInScreen extends ConsumerWidget {
 
                 PrimaryButton(
                   label: signIn.status == AuthStatus.loading ? t.signin_loading : t.signin_button,
-                  onPressed: () {
+                  onPressed: signIn.status == AuthStatus.loading ? null
+                    : () {
                     final phone = _phoneCtrl.text.trim();
                     final countryCode = phone.length >= 4 ? phone.substring(0, 4) : phone;
                     final phoneNumber = phone.length > 4 ? phone.substring(4) : "";

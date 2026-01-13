@@ -13,6 +13,10 @@ class UserNotifier extends Notifier<User?> {
     state = user;
   }
 
+  void clearUser() {
+    state = null;
+  }
+
   // for later
   Future<void> updateUser({
     String? firstName,

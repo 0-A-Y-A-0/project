@@ -79,6 +79,8 @@ class AuthNotifier extends Notifier<AuthState> {
             doc_url: userData['legal_doc_url'],
           ),
         );
+
+        startPolling();
       } else {
         print(response.statusCode);
         // if the response status is not 200 => error
@@ -105,16 +107,17 @@ class AuthNotifier extends Notifier<AuthState> {
     _pollingTimer?.cancel();
     print("started polling");
 
-    final user = ref.watch(UserProvider);
-
+    final user = ref.read(UserProvider);
     String? phone = user?.phone;
-    print(phone);
+    print("phone: $phone");
 
     _pollingTimer = Timer.periodic(const Duration(seconds: 5), (_) async {
       try {
+        final user = ref.watch(UserProvider);
+        String? phone = user?.phone;
         print("polling");
-        print(phone);
-        // i think we need to change this
+        print("phone: $phone");
+
         final dio = ref.read(dioProvider);
         final response = await dio.get(
           '/user/check-approve',
@@ -143,6 +146,27 @@ class AuthNotifier extends Notifier<AuthState> {
   void stopPolling() {
     _pollingTimer?.cancel();
   }
+
+  Future<void> logout() async {
+
+    _pollingTimer?.cancel();
+
+    try {
+      final dio = ref.read(dioProvider);
+
+      final response = await dio.post('/user/logout',);
+
+      // we change the status => jump to the sign in screen
+      state = AuthState(status: AuthStatus.initial);
+      ref.read(UserProvider.notifier).clearUser();
+
+      print ("you're out");
+
+    } catch (e) {
+      print("logout unknown error");
+    }
+  }
+
 }
 
 // this is the provider 💀

@@ -2,11 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:project/generated/l10n/app_localizations.dart';
 import 'package:project/widgets/langToggle.dart';
+import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
+import 'package:project/screens/favorite_screen.dart';
 import 'package:project/widgets/primary_button.dart';
 import 'package:project/widgets/profile_list_button.dart';
 import 'package:project/widgets/profile_list_container.dart';
 import 'package:project/widgets/theme_switch.dart';
 
+import '../models/AuthState.dart';
+import '../providers/auth_provide.dart';
 import '../providers/user_provider.dart';
 
 class ProfileScreen extends ConsumerWidget {
@@ -28,6 +32,11 @@ class ProfileScreen extends ConsumerWidget {
     final logoutIconPath = isRtl
         ? "assets/icons/rtl_log_out_icon.png"
         : "assets/icons/log_out_icon.png";
+
+     // to avoid red screen when logging out 👍
+    if (user == null) {
+      return const SizedBox.shrink();
+    }
 
     return Scaffold(
       backgroundColor: cs.onPrimary,
@@ -180,6 +189,9 @@ class ProfileScreen extends ConsumerWidget {
                   iconPath: 'assets/icons/fav_icon.png',
                   onPressed: () {
                     print("clicked");
+                    PersistentNavBarNavigator.pushNewScreen(context,
+                        screen: FavoriteScreen(),
+                        withNavBar: false );
                   },
                 ),
 
@@ -219,7 +231,7 @@ class ProfileScreen extends ConsumerWidget {
                     ),
 
                     // Spacer(flex: 1,),
-                    SizedBox(width: screenWidth * 0.6),
+                    SizedBox(width: screenWidth * 0.55,),
 
                     ThemeToggle(),
                   ],
@@ -292,16 +304,16 @@ class ProfileScreen extends ConsumerWidget {
                       bottom: 2,
                       top: 1,
                       child: Material(
-                        color: Colors.transparent,
-                        borderRadius: BorderRadius.circular(16),
-                        child: InkWell(
-                          onTap: () {
-                            print("clicked -----------------------------");
-                          },
-                          splashColor: cs.primary.withAlpha(
-                            50,
-                          ), // to make the splash color matchy matchy
-                        ),
+                          color: Colors.transparent,
+                          borderRadius: BorderRadius.circular(16),
+                          child: InkWell(
+                            onTap: (){
+                              print("clicked -----------------------------");
+                              ref.read(AuthNotifierProvider.notifier).logout();
+                              // navigating is happening in the main screen
+                            },
+                            splashColor: cs.primary.withAlpha(50), // to make the splash color matchy matchy
+                          )
                       ),
                     ),
                   ],

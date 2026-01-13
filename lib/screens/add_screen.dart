@@ -86,26 +86,8 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
 
     try{
       print ("inside try");
-      final formData = FormData.fromMap({
-        'governorate': _gov,
-        'city': _city,
-        'street': _streetCtrl.text.trim(),
-        'building_number': _buildingCtrl.text.trim(),
-        'floor': int.parse(_floorCtrl.text.trim()),
-        'apartment_number': int.parse(_aptNumCtrl.text.trim()),
-        'number_of_bedrooms': _bedrooms,
-        'number_of_bathrooms': _bathrooms,
-        'area_sq_meters': double.parse(_areaCtrl.text.trim()).round(),
-        'rent_price_per_night': double.parse(_priceCtrl.text.trim()),
-        'description_en': _descCtrl.text.trim(),
-        'description_ar': _descCtrl.text.trim(),
-        'has_balcony': 0,
-        'assets': [
-          for (var xfile in _images)
-            await MultipartFile.fromFile(xfile.path, filename: xfile.name)
-        ],
-      });
 
+      final formData = FormData();
       // final formData = FormData();
 
       formData.fields.addAll([
@@ -455,6 +437,10 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                 ),
+                                keyboardType: TextInputType.number,
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.digitsOnly,
+                                ],
                                 validator: (v) =>
                                     (v == null || v.trim().isEmpty)
                                     ? t.error_required
@@ -683,7 +669,7 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
                       backgroundColor: cs.primary,
                       foregroundColor: cs.onPrimary,
                     ),
-                    onPressed: _submit,
+                    onPressed: _isSubmitting ? null : _submit,
                     child: Text(
                       _isSubmitting ? t.loading
                       : t.addApt_title,

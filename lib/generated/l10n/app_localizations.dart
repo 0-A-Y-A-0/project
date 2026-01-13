@@ -251,19 +251,19 @@ abstract class AppLocalizations {
   /// No description provided for @priceOptionLessThan1000.
   ///
   /// In en, this message translates to:
-  /// **'Less than 1000\$'**
+  /// **'Less than 100\$'**
   String get priceOptionLessThan1000;
 
   /// No description provided for @priceOptionBetween1000And2500.
   ///
   /// In en, this message translates to:
-  /// **'Between 1000\$ and 2500\$'**
+  /// **'Between 100\$ and 250\$'**
   String get priceOptionBetween1000And2500;
 
   /// No description provided for @priceOptionMoreThan2500.
   ///
   /// In en, this message translates to:
-  /// **'More than 2500\$'**
+  /// **'More than 250\$'**
   String get priceOptionMoreThan2500;
 
   /// No description provided for @ratingOptionLessThan3.

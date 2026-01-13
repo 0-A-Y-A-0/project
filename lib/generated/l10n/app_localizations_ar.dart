@@ -84,13 +84,13 @@ class AppLocalizationsAr extends AppLocalizations {
   String get aboutUs => 'من نحن';
 
   @override
-  String get priceOptionLessThan1000 => 'أقل من 1000\$';
+  String get priceOptionLessThan1000 => 'أقل من 100\$';
 
   @override
-  String get priceOptionBetween1000And2500 => 'بين 1000\$ و 2500\$';
+  String get priceOptionBetween1000And2500 => 'بين 100\$ و 250\$';
 
   @override
-  String get priceOptionMoreThan2500 => 'أكثر من 2500\$';
+  String get priceOptionMoreThan2500 => 'أكثر من 250\$';
 
   @override
   String get ratingOptionLessThan3 => 'أقل من ☆☆☆';

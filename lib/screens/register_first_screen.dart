@@ -36,25 +36,33 @@ class RegisterFirstScreen extends ConsumerWidget {
     final cs = Theme.of(context).colorScheme;
 
     return Scaffold(
-      resizeToAvoidBottomInset: true,
-      body: GestureDetector(
-        onTap: () =>
-            FocusScope.of(context).unfocus(), //for unfocusing from textfields
-        child: Stack(
-          children: [
-            Positioned.fill(
-              child: SvgPicture.asset(bgAsset, fit: BoxFit.cover),
+  resizeToAvoidBottomInset: true,
+  body: GestureDetector(
+    onTap: () => FocusScope.of(context).unfocus(),//for unfocusing from textfields
+    child: Stack(
+      children: [
+        SizedBox.expand( // to make it fit all sizes
+          child: SvgPicture.asset(bgAsset, fit: BoxFit.cover),
+        ),
+
+        SafeArea(
+          child: SingleChildScrollView(
+            padding: EdgeInsets.fromLTRB(
+              screenWidth * 0.05,
+              screenHeight * 0.02,
+              screenWidth * 0.05,
+              screenHeight * 0.02 + MediaQuery.of(context).viewInsets.bottom,
             ),
 
-            SafeArea(
-              child: SingleChildScrollView(
-                padding: EdgeInsets.fromLTRB(
-                  screenWidth * 0.05,
-                  screenHeight * 0.02,
-                  screenWidth * 0.05,
-                  screenHeight * 0.02 +
-                      MediaQuery.of(context).viewInsets.bottom,
-                ),
+            // SafeArea(
+            //   child: SingleChildScrollView(
+            //     padding: EdgeInsets.fromLTRB(
+            //       screenWidth * 0.05,
+            //       screenHeight * 0.02,
+            //       screenWidth * 0.05,
+            //       screenHeight * 0.02 +
+            //           MediaQuery.of(context).viewInsets.bottom,
+            //     ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

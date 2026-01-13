@@ -84,13 +84,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get aboutUs => 'About us';
 
   @override
-  String get priceOptionLessThan1000 => 'Less than 1000\$';
+  String get priceOptionLessThan1000 => 'Less than 100\$';
 
   @override
-  String get priceOptionBetween1000And2500 => 'Between 1000\$ and 2500\$';
+  String get priceOptionBetween1000And2500 => 'Between 100\$ and 250\$';
 
   @override
-  String get priceOptionMoreThan2500 => 'More than 2500\$';
+  String get priceOptionMoreThan2500 => 'More than 250\$';
 
   @override
   String get ratingOptionLessThan3 => 'Less than ☆☆☆';

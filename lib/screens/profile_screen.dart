@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
+import 'package:project/screens/favorite_screen.dart';
 import 'package:project/widgets/primary_button.dart';
 import 'package:project/widgets/profile_list_button.dart';
 import 'package:project/widgets/profile_list_container.dart';
@@ -175,6 +177,9 @@ class ProfileScreen extends ConsumerWidget {
                   iconPath: 'assets/icons/fav_icon.png',
                   onPressed: () {
                     print("clicked");
+                    PersistentNavBarNavigator.pushNewScreen(context,
+                        screen: FavoriteScreen(),
+                        withNavBar: false );
                   },
                 ),
 

@@ -114,6 +114,7 @@ class ApartmentInfo extends StatelessWidget {
                   ),
                   RowItem(t.city, apartment.city),
                   RowItem(t.apartment_street, apartment.street),
+                  RowItem("ID", "${apartment.id}"),
                 ],
               ),
             ),

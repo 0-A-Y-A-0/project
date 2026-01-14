@@ -231,7 +231,7 @@ class ProfileScreen extends ConsumerWidget {
                     ),
 
                     // Spacer(flex: 1,),
-                    SizedBox(width: screenWidth * 0.55,),
+                    SizedBox(width:isRtl ? screenWidth * 0.59 :  screenWidth * 0.55,),
 
                     ThemeToggle(),
                   ],
@@ -255,7 +255,7 @@ class ProfileScreen extends ConsumerWidget {
                       ),
                     ),
 
-                    SizedBox(width: isRtl ? screenWidth * 0.615 : screenWidth * 0.521),
+                    SizedBox(width: isRtl ? screenWidth * 0.6 : screenWidth * 0.45),
 
                     const LanguageToggle(),
                   ],

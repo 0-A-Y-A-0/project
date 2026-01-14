@@ -223,25 +223,8 @@ class _ApartmentDetailsScreenState extends ConsumerState<ApartmentDetailsScreen>
               ],
 
               children: [
-                ApartmentInfo(apartment:
-                 Apartment(
-                    id: apartment.value!.id,
-                    governorate: apartment.value!.governorate,
-                    city: apartment.value!.city, street: apartment.value!.street,
-                    building_number: apartment.value!.building_number,
-                    floor: apartment.value!.floor,
-                    apartment_number: apartment.value!.apartment_number,
-                    number_of_bedrooms: apartment.value!.number_of_bedrooms,
-                    number_of_bathrooms: apartment.value!.number_of_bathrooms,
-                    area_sq_meters: apartment.value!.area_sq_meters,
-                    description_en: apartment.value!.description_en,
-                    rent_price_per_night: apartment.value!.rent_price_per_night,
-                    rentals: apartment.value!.rentals,
-                    owner_name: apartment.value!.owner_name,
-                    owner_photo_url: apartment.value!.owner_photo_url, 
-                    )
-                ),
-                RatingTab(),
+                ApartmentInfo(apartment: apartment.value!),
+                RatingTab(apartment: apartment.value!),
                 TakenDaysCalendar(
                   takenRanges: apartment.value!.rentals,
                   firstDate: DateTime(2025, 1, 1),

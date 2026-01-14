@@ -173,7 +173,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                           maxPrice = 250;
                         } else if (index == 2) {
                           minPrice = 250;
-                          maxPrice = 500; // this should be infinity
+                          maxPrice = null; // == infinity
                         }
                       });
 
@@ -225,14 +225,27 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                   child: Text("No apartment matches your search"),
                 );
               
-              return ListView.builder(
-                itemCount: list.length,
-                itemBuilder: (context, index) {
-                  return ApartmentWidget(
-                    apartment: list[index] ,
-                    height: 200,
+              return RefreshIndicator(
+                onRefresh: () async {
+                  ref.read(ApartmentsProvider.notifier).fetchApartments(
+                      dataMap: {
+                        'governorate' : selectedGovNum,
+                        'city' : selectedCity,
+                        'min_price' : minPrice,
+                        'max_price' : maxPrice,
+                      }
                   );
                 },
+                child: ListView.builder(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  itemCount: list.length,
+                  itemBuilder: (context, index) {
+                    return ApartmentWidget(
+                      apartment: list[index] ,
+                      height: 200,
+                    );
+                  },
+                ),
               );
             },
         ),
@@ -264,6 +277,22 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
             ),
           ),
           onPressed: () {
+
+            // if nothing is changed do nothing
+            if (
+            selectedGovNum == null &&
+            selectedCity == null&&
+            selectedCityIndex == null &&
+            priceValue == null &&
+            minPrice == null &&
+            maxPrice == null &&
+            rateValue == null &&
+            minRate == null &&
+            maxRate == null
+            ) {
+              return ;
+            }
+
             selectedGovNum = null;
             selectedCity = null;
             selectedCityIndex = null;

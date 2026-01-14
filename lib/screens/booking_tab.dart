@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:project/generated/l10n/app_localizations.dart';
 
-class BookingScreen extends StatefulWidget {
+import '../providers/apartmentDetailsProvider.dart';
+import '../providers/user_provider.dart';
+
+class BookingScreen extends ConsumerStatefulWidget {
   const BookingScreen({super.key});
 
   @override
-  State<BookingScreen> createState() => _BookingScreenState();
+  ConsumerState<BookingScreen> createState() => _BookingScreenState();
 }
 
-class _BookingScreenState extends State<BookingScreen> {
+class _BookingScreenState extends ConsumerState<BookingScreen> {
   final _formKey = GlobalKey<FormState>();
 
   DateTime? _fromDate;
@@ -102,10 +106,27 @@ class _BookingScreenState extends State<BookingScreen> {
   Widget build(BuildContext context) {
     final fromText = _formatDate(_fromDate);
     final toText = _formatDate(_toDate);
-
     final AppLocalizations t = AppLocalizations.of(context)!;
 
-    return SafeArea(
+    final apartment = ref.watch(ApartmentDetailsProvider);
+    final user = ref.watch(UserProvider);
+
+    return apartment.value!.owner_id == user!.id
+    ? Container(
+      margin: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(12),
+      alignment: Alignment.center,
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surfaceContainerHighest,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Text(
+        "You can't book your own apartment man \n(￣(工)￣)",
+        textAlign: TextAlign.center,
+      ),
+    )
+    : SafeArea(
       child: Form(
         key: _formKey,
         child: ListView(

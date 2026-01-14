@@ -50,6 +50,7 @@ class ApartmentDetailsNotifier extends AsyncNotifier<Apartment> {
         return DateTimeRange(start: start, end: end);
       }).toList(),
       owner_name: data['owner_name'] as String,
+      owner_id: data['user_id'] as int,
       owner_photo_url: data['owner_photo_url'] as String,
       rate: double.tryParse(response.data['rate'].toString()) ?? 0.0,
       comments: ratings.map<Comment>((r) {

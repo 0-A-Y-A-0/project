@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -8,8 +9,20 @@ import 'package:project/screens/register_first_screen.dart';
 import 'package:project/screens/sign_in_screen.dart';
 import 'package:project/components/theme.dart';
 import 'package:project/generated/l10n/app_localizations.dart';
+import 'package:project/services/local_notification.dart';
+import 'package:project/services/push_notification.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
+  await LocalNotificationService.init();
+  await PushNotificationsService.init();
+
+  // for testing
+  final token = await PushNotificationsService.getDeviceToken();
+  // cOOS0pLsTjGTiGkbHgbS4K:APA91bEIEO1Z9TfOwfPbQpPapgX4vRKCubVsPe0rxk0lWU1m3nTz4uauw_vomHLQbVII-vw562SRMLSy9VY51fjDUGM4h-P_uWPMt-BrksUHEJnDln_9I9U
+
   runApp(const ProviderScope(child: watashiWaSta()));
 }
 

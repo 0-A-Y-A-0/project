@@ -68,7 +68,7 @@ class AuthNotifier extends Notifier<AuthState> {
         // sending the token to the back
         final fcmToken = await PushNotificationsService.getDeviceToken();
         if (fcmToken != null) {
-          await PushNotificationsService.sendTokenToServer(fcmToken);
+          await PushNotificationsService.sendTokenToServer(fcmToken, authToken: response.data['token']);
         }
 
       } else if (response.statusCode == 201) {

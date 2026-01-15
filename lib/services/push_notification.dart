@@ -56,12 +56,11 @@ class PushNotificationsService {
       return;
     }
       final dio = Dio();
-      // إعدادات الـ Header لضمان قبول الطلب من السيرفر
       dio.options.headers["Authorization"] = "Bearer $finalToken";
       dio.options.headers["Accept"] = "application/json";
       
       final response = await dio.post(
-        'http://192.168.0.107:8000/api/update-fcm-token', //,,,,,
+        'http://10.0.2.2:8000/api/user/fcm-token',
         data: {'fcm_token': fcm_token},
       );
 

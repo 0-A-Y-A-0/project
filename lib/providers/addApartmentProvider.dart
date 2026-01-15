@@ -21,15 +21,22 @@ final AddApartmentProvider = FutureProvider.family<void, FormData>((ref, formDat
 
     // 422 validation
     // 409 address
-    if(response.statusCode == 409){
-      throw Exception('Address already exists');
-    }else if(response.statusCode == 422){
-      throw Exception("Validation error");
-    }
+    // if(response.statusCode == 409){
+    //   throw Exception('Address already exists');
+    // }else if(response.statusCode == 422){
+    //   throw Exception("Validation error");
+    // }
 
     ref.invalidate(ApartmentsProvider);
-  }catch (e){
-    print(e.toString());
+  }on DioException catch (e) {
+    final status = e.response?.statusCode;
+    final message = e.response?.data['message'] ?? 'Request failed';
+
+    if (status == 422 || status == 409) {
+      throw Exception(message);
+    }
+
+    throw Exception('Unexpected error');
   }
 });
 

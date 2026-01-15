@@ -1,8 +1,10 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:project/generated/l10n/app_localizations.dart';
 
+import '../providers/addRental.dart';
 import '../providers/apartmentDetailsProvider.dart';
 import '../providers/user_provider.dart';
 
@@ -57,14 +59,6 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
     setState(() => _toDate = picked);
   }
 
-  Future<void> _sendBookingToBackend({
-    required DateTime from,
-    required DateTime to,
-    required String cardNumber,
-  }) async {
-    // we'll replace with backend request.
-  }
-
   Future<void> _submit() async {
     FocusScope.of(context).unfocus();
     if (_isSubmitting) return;
@@ -82,20 +76,41 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
 
     setState(() => _isSubmitting = true);
     try {
-      await _sendBookingToBackend(
-        from: _fromDate!,
-        to: _toDate!,
-        cardNumber: cardDigits,
-      );
+      final apartment = ref.read(ApartmentDetailsProvider).value!;
+
+      final formData = FormData.fromMap({
+        'apartment_id': apartment.id.toString(),
+        'rental_start_date': _formatDate(_fromDate!),
+        'rental_end_date': _formatDate(_toDate!),
+        'card_number': cardDigits,
+        // cardNumber ignored by backend
+      });
+
+      print(apartment.id.toString());
+      print(_formatDate(_fromDate!));
+      print(_formatDate(_toDate!));
+
+      print("submitting") ;
+      await ref.read(AddRentalProvider(formData).future);
+
+      print("done------------------------------------------------------------------");
 
       if (!mounted) return;
+
+      setState(() {
+        _fromDate = null;
+        _toDate = null;
+        _cardNumberCtrl.clear();
+      });
+      _formKey.currentState?.reset();
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(AppLocalizations.of(context)!.booking_snack_submitted)),
       );
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(AppLocalizations.of(context)!.booking_snack_failed)),
+        SnackBar(content: Text(e.toString().replaceFirst('Exception: ', ''))),
       );
     } finally {
       if (mounted) setState(() => _isSubmitting = false);

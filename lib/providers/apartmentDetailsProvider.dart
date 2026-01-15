@@ -27,6 +27,8 @@ class ApartmentDetailsNotifier extends AsyncNotifier<Apartment> {
     final details = data['details'] ?? {};
     final assets = data['assets'] as List<dynamic>? ?? [];
     final rentals = (data['rentals'] as List<dynamic>?) ?? [];
+    final ratings = data['ratings'] as List<dynamic>? ?? [];
+
 
     final apartment = Apartment(
       id: data['id'] as int,
@@ -48,7 +50,17 @@ class ApartmentDetailsNotifier extends AsyncNotifier<Apartment> {
         return DateTimeRange(start: start, end: end);
       }).toList(),
       owner_name: data['owner_name'] as String,
+      owner_id: data['user_id'] as int,
       owner_photo_url: data['owner_photo_url'] as String,
+      rate: double.tryParse(response.data['rate'].toString()) ?? 0.0,
+      comments: ratings.map<Comment>((r) {
+        return Comment(
+          r['user_name'] as String?,
+          r['user_photo_url'] as String?,
+          r['comment'] as String?,
+          (r['rating'] as num?)?.toDouble(),
+        );
+      }).toList(),
     );
 
 

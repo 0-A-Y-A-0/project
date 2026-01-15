@@ -1,19 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:project/generated/l10n/app_localizations.dart';
+import 'package:project/providers/rating_provider.dart';
 
-class AddRating extends StatefulWidget {
-  const AddRating({super.key});
+class AddRating extends ConsumerStatefulWidget {
+  const AddRating({super.key, required this.apartmentId});
+
+  final int apartmentId;
 
   @override
-  State<AddRating> createState() => _AddRatingState();
+  ConsumerState<AddRating> createState() => _AddRatingState();
 }
 
-class _AddRatingState extends State<AddRating> {
-  double _rating = 0; // current rating
-  bool _hasRated = false; // tracks if user already rated
+class _AddRatingState extends ConsumerState<AddRating> {
+  // double _rating = 0; // current rating
+  // bool _hasRated = false; // tracks if user already rated
+
+  double tempRate = 0;
 
   final _reviewCtrl = TextEditingController();
+
+  @override
+  void initState() {
+    Future.microtask(() {
+      ref
+          .read(RatingProvider.notifier)
+          .getStatus(apartmentId: widget.apartmentId);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,59 +37,95 @@ class _AddRatingState extends State<AddRating> {
     final screenHeight = MediaQuery.of(context).size.height;
     final AppLocalizations t = AppLocalizations.of(context)!;
 
-    return Container(
-      width: double.infinity,
-      padding: EdgeInsets.all(screenWidth * 0.03),
-      decoration: BoxDecoration(
-        color: cs.onPrimary.withAlpha(_hasRated ? 250 : 180),
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: cs.onPrimary, width: 4),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            _hasRated ? "Your review:" : "Rate this apartment:",
-            style: TextStyle(
-              color: cs.primary,
-              fontWeight: FontWeight.w800,
-              fontSize: screenWidth * 0.045,
-              fontFamily: 'BellotaText',
+    final userRate = ref.watch(RatingProvider);
+
+    return userRate.when(
+        error: (_, __) => Center(child: Text("There's an error, try again later")),
+        loading: () => Center(
+            child: Container(
+              width: double.infinity,
+              padding: EdgeInsets.all( screenWidth * 0.035),
+              decoration: BoxDecoration(
+                color: cs.surface,
+                borderRadius: BorderRadius.circular(18),
+                border: Border.all(color: Colors.transparent),
+              ),
+              child: Center(child: CircularProgressIndicator())
+            )
+        ),
+        data: (ur) {
+          print (ur.canRate);
+          print (ur.rate);
+          print (ur.comment);
+
+          return !ur.canRate ?
+          Container(
+            width: double.infinity,
+            padding: EdgeInsets.all( screenWidth * 0.035),
+            decoration: BoxDecoration(
+              color: cs.surface,
+              borderRadius: BorderRadius.circular(18),
+              border: Border.all(color: Colors.transparent),
             ),
-          ),
+            child: Text(
+                "You can't rate an apartment that you haven't rented before"
+            ),
+          )
+          : Container(
+            width: double.infinity,
+            padding: EdgeInsets.all(screenWidth * 0.03),
+            decoration: BoxDecoration(
+              color: cs.onPrimary.withAlpha(ur.canRate ? 250 : 180),
+              borderRadius: BorderRadius.circular(18),
+              border: Border.all(color: cs.onPrimary, width: 4),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  ur.canRate ? "Your review:" : "Rate this apartment:",
+                  style: TextStyle(
+                    color: cs.primary,
+                    fontWeight: FontWeight.w800,
+                    fontSize: screenWidth * 0.045,
+                    fontFamily: 'BellotaText',
+                  ),
+                ),
 
-          SizedBox(height: 10,),
+                SizedBox(height: 10,),
 
-          RatingBar(
-            initialRating: _rating,
-            minRating: 0,
-            direction: Axis.horizontal,
-            allowHalfRating: true,
-            itemCount: 5,
-            itemSize: 40,
-            glowColor: cs.primary.withAlpha(100),
-            ignoreGestures: _hasRated,
-            itemPadding: const EdgeInsets.symmetric(horizontal: 10.0),
-            unratedColor: Colors.grey[300],
-            ratingWidget: RatingWidget(
-              full: ImageIcon(AssetImage('assets/icons/filled_star_icon.png'), color: cs.primary,),
-              half: ImageIcon(AssetImage('assets/icons/half_star_icon.png'), color: cs.primary),
-              empty: ImageIcon(AssetImage('assets/icons/star_icon.png'), color: cs.primary), ),
-            onRatingUpdate: (double value) {
-              setState(() {
-                _rating = value;
-              });
-            },
-          ),
+                RatingBar(
+                  initialRating: ur.rate?.toDouble() ?? 0,
+                  minRating: 0,
+                  direction: Axis.horizontal,
+                  allowHalfRating: true,
+                  itemCount: 5,
+                  itemSize: 40,
+                  glowColor: cs.primary.withAlpha(100),
+                  ignoreGestures: ur.canRate,
+                  itemPadding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  unratedColor: Colors.grey[300],
+                  ratingWidget: RatingWidget(
+                    full: ImageIcon(AssetImage('assets/icons/filled_star_icon.png'), color: cs.primary,),
+                    half: ImageIcon(AssetImage('assets/icons/half_star_icon.png'), color: cs.primary),
+                    empty: ImageIcon(AssetImage('assets/icons/star_icon.png'), color: cs.primary), ),
+                  onRatingUpdate: (double value) {
+                    setState(() {
+                      tempRate = value;
+                    });
+                  },
+                ),
 
-          SizedBox(height: 10,),
+                SizedBox(height: 10,),
 
-          _hasRated
-              ? _buildSubmittedReview(cs,t)
-              : _buildReviewForm(cs, screenWidth,t),
-        ],
-      ),
+                ur.canRate
+                    ? _buildSubmittedReview(cs,t)
+                    : _buildReviewForm(cs, screenWidth,t),
+              ],
+            ),
+          );
+        },
     );
   }
 
@@ -116,15 +167,18 @@ class _AddRatingState extends State<AddRating> {
             width: double.infinity,
             height: 40,
             child: OutlinedButton(
-              onPressed: () {
-                if (_rating == 0) return;
-
-                print('RATING: $_rating');
+              onPressed: tempRate == 0 ? null
+                  : () async{
+                print('RATING: $tempRate');
                 print('REVIEW: ${_reviewCtrl.text}');
 
-                setState(() {
-                  _hasRated = true;
-                });
+                await ref
+                    .read(RatingProvider.notifier)
+                    .submitRating(
+                  comment: _reviewCtrl.text,
+                  rating: tempRate,
+                  apartmentId: widget.apartmentId,
+                );
               },
               style: OutlinedButton.styleFrom(
                 backgroundColor: cs.primary,
@@ -148,6 +202,8 @@ class _AddRatingState extends State<AddRating> {
   }
 
   Widget _buildSubmittedReview(ColorScheme cs, AppLocalizations t) {
+    final userRate = ref.watch(RatingProvider);
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(12),
@@ -160,9 +216,9 @@ class _AddRatingState extends State<AddRating> {
         // ),
       ),
       child: Text(
-        _reviewCtrl.text.isEmpty
+        userRate.value!.comment == null
             ? t.rating_noWrittenReview
-            : _reviewCtrl.text,
+            : userRate.value!.comment!,
         style: TextStyle(
           color: cs.primary,
           fontSize: 17,

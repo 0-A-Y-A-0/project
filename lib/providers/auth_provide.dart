@@ -7,6 +7,8 @@ import 'package:project/models/User.dart';
 import 'package:project/providers/dio_provider.dart';
 import 'package:project/providers/user_provider.dart';
 
+import '../services/push_notification.dart';
+
 enum AuthType { sign_in, register }
 
 class AuthNotifier extends Notifier<AuthState> {
@@ -44,6 +46,8 @@ class AuthNotifier extends Notifier<AuthState> {
           error: "no error!",
         );
 
+        print ("USER ID : ${userData['id']}");
+
         // creating the user in the user provider
         ref.read(UserProvider.notifier).setUser(
           User(
@@ -54,10 +58,18 @@ class AuthNotifier extends Notifier<AuthState> {
             birth_date: DateTime.parse(userData['birth_date']),
             photo_url: userData['legal_photo_url'],
             doc_url: userData['legal_doc_url'],
+            id:  userData['id']
           ),
         );
 
         print(userData['legal_photo_url']);
+
+
+        // sending the token to the back
+        final fcmToken = await PushNotificationsService.getDeviceToken();
+        if (fcmToken != null) {
+          await PushNotificationsService.sendTokenToServer(fcmToken, authToken: response.data['token']);
+        }
 
       } else if (response.statusCode == 201) {
         print('register completed');

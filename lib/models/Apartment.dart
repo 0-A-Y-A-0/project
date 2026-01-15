@@ -18,6 +18,7 @@ class Apartment {
   final List<String> photos;
   final List<DateTimeRange> rentals;
   final String owner_name;
+  final int owner_id;
   final String owner_photo_url;
 
   final double rate;
@@ -39,6 +40,7 @@ class Apartment {
     this.photos = const [],
     this.rentals = const [],
     this.owner_name = '',
+    this.owner_id = 0,
     this.owner_photo_url = '',
     this.rate = 0,
     this.comments = null

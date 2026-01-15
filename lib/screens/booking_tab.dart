@@ -1,15 +1,21 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:project/generated/l10n/app_localizations.dart';
 
-class BookingScreen extends StatefulWidget {
+import '../providers/addRental.dart';
+import '../providers/apartmentDetailsProvider.dart';
+import '../providers/user_provider.dart';
+
+class BookingScreen extends ConsumerStatefulWidget {
   const BookingScreen({super.key});
 
   @override
-  State<BookingScreen> createState() => _BookingScreenState();
+  ConsumerState<BookingScreen> createState() => _BookingScreenState();
 }
 
-class _BookingScreenState extends State<BookingScreen> {
+class _BookingScreenState extends ConsumerState<BookingScreen> {
   final _formKey = GlobalKey<FormState>();
 
   DateTime? _fromDate;
@@ -53,14 +59,6 @@ class _BookingScreenState extends State<BookingScreen> {
     setState(() => _toDate = picked);
   }
 
-  Future<void> _sendBookingToBackend({
-    required DateTime from,
-    required DateTime to,
-    required String cardNumber,
-  }) async {
-    // we'll replace with backend request.
-  }
-
   Future<void> _submit() async {
     FocusScope.of(context).unfocus();
     if (_isSubmitting) return;
@@ -96,13 +94,34 @@ class _BookingScreenState extends State<BookingScreen> {
 
     setState(() => _isSubmitting = true);
     try {
-      await _sendBookingToBackend(
-        from: _fromDate!,
-        to: _toDate!,
-        cardNumber: cardDigits,
-      );
+      final apartment = ref.read(ApartmentDetailsProvider).value!;
+
+      final formData = FormData.fromMap({
+        'apartment_id': apartment.id.toString(),
+        'rental_start_date': _formatDate(_fromDate!),
+        'rental_end_date': _formatDate(_toDate!),
+        'card_number': cardDigits,
+        // cardNumber ignored by backend
+      });
+
+      print(apartment.id.toString());
+      print(_formatDate(_fromDate!));
+      print(_formatDate(_toDate!));
+
+      print("submitting") ;
+      await ref.read(AddRentalProvider(formData).future);
+
+      print("done------------------------------------------------------------------");
 
       if (!mounted) return;
+
+      setState(() {
+        _fromDate = null;
+        _toDate = null;
+        _cardNumberCtrl.clear();
+      });
+      _formKey.currentState?.reset();
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(AppLocalizations.of(context)!.booking_snack_submitted),
@@ -111,9 +130,7 @@ class _BookingScreenState extends State<BookingScreen> {
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(AppLocalizations.of(context)!.booking_snack_failed),
-        ),
+        SnackBar(content: Text(e.toString().replaceFirst('Exception: ', ''))),
       );
     } finally {
       if (mounted) setState(() => _isSubmitting = false);
@@ -124,10 +141,27 @@ class _BookingScreenState extends State<BookingScreen> {
   Widget build(BuildContext context) {
     final fromText = _formatDate(_fromDate);
     final toText = _formatDate(_toDate);
-
     final AppLocalizations t = AppLocalizations.of(context)!;
 
-    return SafeArea(
+    final apartment = ref.watch(ApartmentDetailsProvider);
+    final user = ref.watch(UserProvider);
+
+    return apartment.value!.owner_id == user!.id
+    ? Container(
+      margin: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(12),
+      alignment: Alignment.center,
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surfaceContainerHighest,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Text(
+        "You can't book your own apartment man \n(￣(工)￣)",
+        textAlign: TextAlign.center,
+      ),
+    )
+    : SafeArea(
       child: Form(
         key: _formKey,
         child: ListView(

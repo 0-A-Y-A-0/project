@@ -2,11 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:project/generated/l10n/app_localizations.dart';
+import 'package:project/models/Apartment.dart';
 import 'package:project/widgets/addRating.dart';
 
 class RatingTab extends StatelessWidget {
-  const RatingTab({super.key});
+  const RatingTab({super.key, required this.apartment});
 
+  final Apartment apartment;
   final bool widgetTest = true;
 
   @override
@@ -34,7 +36,8 @@ class RatingTab extends StatelessWidget {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Text("4.5",
+                  Text(
+                    "${apartment.rate}",
                     style: TextStyle(
                       color: cs.primary,
                       fontWeight: FontWeight.w900,
@@ -45,7 +48,7 @@ class RatingTab extends StatelessWidget {
               
                   Padding(
                     padding: EdgeInsets.only(bottom: 15, left: 5),
-                    child: Text(t.basedOn + " 20 " + t.review,
+                    child: Text(t.basedOn+ " ${apartment.comments?.length} "+ t.review,
                       style: TextStyle(
                         color: cs.primary.withAlpha(160),
                         fontWeight: FontWeight.w600,
@@ -58,7 +61,7 @@ class RatingTab extends StatelessWidget {
               ),
               
               SmallStars(
-                  rating: 3.5,
+                  rating: apartment.rate,
                   padding: 3,
                 color: cs.primary,
               )
@@ -70,24 +73,14 @@ class RatingTab extends StatelessWidget {
           height: screenHeight * 0.02,
         ),
 
-        widgetTest ? AddRating()
-        : Container(
-          width: double.infinity,
-          padding: EdgeInsets.all( screenWidth * 0.035),
-          decoration: BoxDecoration(
-            color: cs.surface,
-            borderRadius: BorderRadius.circular(18),
-            border: Border.all(color: Colors.transparent),
-          ),
-          child: Text(
-            "You can't rate an apartment that you haven't rented before"
-          ),
-        ),
+        // your rate
+        AddRating(apartmentId: apartment.id,),
 
         SizedBox(
           height: screenHeight * 0.02,
         ),
 
+        // the comments
         Container(
           width: double.infinity,
           padding: EdgeInsets.all( screenWidth * 0.035),
@@ -96,10 +89,18 @@ class RatingTab extends StatelessWidget {
             borderRadius: BorderRadius.circular(18),
             border: Border.all(color: Colors.transparent),
           ),
-          child: Column(
-            children: List.generate( 5, (index) {
+          child: (apartment.comments == null || apartment.comments!.isEmpty)
+              ? Text("No reviews yet")
+          : Column(
+            children: List.generate( apartment.comments!.length , (index) {
+              final review = apartment.comments![index];
+
               return ReviewRow(
-                divider: index < 4 ? true : false, // dont put a divider to the last element
+                picUrl: review.photo_url ?? '',
+                name: review.name ?? 'Anonymous',
+                rate: review.rate ?? 0,
+                comment: review.review,
+                divider: index < apartment.comments!.length - 1 ? true : false, // dont put a divider to the last element
               );
             },),
           ),
@@ -145,8 +146,12 @@ class SmallStars extends StatelessWidget {
 
 
 class ReviewRow extends StatelessWidget {
-  const ReviewRow({super.key, required this.divider, });
+  const ReviewRow({super.key, required this.divider, required this.picUrl, required this.name, required this.rate, required this.comment, });
 
+  final String picUrl;
+  final String name;
+  final double rate;
+  final String? comment;
   final bool divider;
 
   @override
@@ -167,13 +172,22 @@ class ReviewRow extends StatelessWidget {
               CircleAvatar(
                 radius: screenWidth * 0.08,
                 backgroundColor: cs.onPrimary,
-                child: CircleAvatar(
-                  radius: screenWidth * 0.08,
-                  // hereeeeeeeee user.pic
-                  backgroundImage: AssetImage('assets/images/apartments/test.jpg'),
+                child: SizedBox(
+                  width: screenWidth * 0.15,
+                  height: screenWidth * 0.15,
+                  child: ClipOval(
+                    child: Image.network(
+                      "http://10.0.2.2:8000/storage/${picUrl}",
+                      fit: BoxFit.cover,
+                      errorBuilder: (_, __, ___) {
+                        return Image.asset(
+                          'assets/images/apartments/test.jpg',
+                          fit: BoxFit.cover,
+                        );
+                      },
+                    ),
+                  ),
                 ),
-
-                //Icon(Icons.person, color: cs.primary, size: screenWidth * 0.1),
               ),
               SizedBox(width: screenWidth * 0.05),
               Column(
@@ -183,7 +197,7 @@ class ReviewRow extends StatelessWidget {
                   // user name
                   Text(
                     //user name
-                    "Mohammad Hassan Jaalouk",
+                    name,
                     style: TextStyle(
                       color: cs.primary,
                       fontWeight: FontWeight.w700,
@@ -195,7 +209,7 @@ class ReviewRow extends StatelessWidget {
                   SizedBox(height: screenHeight * 0.005,),
 
                   SmallStars(
-                      rating: 3.5,
+                      rating: rate,
                       padding: 5,
                     color: cs.primary.withAlpha(170),
                   )
@@ -210,11 +224,10 @@ class ReviewRow extends StatelessWidget {
           // the comment 
           SizedBox(
             width: double.infinity,
-            //bio although it wont be better than this one
             child: Text(
-              "this is Hasan he is very mja3lak dkhfkjf fh fkhf fkhf kh kh kh kh here we are introducing the amazing owner of this amazing apartment",
+              comment == null ? "No comment" : comment!,
               style: TextStyle(
-                color: cs.primary,
+                color: comment == null ? cs.primary.withAlpha(150) :cs.primary,
                 fontWeight: FontWeight.w700,
                 fontSize: screenWidth * 0.045,
                 fontFamily: 'BellotaText',

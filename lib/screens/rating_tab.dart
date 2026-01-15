@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:project/generated/l10n/app_localizations.dart';
 import 'package:project/widgets/addRating.dart';
 
 class RatingTab extends StatelessWidget {
@@ -13,6 +14,7 @@ class RatingTab extends StatelessWidget {
     final cs = Theme.of(context).colorScheme ;
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
+    final t = AppLocalizations.of(context)!;
 
     return ListView(
       padding: EdgeInsets.only(top : screenWidth * 0.032, left: screenWidth * 0.015, right: screenWidth * 0.015),
@@ -20,7 +22,7 @@ class RatingTab extends StatelessWidget {
         // display the rating
         Container(
           width: double.infinity,
-          padding: EdgeInsets.only(left: screenWidth * 0.035, bottom: screenWidth * 0.04),
+          padding: EdgeInsetsDirectional.only(start: screenWidth * 0.035, bottom: screenWidth * 0.04),
           decoration: BoxDecoration(
             color: cs.surface,
             borderRadius: BorderRadius.circular(18),
@@ -43,7 +45,7 @@ class RatingTab extends StatelessWidget {
               
                   Padding(
                     padding: EdgeInsets.only(bottom: 15, left: 5),
-                    child: Text("Based on 20 reviews",
+                    child: Text(t.basedOn + " 20 " + t.review,
                       style: TextStyle(
                         color: cs.primary.withAlpha(160),
                         fontWeight: FontWeight.w600,

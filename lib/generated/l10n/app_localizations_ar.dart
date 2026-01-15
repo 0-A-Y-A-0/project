@@ -428,6 +428,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get booking_snack_failed => 'فشل إرسال طلب الحجز: ';
 
   @override
+  String get booking_snack_fromAfterTo =>
+      'تاريخ البداية لا يمكن أن يكون بعد تاريخ النهاية.';
+
+  @override
   String get datePicker_year => 'السنة';
 
   @override
@@ -441,4 +445,77 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get common_ok => 'موافق';
+
+  @override
+  String get apartment => 'الشقة';
+
+  @override
+  String get from => 'من';
+
+  @override
+  String get to => 'إلى';
+
+  @override
+  String get owner => 'المالك';
+
+  @override
+  String get tenant => 'المستأجر';
+
+  @override
+  String get status => 'الحالة';
+
+  @override
+  String get pending => 'قيد الانتظار';
+
+  @override
+  String get accepted => 'مقبول';
+
+  @override
+  String get ongoing => 'جارٍ';
+
+  @override
+  String get passed => 'منتهي';
+
+  @override
+  String get rejected => 'مرفوض';
+
+  @override
+  String get canceled => 'ملغي';
+
+  @override
+  String get edit => 'تعديل';
+
+  @override
+  String get accept => 'قبول';
+
+  @override
+  String get reject => 'رفض';
+
+  @override
+  String get unknown => 'غير معروف';
+
+  @override
+  String get editBookingDates => 'تعديل تواريخ الحجز';
+
+  @override
+  String get select => 'اختر';
+
+  @override
+  String get confirm => 'تأكيد';
+
+  @override
+  String get fromMustBeBeforeTo =>
+      'يجب أن يكون تاريخ البدء قبل تاريخ الانتهاء.';
+
+  @override
+  String get activeRentalTitle => 'الإيجارات الحالية';
+
+  @override
+  String get basedOn => 'بالنسبة ل';
+
+  @override
+  String get review => 'تقييم';
+
+  @override
+  String get youCantRent => 'لا يمكنك تقييم شقة لم تقم باستئجارها من قبل';
 }

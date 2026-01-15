@@ -429,6 +429,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get booking_snack_failed => 'Failed to submit booking: ';
 
   @override
+  String get booking_snack_fromAfterTo => 'Start date can’t be after end date.';
+
+  @override
   String get datePicker_year => 'Year';
 
   @override
@@ -442,4 +445,77 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get common_ok => 'OK';
+
+  @override
+  String get apartment => 'apartment';
+
+  @override
+  String get from => 'From';
+
+  @override
+  String get to => 'To';
+
+  @override
+  String get owner => 'owner';
+
+  @override
+  String get tenant => 'tenant';
+
+  @override
+  String get status => 'status';
+
+  @override
+  String get pending => 'pending';
+
+  @override
+  String get accepted => 'accepted';
+
+  @override
+  String get ongoing => 'ongoing';
+
+  @override
+  String get passed => 'passed';
+
+  @override
+  String get rejected => 'rejected';
+
+  @override
+  String get canceled => 'canceled';
+
+  @override
+  String get edit => 'edit';
+
+  @override
+  String get accept => 'accept';
+
+  @override
+  String get reject => 'reject';
+
+  @override
+  String get unknown => 'Unknown';
+
+  @override
+  String get editBookingDates => 'Edit booking dates';
+
+  @override
+  String get select => 'Select';
+
+  @override
+  String get confirm => 'Confirm';
+
+  @override
+  String get fromMustBeBeforeTo => 'From must be before To.';
+
+  @override
+  String get activeRentalTitle => 'Active Rentals';
+
+  @override
+  String get basedOn => 'Based on';
+
+  @override
+  String get review => 'review';
+
+  @override
+  String get youCantRent =>
+      'You can\'t rate an apartment that you haven\'t rented before';
 }

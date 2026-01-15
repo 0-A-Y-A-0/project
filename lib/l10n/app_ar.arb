@@ -159,10 +159,42 @@
   "booking_snack_selectBothDates": "يرجى اختيار تاريخي البداية والنهاية.",
   "booking_snack_submitted": "تم إرسال طلب الحجز!",
   "booking_snack_failed": "فشل إرسال طلب الحجز: ",
+  "booking_snack_fromAfterTo": "تاريخ البداية لا يمكن أن يكون بعد تاريخ النهاية.",
 
   "datePicker_year": "السنة",
   "datePicker_month": "الشهر",
   "datePicker_day": "اليوم",
   "common_cancel": "إلغاء",
-  "common_ok": "موافق"
+  "common_ok": "موافق",
+
+   "apartment": "الشقة",
+    "from": "من",
+    "to": "إلى",
+    "owner": "المالك",
+    "tenant": "المستأجر",
+    "status": "الحالة",
+    "pending": "قيد الانتظار",
+    "accepted": "مقبول",
+    "ongoing": "جارٍ",
+    "passed": "منتهي",
+    "rejected": "مرفوض",
+    "canceled": "ملغي",
+    "edit": "تعديل",
+    "cancel": "إلغاء",
+    "accept": "قبول",
+    "reject": "رفض",
+    "unknown": "غير معروف",
+
+    "editBookingDates": "تعديل تواريخ الحجز",
+    "from": "من",
+    "to": "إلى",
+    "select": "اختر",
+    "cancel": "إلغاء",
+    "confirm": "تأكيد",
+    "fromMustBeBeforeTo": "يجب أن يكون تاريخ البدء قبل تاريخ الانتهاء.",
+
+    "activeRentalTitle" : "الإيجارات الحالية",
+    "basedOn" : "بالنسبة ل",
+    "review" : "تقييم",
+    "youCantRent" : "لا يمكنك تقييم شقة لم تقم باستئجارها من قبل"
 }

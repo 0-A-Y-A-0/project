@@ -36,7 +36,6 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
     final cs = Theme.of(context).colorScheme;
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-
     final apartments = ref.watch(ApartmentsProvider);
     AppLocalizations t = AppLocalizations.of(context)!;
 

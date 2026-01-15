@@ -161,10 +161,44 @@
   "booking_snack_selectBothDates": "Please select both From and To dates.",
   "booking_snack_submitted": "Booking request submitted!",
   "booking_snack_failed": "Failed to submit booking: ",
+  "booking_snack_fromAfterTo": "Start date can’t be after end date.",
+
   
   "datePicker_year": "Year",
   "datePicker_month": "Month",
   "datePicker_day": "Day",
   "common_cancel": "Cancel",
-  "common_ok": "OK"
+  "common_ok": "OK",
+
+   "apartment": "apartment",
+    "from": "from",
+    "to": "to",
+    "owner": "owner",
+    "tenant": "tenant",
+    "status": "status",
+    "pending": "pending",
+    "accepted": "accepted",
+    "ongoing": "ongoing",
+    "passed": "passed",
+    "rejected": "rejected",
+    "canceled": "canceled",
+    "edit": "edit",
+    "cancel": "cancel",
+    "accept": "accept",
+    "reject": "reject",
+    "unknown": "Unknown",
+
+    "editBookingDates": "Edit booking dates",
+    "from": "From",
+    "to": "To",
+    "select": "Select",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "fromMustBeBeforeTo": "From must be before To.",
+
+    "activeRentalTitle" : "Active Rentals",
+    "basedOn" : "Based on",
+    "review" : "review",
+    "youCantRent" : "You can't rate an apartment that you haven't rented before"
+
 }

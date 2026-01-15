@@ -926,6 +926,12 @@ abstract class AppLocalizations {
   /// **'Failed to submit booking: '**
   String get booking_snack_failed;
 
+  /// No description provided for @booking_snack_fromAfterTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Start date can’t be after end date.'**
+  String get booking_snack_fromAfterTo;
+
   /// No description provided for @datePicker_year.
   ///
   /// In en, this message translates to:
@@ -955,6 +961,150 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'OK'**
   String get common_ok;
+
+  /// No description provided for @apartment.
+  ///
+  /// In en, this message translates to:
+  /// **'apartment'**
+  String get apartment;
+
+  /// No description provided for @from.
+  ///
+  /// In en, this message translates to:
+  /// **'From'**
+  String get from;
+
+  /// No description provided for @to.
+  ///
+  /// In en, this message translates to:
+  /// **'To'**
+  String get to;
+
+  /// No description provided for @owner.
+  ///
+  /// In en, this message translates to:
+  /// **'owner'**
+  String get owner;
+
+  /// No description provided for @tenant.
+  ///
+  /// In en, this message translates to:
+  /// **'tenant'**
+  String get tenant;
+
+  /// No description provided for @status.
+  ///
+  /// In en, this message translates to:
+  /// **'status'**
+  String get status;
+
+  /// No description provided for @pending.
+  ///
+  /// In en, this message translates to:
+  /// **'pending'**
+  String get pending;
+
+  /// No description provided for @accepted.
+  ///
+  /// In en, this message translates to:
+  /// **'accepted'**
+  String get accepted;
+
+  /// No description provided for @ongoing.
+  ///
+  /// In en, this message translates to:
+  /// **'ongoing'**
+  String get ongoing;
+
+  /// No description provided for @passed.
+  ///
+  /// In en, this message translates to:
+  /// **'passed'**
+  String get passed;
+
+  /// No description provided for @rejected.
+  ///
+  /// In en, this message translates to:
+  /// **'rejected'**
+  String get rejected;
+
+  /// No description provided for @canceled.
+  ///
+  /// In en, this message translates to:
+  /// **'canceled'**
+  String get canceled;
+
+  /// No description provided for @edit.
+  ///
+  /// In en, this message translates to:
+  /// **'edit'**
+  String get edit;
+
+  /// No description provided for @accept.
+  ///
+  /// In en, this message translates to:
+  /// **'accept'**
+  String get accept;
+
+  /// No description provided for @reject.
+  ///
+  /// In en, this message translates to:
+  /// **'reject'**
+  String get reject;
+
+  /// No description provided for @unknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown'**
+  String get unknown;
+
+  /// No description provided for @editBookingDates.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit booking dates'**
+  String get editBookingDates;
+
+  /// No description provided for @select.
+  ///
+  /// In en, this message translates to:
+  /// **'Select'**
+  String get select;
+
+  /// No description provided for @confirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get confirm;
+
+  /// No description provided for @fromMustBeBeforeTo.
+  ///
+  /// In en, this message translates to:
+  /// **'From must be before To.'**
+  String get fromMustBeBeforeTo;
+
+  /// No description provided for @activeRentalTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Active Rentals'**
+  String get activeRentalTitle;
+
+  /// No description provided for @basedOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Based on'**
+  String get basedOn;
+
+  /// No description provided for @review.
+  ///
+  /// In en, this message translates to:
+  /// **'review'**
+  String get review;
+
+  /// No description provided for @youCantRent.
+  ///
+  /// In en, this message translates to:
+  /// **'You can\'t rate an apartment that you haven\'t rented before'**
+  String get youCantRent;
 }
 
 class _AppLocalizationsDelegate

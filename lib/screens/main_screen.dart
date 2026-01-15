@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:project/screens/add_screen.dart';
 import 'package:project/screens/chat_screen.dart';
-import 'package:project/screens/fav_screen.dart';
+import 'package:project/screens/activeRentals.dart';
 import 'package:project/screens/profile_screen.dart';
 import 'package:project/screens/search_screen.dart';
 
@@ -28,7 +28,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       ChatScreen(),
       SearchScreen(),
       AddApartmentScreen(),
-      FavScreen(),
+      ActiveRentalsScreen(),
       ProfileScreen(),
     ];
   }

@@ -45,7 +45,7 @@ class _BookingScreenState extends State<BookingScreen> {
   Future<void> _pickTo() async {
     final picked = await showListDatePicker(
       context: context,
-      title:  AppLocalizations.of(context)!.booking_selectEndDate,
+      title: AppLocalizations.of(context)!.booking_selectEndDate,
       initialDate: _toDate,
     );
     if (picked == null) return;
@@ -67,7 +67,25 @@ class _BookingScreenState extends State<BookingScreen> {
 
     if (_fromDate == null || _toDate == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(AppLocalizations.of(context)!.booking_snack_selectBothDates)),
+        SnackBar(
+          content: Text(
+            AppLocalizations.of(context)!.booking_snack_selectBothDates,
+          ),
+        ),
+      );
+      return;
+    }
+
+    final from = DateTime(_fromDate!.year, _fromDate!.month, _fromDate!.day);
+    final to = DateTime(_toDate!.year, _toDate!.month, _toDate!.day);
+
+    if (from.isAfter(to)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            AppLocalizations.of(context)!.booking_snack_fromAfterTo,
+          ),
+        ),
       );
       return;
     }
@@ -86,12 +104,16 @@ class _BookingScreenState extends State<BookingScreen> {
 
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(AppLocalizations.of(context)!.booking_snack_submitted)),
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.booking_snack_submitted),
+        ),
       );
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(AppLocalizations.of(context)!.booking_snack_failed)),
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.booking_snack_failed),
+        ),
       );
     } finally {
       if (mounted) setState(() => _isSubmitting = false);
@@ -117,9 +139,7 @@ class _BookingScreenState extends State<BookingScreen> {
                 color: Theme.of(context).colorScheme.surfaceContainerHighest,
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: Text(
-                t.booking_note,
-              ),
+              child: Text(t.booking_note),
             ),
             const SizedBox(height: 16),
 
@@ -152,7 +172,7 @@ class _BookingScreenState extends State<BookingScreen> {
                 FilteringTextInputFormatter.digitsOnly,
                 _CardNumberFormatter(),
               ],
-              decoration:  InputDecoration(
+              decoration: InputDecoration(
                 labelText: t.booking_cardNumber,
                 hintText: '0000 0000 0000 0000',
                 border: OutlineInputBorder(),
@@ -214,7 +234,10 @@ class _DateField extends StatelessWidget {
 
 class _CardNumberFormatter extends TextInputFormatter {
   @override
-  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
     final digits = newValue.text.replaceAll(RegExp(r'\s+'), '');
     final buf = StringBuffer();
 
@@ -249,7 +272,10 @@ Future<DateTime?> showListDatePicker({
   }
 
   // Simple year range (purely for UI)
-  final years = List<int>.generate(11, (i) => DateTime.now().year + i); // current year .. +10
+  final years = List<int>.generate(
+    11,
+    (i) => DateTime.now().year + i,
+  ); // current year .. +10
   final months = List<int>.generate(12, (i) => i + 1);
 
   int safeDay() {
@@ -281,13 +307,20 @@ Future<DateTime?> showListDatePicker({
                       child: DropdownButtonFormField<int>(
                         initialValue: year,
                         items: years
-                            .map((y) => DropdownMenuItem(value: y, child: Text(y.toString())))
+                            .map(
+                              (y) => DropdownMenuItem(
+                                value: y,
+                                child: Text(y.toString()),
+                              ),
+                            )
                             .toList(),
                         onChanged: (v) {
                           if (v == null) return;
                           setState(() => year = v);
                         },
-                        decoration: InputDecoration(labelText: t.datePicker_year),
+                        decoration: InputDecoration(
+                          labelText: t.datePicker_year,
+                        ),
                       ),
                     ),
                     const SizedBox(width: 12),
@@ -295,16 +328,20 @@ Future<DateTime?> showListDatePicker({
                       child: DropdownButtonFormField<int>(
                         initialValue: month,
                         items: months
-                            .map((m) => DropdownMenuItem(
-                                  value: m,
-                                  child: Text(m.toString().padLeft(2, '0')),
-                                ))
+                            .map(
+                              (m) => DropdownMenuItem(
+                                value: m,
+                                child: Text(m.toString().padLeft(2, '0')),
+                              ),
+                            )
                             .toList(),
                         onChanged: (v) {
                           if (v == null) return;
                           setState(() => month = v);
                         },
-                        decoration: InputDecoration(labelText: t.datePicker_month),
+                        decoration: InputDecoration(
+                          labelText: t.datePicker_month,
+                        ),
                       ),
                     ),
                   ],
@@ -313,10 +350,12 @@ Future<DateTime?> showListDatePicker({
                 DropdownButtonFormField<int>(
                   initialValue: safeDay(),
                   items: days
-                      .map((d) => DropdownMenuItem(
-                            value: d,
-                            child: Text(d.toString().padLeft(2, '0')),
-                          ))
+                      .map(
+                        (d) => DropdownMenuItem(
+                          value: d,
+                          child: Text(d.toString().padLeft(2, '0')),
+                        ),
+                      )
                       .toList(),
                   onChanged: (v) {
                     if (v == null) return;

@@ -102,7 +102,6 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
         'rental_start_date': _formatDate(_fromDate!),
         'rental_end_date': _formatDate(_toDate!),
         'card_number': cardDigits,
-        // cardNumber ignored by backend
       });
 
       print(apartment.id.toString());

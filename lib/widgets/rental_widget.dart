@@ -1,13 +1,16 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:project/generated/l10n/app_localizations.dart';
 import 'package:project/models/Rental.dart';
+import 'package:project/providers/cancelUpdate.dart';
 import 'package:project/screens/apartment_details_screen.dart';
 import 'package:project/widgets/rental_edit.dart';
 
 import '../providers/cancleRentalProvider.dart';
+import '../providers/updateRentalProvider.dart';
 
 class RentalWidget extends ConsumerStatefulWidget {
   const RentalWidget({
@@ -43,8 +46,14 @@ class _RentalWidgetState extends ConsumerState<RentalWidget> {
     final shadowColor = _shadowColor(cs, widget.rental.status);
 
     final df = DateFormat('yyyy-MM-dd');
-    final fromStr = df.format(widget.rental.start);
-    final toStr = df.format(widget.rental.end);
+    String fromStr = df.format(widget.rental.start);
+    String toStr = df.format(widget.rental.end);
+
+    final isUpdating = widget.rental.updateRequest != null ;
+    if (isUpdating){
+      fromStr = df.format(widget.rental.updateRequest!.start!);
+      toStr = df.format(widget.rental.updateRequest!.end!);
+    }
 
     return Container(
       margin: EdgeInsets.symmetric(
@@ -111,7 +120,7 @@ class _RentalWidgetState extends ConsumerState<RentalWidget> {
 
                       SizedBox(height: screenHeight * 0.006),
 
-                      _line(t.status, widget.rental.status, cs, screenWidth),
+                      _line(t.status, isUpdating ? "update" : widget.rental.status, cs, screenWidth),
 
                       SizedBox(height: screenHeight * 0.015),
 
@@ -133,6 +142,7 @@ class _RentalWidgetState extends ConsumerState<RentalWidget> {
                 flex: 2,
                 child: InkWell(
                   onTap: () {
+                    print ("GO TO ${widget.rental.apartmentId}");
                     PersistentNavBarNavigator.pushNewScreen(
                       context,
                       screen: ApartmentDetailsScreen(
@@ -185,6 +195,13 @@ class _RentalWidgetState extends ConsumerState<RentalWidget> {
     return cs.error;
   }
 
+  String _formatDate(DateTime? d) {
+    if (d == null) return '';
+    return '${d.year.toString().padLeft(4, '0')}-'
+        '${d.month.toString().padLeft(2, '0')}-'
+        '${d.day.toString().padLeft(2, '0')}';
+  }
+
   Widget _actionsRow({
     required AppLocalizations t,
     required ColorScheme cs,
@@ -193,9 +210,12 @@ class _RentalWidgetState extends ConsumerState<RentalWidget> {
     required bool ownerView,
     required String status,
   }) {
-    if (!ownerView &&
-        status == 'pending' && widget.onActive) {
 
+    // NORMAL pending & no edit
+    if (!ownerView &&
+        status == 'pending' && widget.onActive &&
+        (widget.rental.updateRequest == null) )
+    {
       bool _isCanceling = false;
 
       return Row(
@@ -217,12 +237,35 @@ class _RentalWidgetState extends ConsumerState<RentalWidget> {
                   lastDate: DateTime(2060, 1, 1),
                 );
 
+                print ("CLosed..................") ;
+
                 if (range != null) {
-                  //hereee we send the edit request/use the edit logic
-                  setState(() {
-                    widget.rental.start = range.start;
-                    widget.rental.end = range.end;
-                  });
+                  // print (_formatDate(range.start));
+                  // print (_formatDate(range.end));
+
+                  try {
+                    await ref.read(UpdateRentalProvider)(
+                      widget.rental.id,
+                      FormData.fromMap({
+                        '_method': 'PUT',
+                        'rental_start_date': _formatDate(range.start),
+                        'rental_end_date': _formatDate(range.end),
+                      }),
+                    );
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text("Edit request submitted successfully!"),
+                      ),
+                    );
+
+                  } catch (e) {
+                    if (!mounted) return;
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(e.toString().replaceFirst('Exception: ', ''))),
+                    );
+                  }
+
                 }
               },
             ),
@@ -266,8 +309,11 @@ class _RentalWidgetState extends ConsumerState<RentalWidget> {
     }
 
 
+    // NORMAL approved & no edit
      if (!ownerView &&
-        status == 'approved' && widget.onActive) {
+        status == 'approved' && widget.onActive &&
+         (widget.rental.updateRequest == null)
+     ) {
       return Row(
         children: [
           Expanded(
@@ -288,11 +334,31 @@ class _RentalWidgetState extends ConsumerState<RentalWidget> {
                 );
 
                 if (range != null) {
-                  //hereee we send the edit request/use the edit logic
-                  setState(() {
-                    widget.rental.start = range.start;
-                    widget.rental.end = range.end;
-                  });
+                  // print (_formatDate(range.start));
+                  // print (_formatDate(range.end));
+
+                  try {
+                    await ref.read(UpdateRentalProvider)(
+                      widget.rental.id,
+                      FormData.fromMap({
+                        '_method': 'PUT',
+                        'rental_start_date': _formatDate(range.start),
+                        'rental_end_date': _formatDate(range.end),
+                      }),
+                    );
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text("Edit request submitted successfully!"),
+                      ),
+                    );
+
+                  } catch (e) {
+                    if (!mounted) return;
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(e.toString().replaceFirst('Exception: ', ''))),
+                    );
+                  }
                 }
               },
             ),
@@ -302,6 +368,40 @@ class _RentalWidgetState extends ConsumerState<RentalWidget> {
       );
     }
 
+     // UPDATE approved & update request
+    if (!ownerView &&
+        status == 'approved' && widget.onActive &&
+        (widget.rental.updateRequest != null)
+    ) {
+      return Row(
+        children: [
+          Expanded(
+            child: _ActionBtn(
+              //cancel button
+              cs: cs,
+              screenWidth: screenWidth,
+              height: btnHeight,
+              radius: screenWidth * 0.035,
+              text: t.cancel,
+              onTap: () async{
+                try{
+                  print("CANCELING --------------------- ${widget.rental.updateRequest!.id!}");
+                  await ref.read(cancelUpdateProvider)(widget.rental.updateRequest!.id!);
+                  print("DONE CANCELING");
+
+                  setState(() {});
+                }catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(e.toString())),
+                  );
+                }
+              },
+            ),
+          ),
+          SizedBox(width: screenWidth * 0.025),
+        ],
+      );
+    }
 
     if (ownerView && status == 'pending') {
       return Row(

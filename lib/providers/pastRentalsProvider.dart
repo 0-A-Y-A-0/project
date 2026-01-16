@@ -16,7 +16,7 @@ class PastRentalsHistory extends AsyncNotifier<List<Rental>> {
 
       final assets = apartment['assets'] as List?;
       final coverImage =
-      (assets != null && assets.isNotEmpty) ? assets.first['url'] : null;
+      (assets != null && assets.isNotEmpty) ? assets.first['asset_url'] : null;
 
       return Rental(
         id: item['id'],

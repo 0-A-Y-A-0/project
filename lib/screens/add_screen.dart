@@ -118,7 +118,7 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
         );
       }
 
-      final result = await ref.read(AddApartmentProvider(formData).future);
+      final result = await ref.read(AddApartmentProvider)(formData);
 
       print("done inside the try/////////////////////////////");
       //  success

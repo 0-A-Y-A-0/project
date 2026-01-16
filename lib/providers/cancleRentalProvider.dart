@@ -4,12 +4,15 @@ import 'package:project/providers/pastRentalsProvider.dart';
 import 'activeRentalsProvider.dart';
 import 'dio_provider.dart';
 
-final CancelRentalProvider = FutureProvider.family<void, int>((ref, rentalId) async {
+final cancelRentalProvider = Provider<Future<void> Function(int)>((ref) {
     final dio = ref.read(dioProvider);
 
-    await dio.put('/user/rentals/$rentalId/cancel');
+    return (int rentalId) async {
+        await dio.put('/user/rentals/$rentalId/cancel');
 
-    // refresh
-    ref.invalidate(ActiveRentalsProvider);
-    ref.invalidate(PastRentalsProvider);
+        ref.invalidate(ActiveRentalsProvider);
+        ref.invalidate(PastRentalsProvider);
+    };
 });
+
+

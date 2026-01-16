@@ -26,15 +26,17 @@ final AddRentalProvider = FutureProvider.family<void, FormData>((ref, formData) 
     //   throw Exception("You already have an active rental request for these dates");
     // }
 
-  }on DioException catch (e) {
-    final status = e.response?.statusCode;
-    final message = e.response?.data['message'] ?? 'Request failed';
+  } catch (e) {
+    // final status = e.response?.statusCode;
+    // final message = e.response?.data['message'] ?? 'Request failed';
+    //
+    // if (status == 422 || status == 409) {
+    //   throw Exception(message);
+    // }
+    //
+    // throw Exception('Unexpected error');
 
-    if (status == 422 || status == 409) {
-      throw Exception(message);
-    }
-
-    throw Exception('Unexpected error');
+    rethrow;
   }
 });
 

@@ -194,7 +194,8 @@ class _RentalWidgetState extends ConsumerState<RentalWidget> {
   }) {
     if (!ownerView &&
         (status == 'approved' || status == 'ongoing' || status == 'pending')) {
-      bool canceling = ref.watch(CancelRentalProvider(widget.rental.id));
+
+      bool _isCanceling = false;
 
       return Row(
         children: [
@@ -233,23 +234,28 @@ class _RentalWidgetState extends ConsumerState<RentalWidget> {
               screenWidth: screenWidth,
               height: btnHeight,
               radius: screenWidth * 0.035,
-              text: t.cancel,
-              onTap: canceling
+              text: _isCanceling ? t.loading : t.cancel,
+              onTap: _isCanceling
                   ? () {}
                   : () async{
+                setState(() => _isCanceling = true);
+
                        try{
-                         setState(() {
-                           canceling = true;
-                         });
                         print("CANCELING");
-                        await ref.read(CancelRentalProvider(widget.rental.id).future);
-                        canceling = false;
+                        final cancelRental =
+                        ref.read(cancelRentalProvider);
+                        await cancelRental(widget.rental.id);
                         print("DONE CANCELING");
 
                         setState(() {});
-                      }catch(e){
-                         ScaffoldMessenger.of(context)
-                             .showSnackBar(SnackBar(content: Text(e.toString())));
+                      }catch (e) {
+                         ScaffoldMessenger.of(context).showSnackBar(
+                           SnackBar(content: Text(e.toString())),
+                         );
+                       } finally {
+                         if (mounted) {
+                           setState(() => _isCanceling = false);
+                         }
                        }
                     },
             ),

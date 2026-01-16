@@ -47,7 +47,8 @@ class _ActiveRentalsScreenState extends ConsumerState<ActiveRentalsScreen> {
             child: CircularProgressIndicator(),
           );
         },
-        error: (_, __) {
+        error: (e, __) {
+
           return RefreshIndicator(
               onRefresh: () async {
                 ref.invalidate(ActiveRentalsProvider);

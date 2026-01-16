@@ -10,7 +10,7 @@ class Rental {
   // from the apartment
   final int apartmentId;
   final String owner_name;
-  final String cover_image_url;
+  final String? cover_image_url;
 
   Rental({
     required this.id,

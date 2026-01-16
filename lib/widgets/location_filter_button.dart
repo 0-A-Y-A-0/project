@@ -26,7 +26,7 @@ class LocationFilterButton extends ConsumerStatefulWidget {
 }
 
 class _LocationFilterButtonState extends ConsumerState<LocationFilterButton> {
-  final List<String> governorates = Governorates.governorates;
+  final List<String> governorates = Governorates.keys;
 
   @override
   Widget build(BuildContext context) {
@@ -128,7 +128,7 @@ class _LocationFilterButtonState extends ConsumerState<LocationFilterButton> {
                           governorates.length,
                           (i) => DropdownMenuItem(
                             value: i,
-                            child: Text(governorates[i]),
+                            child: Text(Governorates.labelByIndex(context, i)),
                           ),
                         ),
 

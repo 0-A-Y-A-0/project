@@ -36,7 +36,7 @@ class ActiveRentalsScreen extends StatelessWidget {
         itemBuilder: (context, index) => RentalWidget(
           rental: Rental(id: 0, userId: 0, start: DateTime(2025, 11, 11), 
           end: DateTime(2025, 12, 11), apartment:
-           Apartment(id: 2, governorate: "Damascus", city: "Mazzeh", street: "dhdk", rent_price_per_night: 8769),
+           Apartment(id: 2, governorateIndex: 0, city: "Mazzeh", street: "dhdk", rent_price_per_night: 8769),
             status: 'accepted'), ownerView: false),
       ),
     );

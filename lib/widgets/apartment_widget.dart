@@ -118,7 +118,7 @@ class _ApartmentWidgetState extends ConsumerState<ApartmentWidget> {
                           SizedBox(
                             width: screenWidth * 0.55,
                             child: Text(
-                              widget.apartment.makeAddress(),
+                              widget.apartment.makeAddress(context),
                               textAlign: TextAlign.start,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(

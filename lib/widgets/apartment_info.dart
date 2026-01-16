@@ -67,7 +67,7 @@ class ApartmentInfo extends StatelessWidget {
 
                   // address
                   Text(
-                    '${apartment.makeAddress()} • ${apartment.apartment_number}',
+                    '${apartment.makeAddress(context)} • ${apartment.apartment_number}',
                     style: th.bodyMedium?.copyWith(color: cs.onSurfaceVariant),
                   ),
 

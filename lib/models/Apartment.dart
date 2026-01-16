@@ -3,7 +3,8 @@ import 'package:project/models/Governorates.dart';
 
 class Apartment {
   final int id;
-  final String governorate;
+  // final String governorate;
+  final int governorateIndex;
   final String city;
   final String street;
   final double rent_price_per_night;
@@ -26,7 +27,8 @@ class Apartment {
 
   Apartment({
     required this.id,
-    required this.governorate,
+    // required this.governorate,
+    required this.governorateIndex,
     required this.city,
     required this.street,
     required this.rent_price_per_night,
@@ -45,7 +47,7 @@ class Apartment {
     this.rate = 0,
     this.comments = null
   });
-  String makeAddress() => '$governorate, $city, $street';
+  String makeAddress(BuildContext context) => '${Governorates.labelByIndex(context, governorateIndex)}, $city, $street';
 }
 
 class Comment {

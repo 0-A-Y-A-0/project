@@ -17,7 +17,7 @@ class ApartmentsNotifier extends AsyncNotifier<List<Apartment>> {
 
       return Apartment(
         id: json['apartment_id'],
-        governorate: Governorates.governorates[address['governorate']],
+        governorateIndex: (address['governorate'] as num).toInt(),
         city: address['city'],
         street: address['street'],
         rent_price_per_night: double.parse(json['price_per_night'].toString()),
@@ -48,7 +48,7 @@ class ApartmentsNotifier extends AsyncNotifier<List<Apartment>> {
 
         return Apartment(
           id: json['apartment_id'],
-          governorate: Governorates.governorates[address['governorate']],
+          governorateIndex: (address['governorate'] as num).toInt(),
           city: address['city'],
           street: address['street'],
           rent_price_per_night:

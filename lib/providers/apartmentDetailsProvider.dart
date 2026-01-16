@@ -10,7 +10,7 @@ class ApartmentDetailsNotifier extends AsyncNotifier<Apartment> {
     // the initial state ... we put anything
     return Apartment(
         id: 0,
-        governorate: "",
+        governorateIndex: 0,
         city: "",
         street: "",
         rent_price_per_night: 0);
@@ -32,7 +32,7 @@ class ApartmentDetailsNotifier extends AsyncNotifier<Apartment> {
 
     final apartment = Apartment(
       id: data['id'] as int,
-      governorate: Governorates.governorates[address['governorate'] as int],
+      governorateIndex: (address['governorate'] as num).toInt(),
       city: address['city'] as String,
       street: address['street'] as String,
       building_number: address['building_number'].toString(),

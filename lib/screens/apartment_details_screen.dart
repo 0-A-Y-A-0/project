@@ -66,7 +66,7 @@ class _ApartmentDetailsScreenState extends ConsumerState<ApartmentDetailsScreen>
     // ref.read(ApartmentDetailsProvider.notifier).fetchApartmentDetails(widget.apartmentId);
 
     if (apartment.value != null){
-      print(apartment.value!.governorate);
+      print(Governorates.labelByIndex(context, apartment.value!.governorateIndex));
       print(apartment.value!.city);
       print(apartment.value!.street);
       print(apartment.value!.description_en);

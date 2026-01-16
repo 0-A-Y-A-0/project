@@ -341,10 +341,10 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
                             ),
                           ),
                           items: List.generate(
-                            Governorates.governorates.length,
+                            Governorates.keys.length,
                                 (i) => DropdownMenuItem(
                               value: i,
-                              child: Text(Governorates.governorates[i]),
+                              child: Text(Governorates.labelByIndex(context, i)),
                             ),
                           ),
                           onChanged: (value) {

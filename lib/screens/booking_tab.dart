@@ -110,7 +110,7 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
       print(_formatDate(_toDate!));
 
       print("submitting") ;
-      await ref.read(AddRentalProvider(formData).future);
+      await ref.read(AddRentalProvider)(formData);
 
       print("done------------------------------------------------------------------");
 

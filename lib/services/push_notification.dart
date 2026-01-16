@@ -9,6 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'local_notification.dart';
 
+@pragma('vm:entry-point')
 class PushNotificationsService {
   static FirebaseMessaging messaging = FirebaseMessaging.instance;
 
@@ -76,7 +77,7 @@ class PushNotificationsService {
   }
 
   // handling the notifications in the background
-  @pragma('vm:entry-point') // ضرورية لضمان عملها في الخلفية
+  @pragma('vm:entry-point') // important
   static Future<void> handleBackgroundMessage(RemoteMessage message) async {
     await Firebase.initializeApp();
     log("Background Message: ${message.notification?.title}");

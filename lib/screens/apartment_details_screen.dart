@@ -84,158 +84,159 @@ class _ApartmentDetailsScreenState extends ConsumerState<ApartmentDetailsScreen>
         backgroundColor: cs.onPrimary,
         toolbarHeight: screenHeight * 0.06,
       ),
-      body: apartment.isLoading ? Container(
-            alignment: Alignment.center,
-            child: CircularProgressIndicator(),
-          )
-          : Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // the photos
-          SizedBox(
-            // to control the height
-            height: screenHeight * 0.33,
-            child: Swiper(
-              // similar to the listview builder
-              itemCount: apartment.value!.photos.length, // it should be list.length
-              itemBuilder: (context, index) {
-                return ClipRRect(
-                  // borderRadius: BorderRadius.circular(16),
-                  child: Image.network(
-                    // we should pass the pics list here
-                    "http://10.0.2.2:8000/storage/${apartment.value!.photos[index]}",
-                    width: double.infinity,
-                    height: screenHeight * 0.33,
-                    fit: BoxFit.cover,
-
-                      errorBuilder: (_, __, ___) {
-                        return Image.asset(
-                          'assets/images/apartments/test.jpg',
-                          width: double.infinity,
-                          height: screenHeight * 0.33,
-                          fit: BoxFit.cover,
-                        );
-                      }
-                  ),
-                );
-              },
-
-              // the dots
-              pagination: SwiperPagination(
-                alignment: Alignment.bottomCenter,
-                builder: DotSwiperPaginationBuilder(
-                  // i wanted it to be beige anyway
-                  activeColor: AppTheme.beige,
-                  color: AppTheme.beige.withAlpha(150),
-                  size: screenWidth * 0.015, // the normal size
-                  activeSize: screenWidth * 0.025, // the active size
-                  space: screenWidth * 0.02, // the space between them
-                ),
-              ),
-
-              // the default layout is STACK
-              // if we chose TINDER we have to specify the item height and width
-              // layout: SwiperLayout.TINDER,
-              // itemHeight: 200,
-              // itemWidth: 400,
-
-              //  left/right arrows
-              control: SwiperControl(
-                color: AppTheme.beige.withAlpha(150),
-                disableColor: AppTheme.beige.withAlpha(150),
-              ),
-            ),
-          ),
-
-          // the tabs
-          Container(
-            margin: EdgeInsets.only(top: 10, left: 8, right: 8),
-            width: double.infinity,
-            height: screenHeight * 0.5,
-
-            child: TabContainer(
-              controller: _tabController,
-
-              tabEdge: TabEdge.top, // where the tabs appear
-              tabsStart: 0, // where they start (0.1 = 10%)
-              tabsEnd: 1, // where they end
-              // tabMaxLength: screenWidth * 0.2, // length means the width of the tab ... the default is the best
-              borderRadius: BorderRadius.circular(
-                8,
-              ), // for the entire container
-              tabBorderRadius: BorderRadius.circular(8), // only for the tabs
-              childPadding: const EdgeInsets.only(top: 1), // for the content
-              // this doesn't do anything
-              // selectedTextStyle: TextStyle(
-              //   color: Colors.yellow,
-              //   fontSize: screenWidth * 0.045,
-              // ),
-              // unselectedTextStyle: TextStyle(
-              //   color: cs.tertiary,
-              //   fontSize: screenWidth * 0.04,
-              // ),
-
-              // the colors of the tabs in order
-              colors: [
-                cs.primary.withAlpha(120),
-                cs.primary.withAlpha(120),
-                cs.primary.withAlpha(120),
-                cs.primary.withAlpha(120),
-                cs.primary.withAlpha(120),
-              ],
-
-              // the titles
-              tabs: [
-                createTabIcon(
-                  path: "assets/icons/info_icon.png",
-                  index: _tabController.index,
-                  value: 0,
-                  cs: cs,
-                ),
-
-                createTabIcon(
-                  path: "assets/icons/star_icon.png",
-                  index: _tabController.index,
-                  value: 1,
-                  cs: cs,
-                ),
-
-                createTabIcon(
-                  path: "assets/icons/calendar_icon.png",
-                  index: _tabController.index,
-                  value: 2,
-                  cs: cs,
-                ),
-
-                createTabIcon(
-                  path: "assets/icons/location_icon.png",
-                  index: _tabController.index,
-                  value: 3,
-                  cs: cs,
-                ),
-
-                createTabIcon(
-                  path: "assets/icons/bookmark_icon.png",
-                  index: _tabController.index,
-                  value: 4,
-                  cs: cs,
-                ),
-              ],
-
+      body: apartment.when(
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (e, _) => Center(child: Text('Failed to load apartment')),
+          data: (apt){
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ApartmentInfo(apartment: apartment.value!),
-                RatingTab(apartment: apartment.value!),
-                TakenDaysCalendar(
-                  takenRanges: apartment.value!.rentals,
-                  firstDate: DateTime(2025, 1, 1),
-                  lastDate: DateTime(2026, 12, 31),
+                // the photos
+                SizedBox(
+                  // to control the height
+                  height: screenHeight * 0.33,
+                  child: Swiper(
+                    // similar to the listview builder
+                    itemCount: apt.photos.length, // it should be list.length
+                    itemBuilder: (context, index) {
+                      return ClipRRect(
+                        // borderRadius: BorderRadius.circular(16),
+                        child: Image.network(
+                            "http://10.0.2.2:8000/storage/${apt.photos[index]}",
+                            width: double.infinity,
+                            height: screenHeight * 0.33,
+                            fit: BoxFit.cover,
+
+                            errorBuilder: (_, __, ___) {
+                              return Image.asset(
+                                'assets/images/apartments/test.jpg',
+                                width: double.infinity,
+                                height: screenHeight * 0.33,
+                                fit: BoxFit.cover,
+                              );
+                            }
+                        ),
+                      );
+                    },
+
+                    // the dots
+                    pagination: SwiperPagination(
+                      alignment: Alignment.bottomCenter,
+                      builder: DotSwiperPaginationBuilder(
+                        // i wanted it to be beige anyway
+                        activeColor: AppTheme.beige,
+                        color: AppTheme.beige.withAlpha(150),
+                        size: screenWidth * 0.015, // the normal size
+                        activeSize: screenWidth * 0.025, // the active size
+                        space: screenWidth * 0.02, // the space between them
+                      ),
+                    ),
+
+                    // the default layout is STACK
+                    // if we chose TINDER we have to specify the item height and width
+                    // layout: SwiperLayout.TINDER,
+                    // itemHeight: 200,
+                    // itemWidth: 400,
+
+                    //  left/right arrows
+                    control: SwiperControl(
+                      color: AppTheme.beige.withAlpha(150),
+                      disableColor: AppTheme.beige.withAlpha(150),
+                    ),
+                  ),
                 ),
-                Text('map + location'),
-                BookingScreen(),
+
+                // the tabs
+                Container(
+                  margin: EdgeInsets.only(top: 10, left: 8, right: 8),
+                  width: double.infinity,
+                  height: screenHeight * 0.5,
+
+                  child: TabContainer(
+                    controller: _tabController,
+
+                    tabEdge: TabEdge.top, // where the tabs appear
+                    tabsStart: 0, // where they start (0.1 = 10%)
+                    tabsEnd: 1, // where they end
+                    // tabMaxLength: screenWidth * 0.2, // length means the width of the tab ... the default is the best
+                    borderRadius: BorderRadius.circular(
+                      8,
+                    ), // for the entire container
+                    tabBorderRadius: BorderRadius.circular(8), // only for the tabs
+                    childPadding: const EdgeInsets.only(top: 1), // for the content
+                    // this doesn't do anything
+                    // selectedTextStyle: TextStyle(
+                    //   color: Colors.yellow,
+                    //   fontSize: screenWidth * 0.045,
+                    // ),
+                    // unselectedTextStyle: TextStyle(
+                    //   color: cs.tertiary,
+                    //   fontSize: screenWidth * 0.04,
+                    // ),
+
+                    // the colors of the tabs in order
+                    colors: [
+                      cs.primary.withAlpha(120),
+                      cs.primary.withAlpha(120),
+                      cs.primary.withAlpha(120),
+                      cs.primary.withAlpha(120),
+                      cs.primary.withAlpha(120),
+                    ],
+
+                    // the titles
+                    tabs: [
+                      createTabIcon(
+                        path: "assets/icons/info_icon.png",
+                        index: _tabController.index,
+                        value: 0,
+                        cs: cs,
+                      ),
+
+                      createTabIcon(
+                        path: "assets/icons/star_icon.png",
+                        index: _tabController.index,
+                        value: 1,
+                        cs: cs,
+                      ),
+
+                      createTabIcon(
+                        path: "assets/icons/calendar_icon.png",
+                        index: _tabController.index,
+                        value: 2,
+                        cs: cs,
+                      ),
+
+                      createTabIcon(
+                        path: "assets/icons/location_icon.png",
+                        index: _tabController.index,
+                        value: 3,
+                        cs: cs,
+                      ),
+
+                      createTabIcon(
+                        path: "assets/icons/bookmark_icon.png",
+                        index: _tabController.index,
+                        value: 4,
+                        cs: cs,
+                      ),
+                    ],
+
+                    children: [
+                      ApartmentInfo(apartment: apt),
+                      RatingTab(apartment: apt),
+                      TakenDaysCalendar(
+                        takenRanges: apt.rentals,
+                        firstDate: DateTime(2025, 1, 1),
+                        lastDate: DateTime(2026, 12, 31),
+                      ),
+                      Text('map + location'),
+                      BookingScreen(),
+                    ],
+                  ),
+                ),
               ],
-            ),
-          ),
-        ],
+            ) ;
+          },
       ),
     );
   }

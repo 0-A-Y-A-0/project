@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:project/providers/favorites_provider.dart';
 
+import '../generated/l10n/app_localizations.dart';
 import '../widgets/apartment_widget.dart';
 
 class FavoriteScreen extends ConsumerStatefulWidget {
@@ -19,6 +20,7 @@ class _FavoriteScreenState extends ConsumerState<FavoriteScreen> {
     final cs = Theme.of(context).colorScheme ;
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
+    final AppLocalizations t = AppLocalizations.of(context)!;
 
     final favorites = ref.watch(FavoritesProvider);
 
@@ -26,7 +28,16 @@ class _FavoriteScreenState extends ConsumerState<FavoriteScreen> {
       backgroundColor: cs.onPrimary,
       appBar: AppBar(
         backgroundColor: cs.onPrimary,
-        toolbarHeight: screenHeight * 0.06,
+        toolbarHeight: screenHeight * 0.1,
+        title: Text(
+          t.favorites,
+          style: TextStyle(
+            color: cs.primary,
+            fontSize: screenWidth * 0.08,
+            fontWeight: FontWeight.w200,
+            fontFamily: 'Monoglyceride',
+          ),
+        ),
       ),
       body: favorites.when(
         loading: () {

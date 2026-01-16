@@ -7,13 +7,14 @@ import 'package:project/models/Rental.dart';
 import 'package:project/screens/apartment_details_screen.dart';
 import 'package:project/widgets/rental_edit.dart';
 
+import '../providers/cancleRentalProvider.dart';
+
 class RentalWidget extends ConsumerStatefulWidget {
   const RentalWidget({
     super.key,
     required this.rental,
     required this.ownerView,
     this.tenantNameTemp,
-
   });
 
   final Rental rental;
@@ -57,7 +58,7 @@ class _RentalWidgetState extends ConsumerState<RentalWidget> {
             color: shadowColor.withAlpha(200),
             blurRadius: 0,
             spreadRadius: 0.5,
-            offset: isRtl ? const Offset(5, 0) : const Offset(-5, 0),
+            offset: isRtl ? const Offset(0, 0) : const Offset(-5, 0),
           ),
         ],
       ),
@@ -79,10 +80,11 @@ class _RentalWidgetState extends ConsumerState<RentalWidget> {
                   color: cs.surfaceContainerHighest.withAlpha(180),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       _line(
                         t.apartment,
-                        '#${widget.rental.apartment.id}',
+                        '#${widget.rental.apartmentId}',
                         cs,
                         screenWidth,
                       ),
@@ -94,7 +96,7 @@ class _RentalWidgetState extends ConsumerState<RentalWidget> {
                       if (!widget.ownerView)
                         _line(
                           t.owner,
-                          widget.rental.apartment.owner_name,
+                          widget.rental.owner_name,
                           cs,
                           screenWidth,
                         )
@@ -107,21 +109,18 @@ class _RentalWidgetState extends ConsumerState<RentalWidget> {
                         ),
 
                       SizedBox(height: screenHeight * 0.006),
+
                       _line(t.status, widget.rental.status, cs, screenWidth),
 
                       SizedBox(height: screenHeight * 0.015),
 
-                      SizedBox(
-                        height: screenHeight * 0.05,
-                        child: _actionsRow(
-                          t: t,
-                          cs: cs,
-                          screenWidth: screenWidth,
-                          btnHeight: screenHeight * 0.05,
-                          ownerView: widget.ownerView,
-                          status: widget.rental.status,
-
-                        ),
+                      _actionsRow(
+                        t: t,
+                        cs: cs,
+                        screenWidth: screenWidth,
+                        btnHeight: screenHeight * 0.05,
+                        ownerView: widget.ownerView,
+                        status: widget.rental.status,
                       ),
                     ],
                   ),
@@ -136,15 +135,15 @@ class _RentalWidgetState extends ConsumerState<RentalWidget> {
                     PersistentNavBarNavigator.pushNewScreen(
                       context,
                       screen: ApartmentDetailsScreen(
-                        apartmentId: widget.rental.apartment.id,
+                        apartmentId: widget.rental.apartmentId,
                       ),
                       withNavBar: false,
                     );
                   },
                   child: Image.network(
-                    widget.rental.apartment.photos.isEmpty
+                    widget.rental.cover_image_url == null
                         ? "assets/images/apartments/test.jpg"
-                        : "http://10.0.2.2:8000/storage/${widget.rental.apartment.photos[0]}",
+                        : "http://10.0.2.2:8000/storage/${widget.rental.cover_image_url}",
                     width: double.infinity,
                     height: screenHeight * 0.3,
                     fit: BoxFit.cover,
@@ -181,7 +180,7 @@ class _RentalWidgetState extends ConsumerState<RentalWidget> {
 
   Color _shadowColor(ColorScheme cs, String status) {
     if (status == 'pending' || status == 'passed') return cs.tertiary;
-    if (status == 'accepted' || status == 'ongoing') return cs.secondary;
+    if (status == 'approved' || status == 'ongoing') return cs.secondary;
     return cs.error;
   }
 
@@ -193,11 +192,15 @@ class _RentalWidgetState extends ConsumerState<RentalWidget> {
     required bool ownerView,
     required String status,
   }) {
-    if (!ownerView && (status == 'accepted' || status == 'ongoing')) {
+    if (!ownerView &&
+        (status == 'approved' || status == 'ongoing' || status == 'pending')) {
+      bool canceling = ref.watch(CancelRentalProvider(widget.rental.id));
+
       return Row(
         children: [
           Expanded(
-            child: _ActionBtn(//edit button
+            child: _ActionBtn(
+              //edit button
               cs: cs,
               screenWidth: screenWidth,
               height: btnHeight,
@@ -208,7 +211,7 @@ class _RentalWidgetState extends ConsumerState<RentalWidget> {
                   context,
                   initialFrom: widget.rental.start,
                   initialTo: widget.rental.end,
-                  firstDate: DateTime(2020, 1, 1),//calendar start and end
+                  firstDate: DateTime(2020, 1, 1), //calendar start and end
                   lastDate: DateTime(2060, 1, 1),
                 );
 
@@ -224,13 +227,31 @@ class _RentalWidgetState extends ConsumerState<RentalWidget> {
           ),
           SizedBox(width: screenWidth * 0.025),
           Expanded(
-            child: _ActionBtn(//cancel button
+            child: _ActionBtn(
+              //cancel button
               cs: cs,
               screenWidth: screenWidth,
               height: btnHeight,
               radius: screenWidth * 0.035,
               text: t.cancel,
-              onTap:  () {},
+              onTap: canceling
+                  ? () {}
+                  : () async{
+                       try{
+                         setState(() {
+                           canceling = true;
+                         });
+                        print("CANCELING");
+                        await ref.read(CancelRentalProvider(widget.rental.id).future);
+                        canceling = false;
+                        print("DONE CANCELING");
+
+                        setState(() {});
+                      }catch(e){
+                         ScaffoldMessenger.of(context)
+                             .showSnackBar(SnackBar(content: Text(e.toString())));
+                       }
+                    },
             ),
           ),
         ],
@@ -241,7 +262,8 @@ class _RentalWidgetState extends ConsumerState<RentalWidget> {
       return Row(
         children: [
           Expanded(
-            child: _ActionBtn(//accept buttn
+            child: _ActionBtn(
+              //accept buttn
               cs: cs,
               screenWidth: screenWidth,
               height: btnHeight,
@@ -252,7 +274,8 @@ class _RentalWidgetState extends ConsumerState<RentalWidget> {
           ),
           SizedBox(width: screenWidth * 0.025),
           Expanded(
-            child: _ActionBtn(//reject buttton
+            child: _ActionBtn(
+              //reject buttton
               cs: cs,
               screenWidth: screenWidth,
               height: btnHeight,
@@ -278,12 +301,14 @@ class _ActionBtn extends StatelessWidget {
     required this.text,
     required this.onTap,
   });
+
   final ColorScheme cs;
   final double screenWidth;
   final double height;
   final double radius;
   final String text;
   final VoidCallback onTap;
+
   @override
   Widget build(BuildContext context) {
     final fontSize = screenWidth * 0.04;

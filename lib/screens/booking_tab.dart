@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:project/generated/l10n/app_localizations.dart';
+import 'package:project/providers/activeRentalsProvider.dart';
 
 import '../providers/addRental.dart';
 import '../providers/apartmentDetailsProvider.dart';
@@ -121,6 +122,9 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
         _cardNumberCtrl.clear();
       });
       _formKey.currentState?.reset();
+
+      // refreshing the rentals tab
+      ref.invalidate(ActiveRentalsProvider);
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

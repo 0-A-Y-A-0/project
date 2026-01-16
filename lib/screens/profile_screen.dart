@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:project/generated/l10n/app_localizations.dart';
+import 'package:project/screens/history_screen.dart';
 import 'package:project/widgets/langToggle.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:project/screens/favorite_screen.dart';
@@ -96,7 +97,7 @@ class ProfileScreen extends ConsumerWidget {
 
                   // user name
                   Text(
-                    "${user?.first_name} ${user?.last_name}",
+                    "${user.first_name} ${user.last_name}",
                     style: TextStyle(
                       color: cs.primary,
                       fontWeight: FontWeight.w900,
@@ -111,7 +112,7 @@ class ProfileScreen extends ConsumerWidget {
                     // we have to force a width so the text wrap works ... remove it if you want to see yellow flags 🚧
                     width: screenWidth * 0.46,
                     child: Text(
-                      user!.bio!,
+                      user.bio!,
                       // "this is me testing the overflow text wrap i don't know what im writing i just want to fill some space and bla bla bla bla i hope its more than two lines now are you open mindu?",
                       style: TextStyle(
                         color: cs.primary,
@@ -206,6 +207,9 @@ class ProfileScreen extends ConsumerWidget {
                   iconPath: 'assets/icons/history_icon.png',
                   onPressed: () {
                     print("clicked");
+                    PersistentNavBarNavigator.pushNewScreen(context,
+                        screen: PastRentalsScreen(),
+                        withNavBar: false );
                   },
                 ),
               ],

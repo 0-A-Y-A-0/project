@@ -197,6 +197,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get register_haveAccount => 'Already have an account?\nsign in ';
 
   @override
+  String get register_fillAllFields => 'Please fill all fields above!!';
+
+  @override
+  String get register_PhonenumberITooShort => 'Phone number is too short';
+
+  @override
   String get register2_birthdateLabel => 'Birthdate';
 
   @override
@@ -493,6 +499,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get unknown => 'Unknown';
+
+  @override
+  String get rentalId => 'Rental ID';
 
   @override
   String get editBookingDates => 'Edit booking dates';

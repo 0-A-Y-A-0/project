@@ -5,6 +5,7 @@ import '../models/Governorates.dart';
 import '../generated/l10n/app_localizations.dart';
 import '../providers/cities_provider.dart';
 
+
 class LocationFilterButton extends ConsumerStatefulWidget {
   LocationFilterButton({
     super.key,
@@ -32,7 +33,6 @@ class _LocationFilterButtonState extends ConsumerState<LocationFilterButton> {
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
     final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
     final AppLocalizations t = AppLocalizations.of(context)!;
 
     return Padding(
@@ -96,7 +96,6 @@ class _LocationFilterButtonState extends ConsumerState<LocationFilterButton> {
       builder: (context) {
         final cs = Theme.of(context).colorScheme;
         final screenHeight = MediaQuery.of(context).size.height;
-        final screenWidth = MediaQuery.of(context).size.width;
         final AppLocalizations t = AppLocalizations.of(context)!;
 
         return StatefulBuilder( // to make the widget stateful

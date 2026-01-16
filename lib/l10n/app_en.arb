@@ -71,6 +71,8 @@
   "register_lastNameHint": "last name",
   "register_continue": "Continue",
   "register_haveAccount": "Already have an account?\nsign in ",
+  "register_fillAllFields" : "Please fill all fields above!!",
+  "register_PhonenumberITooShort" : "Phone number is too short",
 
   "register2_birthdateLabel": "Birthdate",
   "register2_birthdateHint": "dd/mm/yyyy",
@@ -187,6 +189,7 @@
     "accept": "accept",
     "reject": "reject",
     "unknown": "Unknown",
+    "rentalId": "Rental ID",
 
     "editBookingDates": "Edit booking dates",
     "from": "From",

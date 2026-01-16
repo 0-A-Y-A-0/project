@@ -5,12 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:project/generated/l10n/app_localizations.dart';
-
-import 'package:project/models/Apartment.dart';
 import 'package:project/models/Governorates.dart';
-import 'package:project/providers/apartmentsProvider.dart';
 
-import '../providers/addApartmentProvider.dart';
 import '../providers/cities_provider.dart';
 
 class AddApartmentScreen extends ConsumerStatefulWidget {
@@ -118,7 +114,6 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
         );
       }
 
-      final result = await ref.read(AddApartmentProvider(formData).future);
 
       print("done inside the try/////////////////////////////");
       //  success
@@ -166,7 +161,7 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
     // For bedrooms/bathrooms dropdown
     final nums = List<int>.generate(10, (i) => i + 1);
 
-    final cities = ref.watch(CitiesProvider(_gov as int?));
+    final cities = ref.watch(CitiesProvider(_gov));
 
     return Scaffold(
       appBar: AppBar(

@@ -44,6 +44,20 @@ class _RegisterSecondScreenState extends ConsumerState<RegisterSecondScreen> {
   _idImageXfile; //we'll use these when we send pic to backend (convert to bits? then send via dio)
   XFile? _profileImageXfile;
 
+  String? _birthdateError;
+  String? _profileError;
+  String? _idError;
+
+  bool _validateStep2() {
+    setState(() {
+      _birthdateError = (_birthdate == null) ? "Required" : null;
+      _profileError = (_profileImageXfile == null) ? "Required" : null;
+      _idError = (_idImageXfile == null) ? "Required" : null;
+    });
+
+    return _birthdateError == null && _profileError == null && _idError == null;
+  }
+
   final _picker =
       ImagePicker(); //important for image picker package..only used in its func
 
@@ -73,6 +87,7 @@ class _RegisterSecondScreenState extends ConsumerState<RegisterSecondScreen> {
     setState(() {
       _birthdate = picked;
       _birthdateCtrl.text = DateFormat('dd/MM/yyyy').format(picked);
+      _birthdateError = null;
     });
   }
 
@@ -93,12 +108,18 @@ class _RegisterSecondScreenState extends ConsumerState<RegisterSecondScreen> {
             children: [
               ListTile(
                 leading: Icon(Icons.photo_camera, color: cs.onSurface),
-                title: Text(AppLocalizations.of(context)!.register2_pickCamera, style: TextStyle(color: cs.onSurface)),
+                title: Text(
+                  AppLocalizations.of(context)!.register2_pickCamera,
+                  style: TextStyle(color: cs.onSurface),
+                ),
                 onTap: () => Navigator.pop(context, ImageSource.camera),
               ),
               ListTile(
                 leading: Icon(Icons.photo_library, color: cs.onSurface),
-                title: Text(AppLocalizations.of(context)!.register2_pickGallery, style: TextStyle(color: cs.onSurface)),
+                title: Text(
+                  AppLocalizations.of(context)!.register2_pickGallery,
+                  style: TextStyle(color: cs.onSurface),
+                ),
                 onTap: () => Navigator.pop(context, ImageSource.gallery),
               ),
             ],
@@ -123,8 +144,10 @@ class _RegisterSecondScreenState extends ConsumerState<RegisterSecondScreen> {
       final file = File(picked.path);
       if (isProfile) {
         _profileImage = file;
+        _profileError = null;
       } else {
         _idImage = file;
+        _idError = null;
       }
     });
   }
@@ -184,8 +207,7 @@ class _RegisterSecondScreenState extends ConsumerState<RegisterSecondScreen> {
     final screenHeight = MediaQuery.of(context).size.height;
     final isRtl = Localizations.localeOf(context).languageCode == 'ar';
 
-
-   final bgAsset = switch ((isRtl, isDark)) {
+    final bgAsset = switch ((isRtl, isDark)) {
       (false, false) => 'assets/images/backgrounds/register_light_bg.svg',
       (false, true) => 'assets/images/backgrounds/register_dark_bg.svg',
       (true, false) => 'assets/images/backgrounds/rtl_register_light_bg.svg',
@@ -215,7 +237,9 @@ class _RegisterSecondScreenState extends ConsumerState<RegisterSecondScreen> {
                   ),
                 ),
 
-                SizedBox(height: isRtl ? screenWidth * 0.13 : screenWidth * 0.05),
+                SizedBox(
+                  height: isRtl ? screenWidth * 0.13 : screenWidth * 0.05,
+                ),
 
                 // Birthdate label
                 Text(
@@ -250,7 +274,7 @@ class _RegisterSecondScreenState extends ConsumerState<RegisterSecondScreen> {
                   imageFile: _profileImage,
                   onTap: () => _pickImage(isProfile: true),
                 ),
-
+               
                 SizedBox(height: screenHeight * 0.03),
 
                 // ID picture
@@ -267,7 +291,7 @@ class _RegisterSecondScreenState extends ConsumerState<RegisterSecondScreen> {
                   imageFile: _idImage,
                   onTap: () => _pickImage(isProfile: false),
                 ),
-
+              
                 SizedBox(height: screenHeight * 0.04),
 
                 // Register button (matches your button styling via theme)
@@ -276,51 +300,61 @@ class _RegisterSecondScreenState extends ConsumerState<RegisterSecondScreen> {
                   label: register.status == AuthStatus.loading
                       ? t.loading
                       : t.register_title,
-                  onPressed: register.status == AuthStatus.loading ? null :
-                      () async {
-                    print(widget.firstName);
-                    print(widget.lastName);
-                    print(widget.password);
-                    print(widget.phoneNum);
-                    print(_birthdate?.toIso8601String());
-                    print(_profileImageXfile!.path);
+                  onPressed: register.status == AuthStatus.loading
+                      ? null
+                      : () async {
+                          if (!_validateStep2()) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                               SnackBar(
+                                content: Text(
+                                  t.register_fillAllFields
+                                ),
+                              ),
+                            );
+                            return;
+                          }
+                          print(widget.firstName);
+                          print(widget.lastName);
+                          print(widget.password);
+                          print(widget.phoneNum);
+                          print(_birthdate?.toIso8601String());
+                          print(_profileImageXfile!.path);
 
-                    final phone = widget.phoneNum!.trim();
+                          final phone = widget.phoneNum!.trim();
 
-                    final countryCode = phone.length >= 4
-                        ? phone.substring(0, 4)
-                        : phone;
-                    final phoneNumber = phone.length > 4
-                        ? phone.substring(4)
-                        : "";
+                          final countryCode = phone.length >= 4
+                              ? phone.substring(0, 4)
+                              : phone;
+                          final phoneNumber = phone.length > 4
+                              ? phone.substring(4)
+                              : "";
 
-                    // _submit();
-                    // here we consume the sign in provider bro
-                    // when pressed, read the data
-                    ref
-                        .read(AuthNotifierProvider.notifier)
-                        .auth(
-                          authType: AuthType.register,
-                          dataMap: {
-                            "first_name": widget.firstName,
-                            "last_name": widget.lastName,
-                            "country_code": countryCode,
-                            "phone_number": phoneNumber,
-                            "password": widget.password,
-                            "password_confirmation": widget.password,
-                            "birth_date": _birthdate?.toIso8601String(),
-                            "legal_photo": await MultipartFile.fromFile(
-                              _profileImageXfile!.path,
-                              filename: _profileImageXfile!.name,
-                            ),
-                            "legal_doc": await MultipartFile.fromFile(
-                              _idImageXfile!.path,
-                              filename: _idImageXfile!.name,
-                            ),
-                          },
-                        );
-
-                  },
+                          // _submit();
+                          // here we consume the sign in provider bro
+                          // when pressed, read the data
+                          ref
+                              .read(AuthNotifierProvider.notifier)
+                              .auth(
+                                authType: AuthType.register,
+                                dataMap: {
+                                  "first_name": widget.firstName,
+                                  "last_name": widget.lastName,
+                                  "country_code": countryCode,
+                                  "phone_number": phoneNumber,
+                                  "password": widget.password,
+                                  "password_confirmation": widget.password,
+                                  "birth_date": _birthdate?.toIso8601String(),
+                                  "legal_photo": await MultipartFile.fromFile(
+                                    _profileImageXfile!.path,
+                                    filename: _profileImageXfile!.name,
+                                  ),
+                                  "legal_doc": await MultipartFile.fromFile(
+                                    _idImageXfile!.path,
+                                    filename: _idImageXfile!.name,
+                                  ),
+                                },
+                              );
+                        },
                 ),
                 SizedBox(height: screenHeight * 0.05),
                 RichText(
@@ -330,7 +364,7 @@ class _RegisterSecondScreenState extends ConsumerState<RegisterSecondScreen> {
                       fontSize: screenHeight * 0.021,
                     ),
                     children: [
-                       TextSpan(text: t.register_haveAccount),
+                      TextSpan(text: t.register_haveAccount),
                       TextSpan(
                         text: t.here,
                         style: TextStyle(
@@ -338,7 +372,8 @@ class _RegisterSecondScreenState extends ConsumerState<RegisterSecondScreen> {
                           decoration: TextDecoration.underline,
                           fontWeight: FontWeight.w700,
                         ),
-                        recognizer: TapGestureRecognizer()..onTap = () {
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
                             //well change this to provider things
                             Navigator.pushNamed(context, "SignInPage");
                           },

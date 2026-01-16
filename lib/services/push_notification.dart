@@ -2,6 +2,9 @@ import 'dart:developer';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:dio/dio.dart';
+import 'package:project/providers/activeRentalsProvider.dart';
+import 'package:project/providers/pastRentalsProvider.dart';
+import 'package:project/services/providerContainer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'local_notification.dart';
@@ -82,8 +85,12 @@ class PushNotificationsService {
   // handling the notifications when the app is  open
   static void handleForegroundMessage() {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      log("Foreground Message: ${message.notification?.title}");
-      LocalNotificationService.showBasicNotification(message);
+      log("Foreground Message: ${message.notification?.title}"); // debugging
+      LocalNotificationService.showBasicNotification(message); // to show the notification
+
+      // to refresh the providers
+      providerContainer.invalidate(ActiveRentalsProvider);
+      providerContainer.invalidate(PastRentalsProvider);
     });
   }
 }

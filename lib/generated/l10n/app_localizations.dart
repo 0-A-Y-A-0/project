@@ -470,6 +470,18 @@ abstract class AppLocalizations {
   /// **'Already have an account?\nsign in '**
   String get register_haveAccount;
 
+  /// No description provided for @register_fillAllFields.
+  ///
+  /// In en, this message translates to:
+  /// **'Please fill all fields above!!'**
+  String get register_fillAllFields;
+
+  /// No description provided for @register_PhonenumberITooShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone number is too short'**
+  String get register_PhonenumberITooShort;
+
   /// No description provided for @register2_birthdateLabel.
   ///
   /// In en, this message translates to:
@@ -1057,6 +1069,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Unknown'**
   String get unknown;
+
+  /// No description provided for @rentalId.
+  ///
+  /// In en, this message translates to:
+  /// **'Rental ID'**
+  String get rentalId;
 
   /// No description provided for @editBookingDates.
   ///

@@ -219,10 +219,11 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
               return Center(child: Text("there's an error, try again later :(")) ;
             },
             data: (list){
-              if (list.isEmpty)
+              if (list.isEmpty) {
                 return Center(
                   child: Text("No apartment matches your search"),
                 );
+              }
               
               return RefreshIndicator(
                 onRefresh: () async {

@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:project/generated/l10n/app_localizations.dart';
@@ -36,33 +37,36 @@ class RegisterFirstScreen extends ConsumerWidget {
     final cs = Theme.of(context).colorScheme;
 
     return Scaffold(
-  resizeToAvoidBottomInset: true,
-  body: GestureDetector(
-    onTap: () => FocusScope.of(context).unfocus(),//for unfocusing from textfields
-    child: Stack(
-      children: [
-        SizedBox.expand( // to make it fit all sizes
-          child: SvgPicture.asset(bgAsset, fit: BoxFit.cover),
-        ),
-
-        SafeArea(
-          child: SingleChildScrollView(
-            padding: EdgeInsets.fromLTRB(
-              screenWidth * 0.05,
-              screenHeight * 0.02,
-              screenWidth * 0.05,
-              screenHeight * 0.02 + MediaQuery.of(context).viewInsets.bottom,
+      resizeToAvoidBottomInset: true,
+      body: GestureDetector(
+        onTap: () =>
+            FocusScope.of(context).unfocus(), //for unfocusing from textfields
+        child: Stack(
+          children: [
+            SizedBox.expand(
+              // to make it fit all sizes
+              child: SvgPicture.asset(bgAsset, fit: BoxFit.cover),
             ),
 
-            // SafeArea(
-            //   child: SingleChildScrollView(
-            //     padding: EdgeInsets.fromLTRB(
-            //       screenWidth * 0.05,
-            //       screenHeight * 0.02,
-            //       screenWidth * 0.05,
-            //       screenHeight * 0.02 +
-            //           MediaQuery.of(context).viewInsets.bottom,
-            //     ),
+            SafeArea(
+              child: SingleChildScrollView(
+                padding: EdgeInsets.fromLTRB(
+                  screenWidth * 0.05,
+                  screenHeight * 0.02,
+                  screenWidth * 0.05,
+                  screenHeight * 0.02 +
+                      MediaQuery.of(context).viewInsets.bottom,
+                ),
+
+                // SafeArea(
+                //   child: SingleChildScrollView(
+                //     padding: EdgeInsets.fromLTRB(
+                //       screenWidth * 0.05,
+                //       screenHeight * 0.02,
+                //       screenWidth * 0.05,
+                //       screenHeight * 0.02 +
+                //           MediaQuery.of(context).viewInsets.bottom,
+                //     ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -72,12 +76,16 @@ class RegisterFirstScreen extends ConsumerWidget {
                       t.register_title,
                       style: TextStyle(
                         color: cs.onPrimary,
-                        fontSize: isRtl ? screenWidth * 0.1 : screenWidth * 0.15,
+                        fontSize: isRtl
+                            ? screenWidth * 0.1
+                            : screenWidth * 0.15,
                         fontFamily: 'Monoglyceride',
                       ),
                     ),
 
-                    SizedBox(height: isRtl ? screenWidth * 0.13 : screenWidth * 0.05),
+                    SizedBox(
+                      height: isRtl ? screenWidth * 0.13 : screenWidth * 0.05,
+                    ),
 
                     Text(
                       t.register_firstNameLabel,
@@ -130,14 +138,18 @@ class RegisterFirstScreen extends ConsumerWidget {
                     SizedBox(height: screenHeight * 0.003),
                     SizedBox(
                       height: screenHeight * 0.07,
-                      child: Directionality
-                      (
+                      child: Directionality(
                         textDirection: TextDirection.ltr,
                         child: MyTextField(
                           controller: _phoneNumCtrl,
                           hintText: "+963-000-000-000",
                           keyboardType: TextInputType.phone,
                           maxLength: 13,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                              RegExp(r'^\+?\d*'),
+                            ),
+                          ],
                         ),
                       ),
                     ),
@@ -167,6 +179,32 @@ class RegisterFirstScreen extends ConsumerWidget {
                     PrimaryButton(
                       label: t.register_continue,
                       onPressed: () {
+                        FocusScope.of(context).unfocus();
+
+                        final first = _firstNameCtrl.text.trim();
+                        final last = _lastNameCtrl.text.trim();
+                        final phone = _phoneNumCtrl.text.trim();
+                        final pass = _passwordCtrl.text;
+
+                        if (first.isEmpty ||
+                            last.isEmpty ||
+                            phone.isEmpty ||
+                            pass.isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text(t.register_fillAllFields)),
+                          );
+                          return;
+                        }
+
+                        if (phone.length < 10) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(t.register_PhonenumberITooShort),
+                            ),
+                          );
+                          return;
+                        }
+
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -190,9 +228,7 @@ class RegisterFirstScreen extends ConsumerWidget {
                           fontSize: screenHeight * 0.021,
                         ),
                         children: [
-                           TextSpan(
-                            text:  t.register_haveAccount,
-                          ),
+                          TextSpan(text: t.register_haveAccount),
                           TextSpan(
                             text: t.here,
                             style: TextStyle(

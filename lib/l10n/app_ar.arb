@@ -78,6 +78,8 @@
   "register2_pickCamera": "الكاميرا",
   "register2_pickGallery": "المعرض",
   "register_button": "إنشاء حساب",
+  "register_fillAllFields" : "الرجاء ملء جميع الحقول أعلاه",
+  "register_PhonenumberITooShort" : "رقم الهاتف قصير",
 
    "addApt_title": "إضافة شقة",
   "common_loading": "جارٍ التحميل...",
@@ -184,6 +186,7 @@
     "accept": "قبول",
     "reject": "رفض",
     "unknown": "غير معروف",
+    "rentalId": "رقم الإيجار",
 
     "editBookingDates": "تعديل تواريخ الحجز",
     "from": "من",

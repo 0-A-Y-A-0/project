@@ -196,6 +196,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get register_haveAccount => 'لديك حساب بالفعل؟\nسجّل الدخول ';
 
   @override
+  String get register_fillAllFields => 'الرجاء ملء جميع الحقول أعلاه';
+
+  @override
+  String get register_PhonenumberITooShort => 'رقم الهاتف قصير';
+
+  @override
   String get register2_birthdateLabel => 'تاريخ الميلاد';
 
   @override
@@ -493,6 +499,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get unknown => 'غير معروف';
+
+  @override
+  String get rentalId => 'رقم الإيجار';
 
   @override
   String get editBookingDates => 'تعديل تواريخ الحجز';

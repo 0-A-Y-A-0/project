@@ -20,14 +20,15 @@ class ApartmentDetailsNotifier extends AsyncNotifier<Apartment> {
     state = const AsyncLoading();
 
     final dio = ref.read(dioProvider);
-    final response = await dio.get('/apartments/$apartmentId');
+    try {
+      final response = await dio.get('/apartments/$apartmentId');
 
-    final data = response.data['apartment'];
-    final address = data['address'] ?? {};
-    final details = data['details'] ?? {};
-    final assets = data['assets'] as List<dynamic>? ?? [];
-    final rentals = (data['rentals'] as List<dynamic>?) ?? [];
-    final ratings = data['ratings'] as List<dynamic>? ?? [];
+      final data = response.data['apartment'];
+      final address = data['address'] ?? {};
+      final details = data['details'] ?? {};
+      final assets = data['assets'] as List<dynamic>? ?? [];
+      final rentals = (data['rentals'] as List<dynamic>?) ?? [];
+      final ratings = data['ratings'] as List<dynamic>? ?? [];
 
 
     final apartment = Apartment(
@@ -64,7 +65,10 @@ class ApartmentDetailsNotifier extends AsyncNotifier<Apartment> {
     );
 
 
-    state = AsyncData(apartment);
+      state = AsyncData(apartment);
+    }catch (e, st) {
+      state = AsyncValue.error(e, st);
+    }
   }
 }
 

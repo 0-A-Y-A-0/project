@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:project/generated/l10n/app_localizations.dart';
 import 'package:project/models/Governorates.dart';
+import 'package:project/providers/addApartmentProvider.dart';
 
 import '../providers/cities_provider.dart';
 
@@ -114,6 +115,7 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
         );
       }
 
+      final result = await ref.read(AddApartmentProvider)(formData);
 
       print("done inside the try/////////////////////////////");
       //  success

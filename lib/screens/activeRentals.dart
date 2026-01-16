@@ -47,8 +47,14 @@ class _ActiveRentalsScreenState extends ConsumerState<ActiveRentalsScreen> {
             child: CircularProgressIndicator(),
           );
         },
-        error: (_, __) {
-          return Center(child: Text("there's an error, try again later :(")) ;
+        error: (e, __) {
+
+          return RefreshIndicator(
+              onRefresh: () async {
+                ref.invalidate(ActiveRentalsProvider);
+              },
+              child: Center(child: Text("there's an error, try again later :("))
+          ) ;
         },
         data: (list){
           if (list.isEmpty) {

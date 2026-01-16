@@ -52,8 +52,7 @@ class _ApartmentWidgetState extends ConsumerState<ApartmentWidget> {
                   children: [
                     // the apartment image
                     Image.network(
-                      widget.apartment.photos.isEmpty ? "assets/images/apartments/test.jpg"
-                          : "http://10.0.2.2:8000/storage/${widget.apartment.photos[0]}",
+                      "http://10.0.2.2:8000/storage/${widget.apartment.photos[0]}",
                       width: double.infinity,
                       height: screenHeight * 0.3,
                       fit: BoxFit.cover,

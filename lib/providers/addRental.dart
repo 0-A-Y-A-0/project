@@ -2,9 +2,15 @@ import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dio_provider.dart';
 
-final AddRentalProvider = FutureProvider.family<void, FormData>((ref, formData) async {
+final AddRentalProvider = Provider<Future<void> Function(FormData)>((ref) {
+  return (formData) async {
 
-  try{
+    // if(response.statusCode == 422){
+    //   throw Exception('Apartment is already rented for the selected dates');
+    // }else if(response.statusCode == 409){
+    //   throw Exception("You already have an active rental request for these dates");
+    // }
+
     final apartmentId = formData.fields
         .firstWhere((e) => e.key == 'apartment_id')
         .value;
@@ -13,30 +19,38 @@ final AddRentalProvider = FutureProvider.family<void, FormData>((ref, formData) 
 
     final dio = ref.read(dioProvider);
 
-    final response = await dio.post(
-      '/apartments/$apartmentId/rentals',
-      data: formData,
-    );
+    try {
+      await dio.post(
+        '/apartments/$apartmentId/rentals',
+        data: formData,
+      );
+      print("DONE FROM PROVIDER!!!!!!!!!!!!!!!!!!!");
 
-    print("DONE FROM PROVIDER!!!!!!!!!!!!!!!!!!!");
+    }on DioException catch (e) {
+      // to make custom error messages
+      final status = e.response?.statusCode;
+      final data = e.response?.data;
 
-    // if(response.statusCode == 422){
-    //   throw Exception('Apartment is already rented for the selected dates');
-    // }else if(response.statusCode == 409){
-    //   throw Exception("You already have an active rental request for these dates");
-    // }
+      if (status == 422) {
+        throw Exception(
+          data?['message'] ?? 'Selected dates are not available',
+        );
+      }
 
-  } catch (e) {
-    // final status = e.response?.statusCode;
-    // final message = e.response?.data['message'] ?? 'Request failed';
-    //
-    // if (status == 422 || status == 409) {
-    //   throw Exception(message);
-    // }
-    //
-    // throw Exception('Unexpected error');
+      if (status == 409) {
+        throw Exception(
+          data?['message'] ?? 'You already requested this rental',
+        );
+      }
 
-    rethrow;
-  }
+      if (status == 500) {
+        throw Exception('Server exploded. Not your fault. Probably.');
+      }
+
+      throw Exception('Unexpected error, try again later.');
+
+    }
+
+  };
 });
 

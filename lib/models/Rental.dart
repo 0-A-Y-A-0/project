@@ -7,10 +7,16 @@ class Rental {
    DateTime end;
   final String status; // "pending" "approved" "rejected" "canceled"
 
+  // tenant
   // pending & no edit => edit normal, cancel normal ------
   // approved & no edit => edit normal
   // approved & edit => cancel edit (it's pending edit)
   // there's no pending & edit
+
+  // owner
+  // pending => accept/ reject normal
+  // approved/ cancel/ rejected => x
+  // approved & edit => accept/ reject edit
 
   // from the apartment
   final int apartmentId;

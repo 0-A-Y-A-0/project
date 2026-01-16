@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:project/generated/l10n/app_localizations.dart';
 import 'package:project/models/Apartment.dart';
+import 'package:project/screens/requests_screen.dart';
 import 'package:project/widgets/apartment_widget.dart';
 import 'package:project/widgets/filter_button.dart';
 import 'package:project/widgets/location_filter_button.dart';
@@ -60,11 +62,18 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
 
           // the icon next to the title
           actions: Container(
-            margin: EdgeInsetsDirectional.only(end: screenWidth * 0.06, top: screenHeight * 0.007),
-            child: ImageIcon(
-              AssetImage('assets/icons/bell_icon.png'),
-              size: 25,
-              color: cs.primary,
+            margin: EdgeInsetsDirectional.only(end: screenWidth * 0.03, top: screenHeight * 0.007),
+            child: IconButton(
+                onPressed: (){
+                  PersistentNavBarNavigator.pushNewScreen(context,
+                      screen: RequestsScreen(),
+                      withNavBar: false );
+                },
+                icon: ImageIcon(
+                  AssetImage('assets/icons/bell_icon.png'),
+                  size: 25,
+                  color: cs.primary,
+                )
             ),
           ),
 

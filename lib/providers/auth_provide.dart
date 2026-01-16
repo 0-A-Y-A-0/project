@@ -4,7 +4,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:project/models/AuthState.dart';
 import 'package:dio/dio.dart';
 import 'package:project/models/User.dart';
+import 'package:project/providers/activeRentalsProvider.dart';
+import 'package:project/providers/apartmentsProvider.dart';
 import 'package:project/providers/dio_provider.dart';
+import 'package:project/providers/favorites_provider.dart';
+import 'package:project/providers/pastRentalsProvider.dart';
+import 'package:project/providers/requestsProvider.dart';
 import 'package:project/providers/user_provider.dart';
 
 import '../services/push_notification.dart';
@@ -70,6 +75,13 @@ class AuthNotifier extends Notifier<AuthState> {
         if (fcmToken != null) {
           await PushNotificationsService.sendTokenToServer(fcmToken, authToken: response.data['token']);
         }
+
+        // refreshing all the providers
+        ref.invalidate(ActiveRentalsProvider);
+        ref.invalidate(ApartmentsProvider);
+        ref.invalidate(FavoritesProvider);
+        ref.invalidate(PastRentalsProvider);
+        ref.invalidate(RequestsProvider);
 
       } else if (response.statusCode == 201) {
         print('register completed');

@@ -31,6 +31,11 @@ class RentalWidget extends ConsumerStatefulWidget {
 }
 
 class _RentalWidgetState extends ConsumerState<RentalWidget> {
+  bool _isEditing = false;
+  bool _isCanceling = false;
+  bool _isAccepting = false;
+  bool _isRejecting = false;
+
   @override
   void initState() {
     super.initState();
@@ -49,8 +54,8 @@ class _RentalWidgetState extends ConsumerState<RentalWidget> {
     String fromStr = df.format(widget.rental.start);
     String toStr = df.format(widget.rental.end);
 
-    final isUpdating = widget.rental.updateRequest != null ;
-    if (isUpdating){
+    final isUpdating = widget.rental.updateRequest != null;
+    if (isUpdating) {
       fromStr = df.format(widget.rental.updateRequest!.start!);
       toStr = df.format(widget.rental.updateRequest!.end!);
     }
@@ -120,7 +125,12 @@ class _RentalWidgetState extends ConsumerState<RentalWidget> {
 
                       SizedBox(height: screenHeight * 0.006),
 
-                      _line(t.status, isUpdating ? "update" : widget.rental.status, cs, screenWidth),
+                      _line(
+                        t.status,
+                        isUpdating ? "update" : widget.rental.status,
+                        cs,
+                        screenWidth,
+                      ),
 
                       SizedBox(height: screenHeight * 0.015),
 
@@ -142,7 +152,7 @@ class _RentalWidgetState extends ConsumerState<RentalWidget> {
                 flex: 2,
                 child: InkWell(
                   onTap: () {
-                    print ("GO TO ${widget.rental.apartmentId}");
+                    print("GO TO ${widget.rental.apartmentId}");
                     PersistentNavBarNavigator.pushNewScreen(
                       context,
                       screen: ApartmentDetailsScreen(
@@ -210,14 +220,11 @@ class _RentalWidgetState extends ConsumerState<RentalWidget> {
     required bool ownerView,
     required String status,
   }) {
-
     // NORMAL pending & no edit
     if (!ownerView &&
-        status == 'pending' && widget.onActive &&
-        (widget.rental.updateRequest == null) )
-    {
-      bool _isCanceling = false;
-
+        status == 'pending' &&
+        widget.onActive &&
+        (widget.rental.updateRequest == null)) {
       return Row(
         children: [
           Expanded(
@@ -227,47 +234,71 @@ class _RentalWidgetState extends ConsumerState<RentalWidget> {
               screenWidth: screenWidth,
               height: btnHeight,
               radius: screenWidth * 0.035,
-              text: t.edit,
-              onTap: () async {
-                final range = await showEditBookingDatesDialog(
-                  context,
-                  initialFrom: widget.rental.start,
-                  initialTo: widget.rental.end,
-                  firstDate: DateTime(2020, 1, 1), //calendar start and end
-                  lastDate: DateTime(2060, 1, 1),
-                );
+              text: _isEditing ? "..." : t.edit,
+              onTap: _isEditing
+                  ? () {}
+                  : () async {
+                      final range = await showEditBookingDatesDialog(
+                        context,
+                        initialFrom: widget.rental.start,
+                        initialTo: widget.rental.end,
+                        firstDate: DateTime(
+                          2020,
+                          1,
+                          1,
+                        ), //calendar start and end
+                        lastDate: DateTime(2060, 1, 1),
+                      );
 
-                print ("CLosed..................") ;
+                      print("CLosed..................");
 
-                if (range != null) {
-                  // print (_formatDate(range.start));
-                  // print (_formatDate(range.end));
+                      if (range != null) {
+                        setState(() => _isEditing = true);
+                        // print (_formatDate(range.start));
+                        // print (_formatDate(range.end));
 
-                  try {
-                    await ref.read(UpdateRentalProvider)(
-                      widget.rental.id,
-                      FormData.fromMap({
-                        '_method': 'PUT',
-                        'rental_start_date': _formatDate(range.start),
-                        'rental_end_date': _formatDate(range.end),
-                      }),
-                    );
+                        try {
+                          await ref.read(UpdateRentalProvider)(
+                            widget.rental.id,
+                            FormData.fromMap({
+                              '_method': 'PUT',
+                              'rental_start_date': _formatDate(range.start),
+                              'rental_end_date': _formatDate(range.end),
+                            }),
+                          );
 
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text("Edit request submitted successfully!"),
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                "Edit request submitted successfully!",
+                              ),
+                            ),
+                          );
+                        } catch (e) {
+                          if (!mounted) return;
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                e.toString().replaceFirst('Exception: ', ''),
+                              ),
+                            ),
+                          );
+                        } finally {
+                          setState(() => _isEditing = false);
+                        }
+                      }
+                    },
+
+              child: _isEditing
+                  ? SizedBox(
+                height: btnHeight - 15,
+                width: btnHeight - 15,
+                    child: CircularProgressIndicator(
+                        color: cs.onPrimary,
+                        strokeWidth: 2,
                       ),
-                    );
-
-                  } catch (e) {
-                    if (!mounted) return;
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(e.toString().replaceFirst('Exception: ', ''))),
-                    );
-                  }
-
-                }
-              },
+                  )
+                  : null,
             ),
           ),
           SizedBox(width: screenWidth * 0.025),
@@ -278,42 +309,49 @@ class _RentalWidgetState extends ConsumerState<RentalWidget> {
               screenWidth: screenWidth,
               height: btnHeight,
               radius: screenWidth * 0.035,
-              text: _isCanceling ? t.loading : t.cancel,
+              text: _isCanceling ? '...' : t.cancel,
               onTap: _isCanceling
                   ? () {}
-                  : () async{
-                setState(() => _isCanceling = true);
+                  : () async {
+                      setState(() => _isCanceling = true);
 
-                       try{
+                      try {
                         print("CANCELING");
-                        final cancelRental =
-                        ref.read(cancelRentalProvider);
+                        final cancelRental = ref.read(cancelRentalProvider);
                         await cancelRental(widget.rental.id);
                         print("DONE CANCELING");
 
                         setState(() {});
-                      }catch (e) {
-                         ScaffoldMessenger.of(context).showSnackBar(
-                           SnackBar(content: Text(e.toString())),
-                         );
-                       } finally {
-                         if (mounted) {
-                           setState(() => _isCanceling = false);
-                         }
-                       }
+                      } catch (e) {
+                        ScaffoldMessenger.of(
+                          context,
+                        ).showSnackBar(SnackBar(content: Text(e.toString())));
+                      } finally {
+                        setState(() => _isCanceling = false);
+                      }
                     },
+
+              child: _isEditing
+                  ? SizedBox(
+                height: btnHeight - 15,
+                width: btnHeight - 15,
+                child: CircularProgressIndicator(
+                  color: cs.onPrimary,
+                  strokeWidth: 2,
+                ),
+              )
+                  : null,
             ),
           ),
         ],
       );
     }
 
-
     // NORMAL approved & no edit
-     if (!ownerView &&
-        status == 'approved' && widget.onActive &&
-         (widget.rental.updateRequest == null)
-     ) {
+    if (!ownerView &&
+        status == 'approved' &&
+        widget.onActive &&
+        (widget.rental.updateRequest == null)) {
       return Row(
         children: [
           Expanded(
@@ -323,8 +361,10 @@ class _RentalWidgetState extends ConsumerState<RentalWidget> {
               screenWidth: screenWidth,
               height: btnHeight,
               radius: screenWidth * 0.035,
-              text: t.edit,
-              onTap: () async {
+              text: _isEditing ? "..." : t.edit,
+              onTap: _isEditing ? () {}
+              : () async {
+
                 final range = await showEditBookingDatesDialog(
                   context,
                   initialFrom: widget.rental.start,
@@ -334,6 +374,7 @@ class _RentalWidgetState extends ConsumerState<RentalWidget> {
                 );
 
                 if (range != null) {
+                  setState(() => _isEditing = true);
                   // print (_formatDate(range.start));
                   // print (_formatDate(range.end));
 
@@ -352,15 +393,30 @@ class _RentalWidgetState extends ConsumerState<RentalWidget> {
                         content: Text("Edit request submitted successfully!"),
                       ),
                     );
-
                   } catch (e) {
                     if (!mounted) return;
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(e.toString().replaceFirst('Exception: ', ''))),
+                      SnackBar(
+                        content: Text(
+                          e.toString().replaceFirst('Exception: ', ''),
+                        ),
+                      ),
                     );
+                  }finally {
+                    setState(() => _isEditing = false);
                   }
                 }
               },
+              child: _isEditing
+                  ? SizedBox(
+                height: btnHeight - 15,
+                width: btnHeight - 15,
+                child: CircularProgressIndicator(
+                  color: cs.onPrimary,
+                  strokeWidth: 2,
+                ),
+              )
+                  : null,
             ),
           ),
           SizedBox(width: screenWidth * 0.025),
@@ -368,11 +424,11 @@ class _RentalWidgetState extends ConsumerState<RentalWidget> {
       );
     }
 
-     // UPDATE approved & update request
+    // UPDATE approved & update request
     if (!ownerView &&
-        status == 'approved' && widget.onActive &&
-        (widget.rental.updateRequest != null)
-    ) {
+        status == 'approved' &&
+        widget.onActive &&
+        (widget.rental.updateRequest != null)) {
       return Row(
         children: [
           Expanded(
@@ -382,20 +438,39 @@ class _RentalWidgetState extends ConsumerState<RentalWidget> {
               screenWidth: screenWidth,
               height: btnHeight,
               radius: screenWidth * 0.035,
-              text: t.cancel,
-              onTap: () async{
-                try{
-                  print("CANCELING --------------------- ${widget.rental.updateRequest!.id!}");
-                  await ref.read(cancelUpdateProvider)(widget.rental.updateRequest!.id!);
+              text: _isCanceling ? '...' : t.cancel,
+              onTap: _isCanceling ? (){}
+              : () async {
+                setState(() => _isCanceling = true);
+
+                try {
+                  print(
+                    "CANCELING --------------------- ${widget.rental.updateRequest!.id!}",
+                  );
+                  await ref.read(cancelUpdateProvider)(
+                    widget.rental.updateRequest!.id!,
+                  );
                   print("DONE CANCELING");
 
                   setState(() {});
-                }catch (e) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(e.toString())),
-                  );
+                } catch (e) {
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(SnackBar(content: Text(e.toString())));
+                }finally {
+                  setState(() => _isCanceling = false);
                 }
               },
+              child: _isEditing
+                  ? SizedBox(
+                height: btnHeight - 15,
+                width: btnHeight - 15,
+                child: CircularProgressIndicator(
+                  color: cs.onPrimary,
+                  strokeWidth: 2,
+                ),
+              )
+                  : null,
             ),
           ),
           SizedBox(width: screenWidth * 0.025),
@@ -403,12 +478,13 @@ class _RentalWidgetState extends ConsumerState<RentalWidget> {
       );
     }
 
-    if (ownerView && status == 'pending') {
+    // OWNER with buttons
+    if (ownerView && (status == 'pending' || (status == 'approved') && widget.rental.updateRequest != null)) {
       return Row(
         children: [
           Expanded(
             child: _ActionBtn(
-              //accept buttn
+              //accept button
               cs: cs,
               screenWidth: screenWidth,
               height: btnHeight,
@@ -420,7 +496,7 @@ class _RentalWidgetState extends ConsumerState<RentalWidget> {
           SizedBox(width: screenWidth * 0.025),
           Expanded(
             child: _ActionBtn(
-              //reject buttton
+              //reject button
               cs: cs,
               screenWidth: screenWidth,
               height: btnHeight,
@@ -445,6 +521,7 @@ class _ActionBtn extends StatelessWidget {
     required this.radius,
     required this.text,
     required this.onTap,
+    this.child,
   });
 
   final ColorScheme cs;
@@ -453,6 +530,7 @@ class _ActionBtn extends StatelessWidget {
   final double radius;
   final String text;
   final VoidCallback onTap;
+  final Widget? child;
 
   @override
   Widget build(BuildContext context) {
@@ -466,14 +544,16 @@ class _ActionBtn extends StatelessWidget {
           borderRadius: BorderRadius.circular(radius),
           onTap: onTap,
           child: Center(
-            child: Text(
-              text,
-              style: TextStyle(
-                color: cs.onPrimary,
-                fontSize: fontSize,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
+            child:
+                child ??
+                Text(
+                  text,
+                  style: TextStyle(
+                    color: cs.onPrimary,
+                    fontSize: fontSize,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
           ),
         ),
       ),

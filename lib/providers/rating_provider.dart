@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:project/providers/apartmentDetailsProvider.dart';
 
 import '../models/UserRating.dart';
 import 'dio_provider.dart';
@@ -34,7 +35,7 @@ class UserRatingNotifier extends AsyncNotifier<UserRating> {
 
       userRating = UserRating(
         canRate: false,
-        rate: rating['rating'] as double?,
+        rate: double.tryParse(rating['rating']?.toString() ?? '0'),
         comment:  rating['comment'] as String?,
       );
     }
@@ -75,6 +76,7 @@ class UserRatingNotifier extends AsyncNotifier<UserRating> {
     state = AsyncData(
       UserRating(canRate: false, rate: rating.toDouble(), comment: comment),
     );
+
   }
 }
 

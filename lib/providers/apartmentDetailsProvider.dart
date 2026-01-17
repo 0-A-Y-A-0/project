@@ -59,7 +59,7 @@ class ApartmentDetailsNotifier extends AsyncNotifier<Apartment> {
           r['user_name'] as String?,
           r['user_photo_url'] as String?,
           r['comment'] as String?,
-          (r['rating'] as num?)?.toDouble(),
+            double.tryParse(r['rating']?.toString() ?? '0'),
         );
       }).toList(),
     );

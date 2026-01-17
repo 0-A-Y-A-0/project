@@ -58,20 +58,74 @@ class _AddRatingState extends ConsumerState<AddRating> {
           print (ur.rate);
           print (ur.comment);
 
-          return !ur.canRate ?
-          Container(
-            width: double.infinity,
-            padding: EdgeInsets.all( screenWidth * 0.035),
-            decoration: BoxDecoration(
-              color: cs.surface,
-              borderRadius: BorderRadius.circular(18),
-              border: Border.all(color: Colors.transparent),
-            ),
-            child: Text(
-                "You can't rate an apartment that you haven't rented before"
-            ),
-          )
-          : Container(
+          // user already rated
+          if (!ur.canRate && ur.rate != null) {
+            return Container(
+              width: double.infinity,
+              padding: EdgeInsets.all(screenWidth * 0.03),
+              decoration: BoxDecoration(
+                color: cs.onPrimary.withAlpha(ur.canRate ? 250 : 180),
+                borderRadius: BorderRadius.circular(18),
+                border: Border.all(color: cs.onPrimary, width: 4),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Your review:",
+                    style: TextStyle(
+                      color: cs.primary,
+                      fontWeight: FontWeight.w800,
+                      fontSize: screenWidth * 0.045,
+                      fontFamily: 'BellotaText',
+                    ),
+                  ),
+
+                  SizedBox(height: 10,),
+
+                  RatingBar(
+                    initialRating: ur.rate?.toDouble() ?? 0,
+                    minRating: 0,
+                    direction: Axis.horizontal,
+                    allowHalfRating: true,
+                    itemCount: 5,
+                    itemSize: 40,
+                    glowColor: cs.primary.withAlpha(100),
+                    ignoreGestures: true,
+                    itemPadding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    unratedColor: Colors.grey[300],
+                    ratingWidget: RatingWidget(
+                      full: ImageIcon(AssetImage('assets/icons/filled_star_icon.png'), color: cs.primary,),
+                      half: ImageIcon(AssetImage('assets/icons/half_star_icon.png'), color: cs.primary),
+                      empty: ImageIcon(AssetImage('assets/icons/star_icon.png'), color: cs.primary), ),
+                    onRatingUpdate: (double value) {},
+                  ),
+
+                  SizedBox(height: 10,),
+
+                  _buildSubmittedReview(cs,t)
+                ],
+              ),
+            );
+          }
+
+          // can't rate at all
+          if (!ur.canRate) {
+            return Container(
+              width: double.infinity,
+              padding: EdgeInsets.all(screenWidth * 0.035),
+              decoration: BoxDecoration(
+                color: cs.surface,
+                borderRadius: BorderRadius.circular(18),
+              ),
+              child: Text(
+                "You can't rate an apartment that you haven't rented before",
+              ),
+            );
+          }
+
+          return Container(
             width: double.infinity,
             padding: EdgeInsets.all(screenWidth * 0.03),
             decoration: BoxDecoration(
@@ -84,7 +138,7 @@ class _AddRatingState extends ConsumerState<AddRating> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  ur.canRate ? "Your review:" : "Rate this apartment:",
+                  "Rate this apartment:",
                   style: TextStyle(
                     color: cs.primary,
                     fontWeight: FontWeight.w800,
@@ -103,7 +157,7 @@ class _AddRatingState extends ConsumerState<AddRating> {
                   itemCount: 5,
                   itemSize: 40,
                   glowColor: cs.primary.withAlpha(100),
-                  ignoreGestures: !ur.canRate,
+                  ignoreGestures: false,
                   itemPadding: const EdgeInsets.symmetric(horizontal: 10.0),
                   unratedColor: Colors.grey[300],
                   ratingWidget: RatingWidget(
@@ -119,9 +173,7 @@ class _AddRatingState extends ConsumerState<AddRating> {
 
                 SizedBox(height: 10,),
 
-                !ur.canRate
-                    ? _buildSubmittedReview(cs,t)
-                    : _buildReviewForm(cs, screenWidth,t),
+                _buildReviewForm(cs, screenWidth,t),
               ],
             ),
           );
@@ -130,6 +182,8 @@ class _AddRatingState extends ConsumerState<AddRating> {
   }
 
   Widget _buildReviewForm(ColorScheme cs, double screenWidth, AppLocalizations t) {
+    final userRate = ref.watch(RatingProvider);
+
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Column(
@@ -167,7 +221,7 @@ class _AddRatingState extends ConsumerState<AddRating> {
             width: double.infinity,
             height: 40,
             child: OutlinedButton(
-              onPressed: tempRate == 0 ? null
+              onPressed: tempRate == 0 || userRate.isLoading ? null
                   : () async{
                 print('RATING: $tempRate');
                 print('REVIEW: ${_reviewCtrl.text}');
@@ -187,7 +241,7 @@ class _AddRatingState extends ConsumerState<AddRating> {
                 ),
               ),
               child: Text(
-                t.rating_postReview,
+                userRate.isLoading ? t.loading : t.rating_postReview,
                 style: TextStyle(
                   color: cs.onPrimary,
                   fontSize: screenWidth * 0.05,

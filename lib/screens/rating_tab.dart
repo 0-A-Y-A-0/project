@@ -1,22 +1,26 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:project/generated/l10n/app_localizations.dart';
 import 'package:project/models/Apartment.dart';
+import 'package:project/providers/user_provider.dart';
 import 'package:project/widgets/addRating.dart';
 
-class RatingTab extends StatelessWidget {
+class RatingTab extends ConsumerWidget {
   const RatingTab({super.key, required this.apartment});
 
   final Apartment apartment;
   final bool widgetTest = true;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final cs = Theme.of(context).colorScheme ;
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     final t = AppLocalizations.of(context)!;
+
+    final user = ref.watch(UserProvider) ;
 
     return ListView(
       padding: EdgeInsets.only(top : screenWidth * 0.032, left: screenWidth * 0.015, right: screenWidth * 0.015),
@@ -94,6 +98,10 @@ class RatingTab extends StatelessWidget {
           : Column(
             children: List.generate( apartment.comments!.length , (index) {
               final review = apartment.comments![index];
+
+              if (review.photo_url == user!.photo_url) {
+                return SizedBox.shrink();
+              }
 
               return ReviewRow(
                 picUrl: review.photo_url ?? '',

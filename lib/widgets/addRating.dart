@@ -103,7 +103,7 @@ class _AddRatingState extends ConsumerState<AddRating> {
                   itemCount: 5,
                   itemSize: 40,
                   glowColor: cs.primary.withAlpha(100),
-                  ignoreGestures: ur.canRate,
+                  ignoreGestures: !ur.canRate,
                   itemPadding: const EdgeInsets.symmetric(horizontal: 10.0),
                   unratedColor: Colors.grey[300],
                   ratingWidget: RatingWidget(
@@ -119,7 +119,7 @@ class _AddRatingState extends ConsumerState<AddRating> {
 
                 SizedBox(height: 10,),
 
-                ur.canRate
+                !ur.canRate
                     ? _buildSubmittedReview(cs,t)
                     : _buildReviewForm(cs, screenWidth,t),
               ],

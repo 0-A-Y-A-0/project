@@ -56,7 +56,6 @@ class UserRatingNotifier extends AsyncNotifier<UserRating> {
     return userRating;
   }
 
-  /// Optional: submit rating later
   Future<void> submitRating({
     required int apartmentId,
     required double rating,

@@ -5,7 +5,9 @@ import 'package:intl/intl.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:project/generated/l10n/app_localizations.dart';
 import 'package:project/models/Rental.dart';
+import 'package:project/providers/acceptRequest.dart';
 import 'package:project/providers/cancelUpdate.dart';
+import 'package:project/providers/rejectRequest.dart';
 import 'package:project/screens/apartment_details_screen.dart';
 import 'package:project/widgets/rental_edit.dart';
 
@@ -36,6 +38,7 @@ class _RentalWidgetState extends ConsumerState<RentalWidget> {
   bool _isAccepting = false;
   bool _isRejecting = false;
 
+
   @override
   void initState() {
     super.initState();
@@ -54,7 +57,7 @@ class _RentalWidgetState extends ConsumerState<RentalWidget> {
     String fromStr = df.format(widget.rental.start);
     String toStr = df.format(widget.rental.end);
 
-    final isUpdating = widget.rental.updateRequest != null;
+    bool isUpdating = widget.rental.updateRequest != null;
     if (isUpdating) {
       fromStr = df.format(widget.rental.updateRequest!.start!);
       toStr = df.format(widget.rental.updateRequest!.end!);
@@ -220,11 +223,12 @@ class _RentalWidgetState extends ConsumerState<RentalWidget> {
     required bool ownerView,
     required String status,
   }) {
-    // NORMAL pending & no edit
+    // NORMAL pending & no edit (edit + cancel)
     if (!ownerView &&
         status == 'pending' &&
         widget.onActive &&
-        (widget.rental.updateRequest == null)) {
+        widget.rental.updateRequest == null)
+    {
       return Row(
         children: [
           Expanded(
@@ -266,6 +270,8 @@ class _RentalWidgetState extends ConsumerState<RentalWidget> {
                               'rental_end_date': _formatDate(range.end),
                             }),
                           );
+
+                          setState(() {});
 
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
@@ -331,7 +337,7 @@ class _RentalWidgetState extends ConsumerState<RentalWidget> {
                       }
                     },
 
-              child: _isEditing
+              child: _isCanceling
                   ? SizedBox(
                 height: btnHeight - 15,
                 width: btnHeight - 15,
@@ -347,11 +353,11 @@ class _RentalWidgetState extends ConsumerState<RentalWidget> {
       );
     }
 
-    // NORMAL approved & no edit
+    // NORMAL approved & no edit (edit)
     if (!ownerView &&
         status == 'approved' &&
-        widget.onActive &&
-        (widget.rental.updateRequest == null)) {
+        widget.onActive && widget.rental.updateRequest == null
+    ) {
       return Row(
         children: [
           Expanded(
@@ -387,6 +393,8 @@ class _RentalWidgetState extends ConsumerState<RentalWidget> {
                         'rental_end_date': _formatDate(range.end),
                       }),
                     );
+
+                    setState(() {});
 
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
@@ -424,11 +432,11 @@ class _RentalWidgetState extends ConsumerState<RentalWidget> {
       );
     }
 
-    // UPDATE approved & update request
+    // UPDATE approved & update request (cancel)
     if (!ownerView &&
         status == 'approved' &&
-        widget.onActive &&
-        (widget.rental.updateRequest != null)) {
+        widget.onActive && widget.rental.updateRequest != null
+    ) {
       return Row(
         children: [
           Expanded(
@@ -444,9 +452,7 @@ class _RentalWidgetState extends ConsumerState<RentalWidget> {
                 setState(() => _isCanceling = true);
 
                 try {
-                  print(
-                    "CANCELING --------------------- ${widget.rental.updateRequest!.id!}",
-                  );
+
                   await ref.read(cancelUpdateProvider)(
                     widget.rental.updateRequest!.id!,
                   );
@@ -461,7 +467,7 @@ class _RentalWidgetState extends ConsumerState<RentalWidget> {
                   setState(() => _isCanceling = false);
                 }
               },
-              child: _isEditing
+              child: _isCanceling
                   ? SizedBox(
                 height: btnHeight - 15,
                 width: btnHeight - 15,
@@ -478,8 +484,8 @@ class _RentalWidgetState extends ConsumerState<RentalWidget> {
       );
     }
 
-    // OWNER with buttons
-    if (ownerView && (status == 'pending' || (status == 'approved') && widget.rental.updateRequest != null)) {
+    // OWNER with buttons (pending or approved + edit request)
+    if (ownerView && (status == 'pending' || ((status == 'approved') && widget.rental.updateRequest != null))) {
       return Row(
         children: [
           Expanded(
@@ -489,8 +495,41 @@ class _RentalWidgetState extends ConsumerState<RentalWidget> {
               screenWidth: screenWidth,
               height: btnHeight,
               radius: screenWidth * 0.035,
-              text: t.accept,
-              onTap: () {},
+              text: _isAccepting ? "..." : t.accept,
+              onTap: _isAccepting ? (){}
+                  : () async{
+
+                setState(() => _isAccepting = true);
+
+                try {
+                  print(
+                    "Accepting ---------------------",
+                  );
+                  await ref.read(acceptRequestProvider)(
+                    widget.rental.updateRequest != null ? widget.rental.updateRequest!.id! : widget.rental.id, // rentalId
+                    widget.rental.updateRequest != null, // isEdit
+                  );
+                  print("DONE");
+
+                  setState(() {});
+                } catch (e) {
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(SnackBar(content: Text(e.toString())));
+                }finally {
+                  setState(() => _isAccepting = false);
+                }
+              },
+              child: _isAccepting
+                  ? SizedBox(
+                height: btnHeight - 15,
+                width: btnHeight - 15,
+                child: CircularProgressIndicator(
+                  color: cs.onPrimary,
+                  strokeWidth: 2,
+                ),
+              )
+                  : null,
             ),
           ),
           SizedBox(width: screenWidth * 0.025),
@@ -501,8 +540,40 @@ class _RentalWidgetState extends ConsumerState<RentalWidget> {
               screenWidth: screenWidth,
               height: btnHeight,
               radius: screenWidth * 0.035,
-              text: t.reject,
-              onTap: () {},
+              text: _isRejecting ? "..." : t.reject,
+              onTap: _isRejecting ? (){}
+                  : () async{
+                setState(() => _isRejecting = true);
+
+                try {
+                  print(
+                    "Rejecting ---------------------",
+                  );
+                  await ref.read(rejectRequestProvider)(
+                    widget.rental.updateRequest != null ? widget.rental.updateRequest!.id! : widget.rental.id, // rentalId
+                    widget.rental.updateRequest != null, // isEdit
+                  );
+                  print("DONE");
+
+                  setState(() {});
+                } catch (e) {
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(SnackBar(content: Text(e.toString())));
+                }finally {
+                  setState(() => _isRejecting = false);
+                }
+              },
+              child: _isRejecting
+                  ? SizedBox(
+                height: btnHeight - 15,
+                width: btnHeight - 15,
+                child: CircularProgressIndicator(
+                  color: cs.onPrimary,
+                  strokeWidth: 2,
+                ),
+              )
+                  : null,
             ),
           ),
         ],

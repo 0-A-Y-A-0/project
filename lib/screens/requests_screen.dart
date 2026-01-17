@@ -59,7 +59,7 @@ class _RequestsScreenState extends ConsumerState<RequestsScreen> {
         data: (list){
           if (list.isEmpty) {
             return Center(
-              child: Text("No active rentals yet"),
+              child: Text("No rental requests yet"),
             );
           }
 

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:project/generated/l10n/app_localizations.dart';
 import 'package:project/models/Apartment.dart';
 
+import '../models/url_config.dart';
+
 class ApartmentInfo extends StatelessWidget {
   const ApartmentInfo({
     super.key,
@@ -26,7 +28,7 @@ class ApartmentInfo extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     final imageUrl = apartment.owner_photo_url != null
-        ? 'http://10.0.2.2:8000/storage/${apartment.owner_photo_url}'
+        ? '${UrlConfig.storageBaseUrl}/${apartment.owner_photo_url}'
         : null;
 
     return SafeArea(

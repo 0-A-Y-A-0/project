@@ -7,6 +7,8 @@ import 'package:project/models/Apartment.dart';
 import 'package:project/providers/user_provider.dart';
 import 'package:project/widgets/addRating.dart';
 
+import '../models/url_config.dart';
+
 class RatingTab extends ConsumerWidget {
   const RatingTab({super.key, required this.apartment});
 
@@ -185,7 +187,7 @@ class ReviewRow extends StatelessWidget {
                   height: screenWidth * 0.15,
                   child: ClipOval(
                     child: Image.network(
-                      "http://10.0.2.2:8000/storage/${picUrl}",
+                      "${UrlConfig.storageBaseUrl}/${picUrl}",
                       fit: BoxFit.cover,
                       errorBuilder: (_, __, ___) {
                         return Image.asset(

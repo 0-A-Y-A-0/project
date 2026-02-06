@@ -11,6 +11,7 @@ import 'package:project/providers/rejectRequest.dart';
 import 'package:project/screens/apartment_details_screen.dart';
 import 'package:project/widgets/rental_edit.dart';
 
+import '../models/url_config.dart';
 import '../providers/cancleRentalProvider.dart';
 import '../providers/updateRentalProvider.dart';
 
@@ -167,7 +168,7 @@ class _RentalWidgetState extends ConsumerState<RentalWidget> {
                   child: Image.network(
                     widget.rental.cover_image_url == null
                         ? "assets/images/apartments/test.jpg"
-                        : "http://10.0.2.2:8000/storage/${widget.rental.cover_image_url}",
+                        : "${UrlConfig.storageBaseUrl}/${widget.rental.cover_image_url}",
                     width: double.infinity,
                     height: screenHeight * 0.3,
                     fit: BoxFit.cover,

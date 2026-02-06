@@ -11,6 +11,7 @@ import 'package:project/widgets/profile_list_container.dart';
 import 'package:project/widgets/theme_switch.dart';
 
 import '../models/AuthState.dart';
+import '../models/url_config.dart';
 import '../providers/auth_provide.dart';
 import '../providers/user_provider.dart';
 
@@ -26,7 +27,7 @@ class ProfileScreen extends ConsumerWidget {
 
     final user = ref.watch(UserProvider);
     final imageUrl = user?.photo_url != null
-        ? 'http://10.0.2.2:8000/storage/${user!.photo_url}'
+        ? '${UrlConfig.storageBaseUrl}/${user!.photo_url}'
         : null;
 
     final isRtl = Directionality.of(context) == TextDirection.rtl;

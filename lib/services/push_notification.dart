@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:dio/dio.dart';
+import 'package:project/models/url_config.dart';
 import 'package:project/providers/activeRentalsProvider.dart';
 import 'package:project/providers/pastRentalsProvider.dart';
 import 'package:project/services/providerContainer.dart';
@@ -64,7 +65,7 @@ class PushNotificationsService {
       dio.options.headers["Accept"] = "application/json";
       
       final response = await dio.post(
-        'http://10.0.2.2:8000/api/user/fcm-token',
+        '${UrlConfig.apiBaseUrl}/user/fcm-token',
         data: {'fcm_token': fcm_token},
       );
 

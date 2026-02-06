@@ -2,11 +2,15 @@ import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:project/providers/user_provider.dart';
 
+import '../models/url_config.dart';
+
 final dioProvider = Provider<Dio>((ref) {
 
   final dio =  Dio(
     BaseOptions(
-      baseUrl: 'http://10.0.2.2:8000/api',//here we change it to out base url
+        // baseUrl: 'http://10.0.2.2:8000/api',//here we change it to out base url
+        // baseUrl: 'http://192.168.1.102:8000/api',
+        baseUrl: UrlConfig.apiBaseUrl,
       connectTimeout: const Duration(seconds: 10),
       sendTimeout: const Duration(seconds: 10),
       receiveTimeout: const Duration(seconds: 10),

@@ -11,6 +11,7 @@ import 'package:project/widgets/calender_show_only.dart';
 import 'package:tab_container/tab_container.dart';
 
 import '../models/Governorates.dart';
+import '../models/url_config.dart';
 
 class ApartmentDetailsScreen extends ConsumerStatefulWidget {
   const ApartmentDetailsScreen({super.key, required this.apartmentId});
@@ -102,7 +103,7 @@ class _ApartmentDetailsScreenState extends ConsumerState<ApartmentDetailsScreen>
                       return ClipRRect(
                         // borderRadius: BorderRadius.circular(16),
                         child: Image.network(
-                            "http://10.0.2.2:8000/storage/${apt.photos[index]}",
+                            "${UrlConfig.storageBaseUrl}/${apt.photos[index]}",
                             width: double.infinity,
                             height: screenHeight * 0.33,
                             fit: BoxFit.cover,

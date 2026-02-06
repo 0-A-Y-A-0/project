@@ -4,6 +4,7 @@ import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:project/models/Apartment.dart';
 import 'package:project/screens/apartment_details_screen.dart';
 
+import '../models/url_config.dart';
 import '../providers/favorites_provider.dart';
 
 class ApartmentWidget extends ConsumerStatefulWidget {
@@ -52,7 +53,7 @@ class _ApartmentWidgetState extends ConsumerState<ApartmentWidget> {
                   children: [
                     // the apartment image
                     Image.network(
-                      "http://10.0.2.2:8000/storage/${widget.apartment.photos[0]}",
+                      "${UrlConfig.storageBaseUrl}/${widget.apartment.photos[0]}",
                       width: double.infinity,
                       height: screenHeight * 0.3,
                       fit: BoxFit.cover,

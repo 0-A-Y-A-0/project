@@ -99,6 +99,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get ratingOptionBetween2And4 => 'بين ☆☆ و ☆☆☆☆';
 
   @override
+  String get ratingOptionHigherThan4 => 'أعلى من ☆☆☆☆';
+
+  @override
   String get gov_damascus => 'دمشق';
 
   @override
@@ -527,4 +530,78 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get youCantRent => 'لا يمكنك تقييم شقة لم تقم باستئجارها من قبل';
+
+  @override
+  String get theresAnError => 'يوجد مشكلة، حاول مجددا لاحقا :(';
+
+  @override
+  String get noActiveRentalsYet => 'لا يوجد ايجارات حالية حتى الان';
+
+  @override
+  String get noPastRentalsYet => 'لا يوجد ايجارات سابقة حتى الان';
+
+  @override
+  String get youDidntPostAnyApartmentYet => 'لم تنشر اي شقة حتى الان';
+
+  @override
+  String get doYouWantToLogOut => 'هل تريد تسجيل خروج؟';
+
+  @override
+  String get noReviewsYet => 'لا يوجد تقييمات حتى الان';
+
+  @override
+  String get noComment => 'لا يوجد تعليق';
+
+  @override
+  String get rentalRequests => 'طلبات الايجار';
+
+  @override
+  String get noRentalRequestsYet => 'لا يوجد طلبات ايجار حتى الان';
+
+  @override
+  String get noApartmentMatchesYourSearch => 'لا يوجد شقق تطابق بحثك';
+
+  @override
+  String get yourReview => 'تقييمك:';
+
+  @override
+  String get cantRate => 'لا يمكنك تقييم شقة لم تستأجرها من قبل';
+
+  @override
+  String get rateThisApartment => 'قيم هذه الشقة:';
+
+  @override
+  String get update => 'تحديث';
+
+  @override
+  String get editSuccess => 'تم ارسال طلب تعديل الايجار بنجاح!';
+
+  @override
+  String get doYouWantToCancel => 'هل تريد الغاء هذا الايجار؟';
+
+  @override
+  String get back => 'رجوع';
+
+  @override
+  String get doYouReallyWantToCancelEdit =>
+      'هل تريد الغاء طلب التعديل على هذه الشقة؟';
+
+  @override
+  String get acceptRental => 'هل تريد قبول طلب الايجار هذا؟';
+
+  @override
+  String get rejectRental => 'هل تريد رفض طلب الايجار هذا؟';
+
+  @override
+  String get noFavs => 'لم تتم اضافة اي شقة الى المفضلة بعد';
+
+  @override
+  String get name => 'اسم المستخدم الكامل';
+
+  @override
+  String get register_enterFullName =>
+      'الرجاء ادخال اسم كامل مكون من اسم اول و اسم العائلة';
+
+  @override
+  String get youCantBookYourOwnApartment => 'لا يمكنك حجز شقتك مان \n(￣(工)￣)';
 }

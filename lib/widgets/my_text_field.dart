@@ -10,6 +10,8 @@ class MyTextField extends StatelessWidget {
     this.keyboardType,
     this.maxLength,
     this.inputFormatters,
+    this.onChanged,
+    this.ib
   });
 
   final TextEditingController controller;
@@ -18,6 +20,8 @@ class MyTextField extends StatelessWidget {
   final TextInputType? keyboardType;
   final int? maxLength;
   final List<TextInputFormatter>? inputFormatters;
+  final void Function(String value)? onChanged;
+  final IconButton? ib ;
 
   @override
   Widget build(BuildContext context) {
@@ -34,16 +38,24 @@ class MyTextField extends StatelessWidget {
       ],
       decoration: InputDecoration(
         hintText: hintText,
+
         hintStyle: TextStyle(color: cs.onSurface.withAlpha(170)),
+
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide(color: cs.onSurface, width: 2),
         ),
+
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide(color: cs.secondary, width: 2),
         ),
+
+        suffixIcon: ib
       ),
+
+      onChanged: onChanged,
+
     );
   }
 }

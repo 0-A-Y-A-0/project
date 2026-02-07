@@ -47,7 +47,7 @@ class SignInScreen extends ConsumerWidget {
             backgroundColor: Colors.red,
             behavior: SnackBarBehavior.floating,
             margin: const EdgeInsets.all(8),
-            duration: Duration(seconds: 3),
+            duration: Duration(seconds: 5),
           ),
         );
       } else if (signIn.status == AuthStatus.waiting) {
@@ -65,7 +65,7 @@ class SignInScreen extends ConsumerWidget {
             backgroundColor: Color(0xFFA26769),
             behavior: SnackBarBehavior.floating,
             margin: const EdgeInsets.all(8),
-            duration: Duration(days: 1),
+            duration: Duration(seconds: 5),
           ),
         );
       } else if (signIn.status == AuthStatus.accepted) {
@@ -84,7 +84,7 @@ class SignInScreen extends ConsumerWidget {
             backgroundColor: Color(0xFF50A2A7),
             behavior: SnackBarBehavior.floating,
             margin: const EdgeInsets.all(8),
-            duration: Duration(days: 1),
+            duration: Duration(seconds: 5),
           ),
         );
       }

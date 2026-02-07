@@ -278,6 +278,12 @@ abstract class AppLocalizations {
   /// **'Between ☆☆ and ☆☆☆☆'**
   String get ratingOptionBetween2And4;
 
+  /// No description provided for @ratingOptionHigherThan4.
+  ///
+  /// In en, this message translates to:
+  /// **'Higher than ☆☆☆☆'**
+  String get ratingOptionHigherThan4;
+
   /// No description provided for @gov_damascus.
   ///
   /// In en, this message translates to:
@@ -1123,6 +1129,150 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'You can\'t rate an apartment that you haven\'t rented before'**
   String get youCantRent;
+
+  /// No description provided for @theresAnError.
+  ///
+  /// In en, this message translates to:
+  /// **'there\'s an error, try again later :('**
+  String get theresAnError;
+
+  /// No description provided for @noActiveRentalsYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No active rentals yet'**
+  String get noActiveRentalsYet;
+
+  /// No description provided for @noPastRentalsYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No passed rentals yet'**
+  String get noPastRentalsYet;
+
+  /// No description provided for @youDidntPostAnyApartmentYet.
+  ///
+  /// In en, this message translates to:
+  /// **'You didn\'t post any apartment yet'**
+  String get youDidntPostAnyApartmentYet;
+
+  /// No description provided for @doYouWantToLogOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Do you want to log out?'**
+  String get doYouWantToLogOut;
+
+  /// No description provided for @noReviewsYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No reviews yet'**
+  String get noReviewsYet;
+
+  /// No description provided for @noComment.
+  ///
+  /// In en, this message translates to:
+  /// **'No comment'**
+  String get noComment;
+
+  /// No description provided for @rentalRequests.
+  ///
+  /// In en, this message translates to:
+  /// **'Rental requests'**
+  String get rentalRequests;
+
+  /// No description provided for @noRentalRequestsYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No rental requests yet'**
+  String get noRentalRequestsYet;
+
+  /// No description provided for @noApartmentMatchesYourSearch.
+  ///
+  /// In en, this message translates to:
+  /// **'No apartment matches your search'**
+  String get noApartmentMatchesYourSearch;
+
+  /// No description provided for @yourReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Your review:'**
+  String get yourReview;
+
+  /// No description provided for @cantRate.
+  ///
+  /// In en, this message translates to:
+  /// **'You can\'t rate an apartment that you haven\'t rented before'**
+  String get cantRate;
+
+  /// No description provided for @rateThisApartment.
+  ///
+  /// In en, this message translates to:
+  /// **'Rate this apartment:'**
+  String get rateThisApartment;
+
+  /// No description provided for @update.
+  ///
+  /// In en, this message translates to:
+  /// **'Update'**
+  String get update;
+
+  /// No description provided for @editSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit request submitted successfully!'**
+  String get editSuccess;
+
+  /// No description provided for @doYouWantToCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Do you really want to cancel this rental?'**
+  String get doYouWantToCancel;
+
+  /// No description provided for @back.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get back;
+
+  /// No description provided for @doYouReallyWantToCancelEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Do you really want to cancel the edit on this rental?'**
+  String get doYouReallyWantToCancelEdit;
+
+  /// No description provided for @acceptRental.
+  ///
+  /// In en, this message translates to:
+  /// **'Do you want to accept this rental?'**
+  String get acceptRental;
+
+  /// No description provided for @rejectRental.
+  ///
+  /// In en, this message translates to:
+  /// **'Do you want to reject this rental?'**
+  String get rejectRental;
+
+  /// No description provided for @noFavs.
+  ///
+  /// In en, this message translates to:
+  /// **'No favorite apartments added yet'**
+  String get noFavs;
+
+  /// No description provided for @name.
+  ///
+  /// In en, this message translates to:
+  /// **'User full Name'**
+  String get name;
+
+  /// No description provided for @register_enterFullName.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a full name with first and last name.'**
+  String get register_enterFullName;
+
+  /// No description provided for @youCantBookYourOwnApartment.
+  ///
+  /// In en, this message translates to:
+  /// **'You can\'t book your own apartment man \n(￣(工)￣)'**
+  String get youCantBookYourOwnApartment;
 }
 
 class _AppLocalizationsDelegate

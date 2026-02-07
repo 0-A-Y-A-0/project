@@ -8,6 +8,7 @@ import 'package:project/providers/activeRentalsProvider.dart';
 import 'package:project/providers/apartmentsProvider.dart';
 import 'package:project/providers/dio_provider.dart';
 import 'package:project/providers/favorites_provider.dart';
+import 'package:project/providers/my_apartments_provider.dart';
 import 'package:project/providers/pastRentalsProvider.dart';
 import 'package:project/providers/requestsProvider.dart';
 import 'package:project/providers/user_provider.dart';
@@ -82,6 +83,7 @@ class AuthNotifier extends Notifier<AuthState> {
         ref.invalidate(FavoritesProvider);
         ref.invalidate(PastRentalsProvider);
         ref.invalidate(RequestsProvider);
+        ref.invalidate(MyApartmentsProvider);
 
       } else if (response.statusCode == 201) {
         print('register completed');

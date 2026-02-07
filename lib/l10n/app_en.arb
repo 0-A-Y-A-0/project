@@ -30,6 +30,7 @@
   "priceOptionMoreThan2500": "More than 250$",
   "ratingOptionLessThan3": "Less than ☆☆☆",
   "ratingOptionBetween2And4": "Between ☆☆ and ☆☆☆☆",
+  "ratingOptionHigherThan4": "Higher than ☆☆☆☆",
   "location": "Location",
   "governorate": "Governorate",
   "city": "City",
@@ -202,6 +203,33 @@
     "activeRentalTitle" : "Active Rentals",
     "basedOn" : "Based on",
     "review" : "review",
-    "youCantRent" : "You can't rate an apartment that you haven't rented before"
+    "youCantRent" : "You can't rate an apartment that you haven't rented before",
+
+    "theresAnError" : "there's an error, try again later :(",
+    "noActiveRentalsYet" : "No active rentals yet",
+    "noPastRentalsYet" : "No passed rentals yet",
+    "youDidntPostAnyApartmentYet" : "You didn't post any apartment yet",
+    "doYouWantToLogOut" : "Do you want to log out?",
+    "noReviewsYet" : "No reviews yet",
+    "noComment" : "No comment",
+    "rentalRequests" : "Rental requests",
+    "noRentalRequestsYet" : "No rental requests yet",
+    "noApartmentMatchesYourSearch" : "No apartment matches your search",
+    "yourReview" : "Your review:",
+    "cantRate" : "You can't rate an apartment that you haven't rented before",
+    "rateThisApartment" : "Rate this apartment:",
+    "update" : "Update",
+    "editSuccess" : "Edit request submitted successfully!",
+    "doYouWantToCancel" : "Do you really want to cancel this rental?",
+    "back" : "Back",
+    "doYouReallyWantToCancelEdit" : "Do you really want to cancel the edit on this rental?",
+    "acceptRental" : "Do you want to accept this rental?",
+    "rejectRental" : "Do you want to reject this rental?",
+    "noFavs" : "No favorite apartments added yet",
+    "name" : "User full Name",
+    "register_enterFullName" : "Please enter a full name with first and last name.",
+    "youCantBookYourOwnApartment" : "You can't book your own apartment man \n(￣(工)￣)"
+
+
 
 }

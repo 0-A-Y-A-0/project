@@ -77,7 +77,7 @@ class _RentalWidgetState extends ConsumerState<RentalWidget> {
             color: shadowColor.withAlpha(200),
             blurRadius: 0,
             spreadRadius: 0.5,
-            offset: isRtl ? const Offset(0, 0) : const Offset(-5, 0),
+            offset: isRtl ? const Offset(5, 0) : const Offset(-5, 0),
           ),
         ],
       ),
@@ -131,7 +131,7 @@ class _RentalWidgetState extends ConsumerState<RentalWidget> {
 
                       _line(
                         t.status,
-                        isUpdating ? "update" : widget.rental.status,
+                        isUpdating ? t.update : widget.rental.status,
                         cs,
                         screenWidth,
                       ),
@@ -277,7 +277,7 @@ class _RentalWidgetState extends ConsumerState<RentalWidget> {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text(
-                                "Edit request submitted successfully!",
+                                t.editSuccess,
                               ),
                             ),
                           );
@@ -320,22 +320,48 @@ class _RentalWidgetState extends ConsumerState<RentalWidget> {
               onTap: _isCanceling
                   ? () {}
                   : () async {
-                      setState(() => _isCanceling = true);
+                final confirm = await showDialog<bool>(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: Text(t.cancel),
+                    content: Text(t.doYouWantToCancel),
+                    actions: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(context, false),
+                            child: Text(t.back),
+                          ),
+                          TextButton(
+                            onPressed: _isCanceling
+                                ? () {}
+                                : () async{
+                              setState(() => _isCanceling = true);
 
-                      try {
-                        print("CANCELING");
-                        final cancelRental = ref.read(cancelRentalProvider);
-                        await cancelRental(widget.rental.id);
-                        print("DONE CANCELING");
+                              try {
+                                print("CANCELING");
+                                final cancelRental = ref.read(cancelRentalProvider);
+                                await cancelRental(widget.rental.id);
+                                print("DONE CANCELING");
 
-                        setState(() {});
-                      } catch (e) {
-                        ScaffoldMessenger.of(
-                          context,
-                        ).showSnackBar(SnackBar(content: Text(e.toString())));
-                      } finally {
-                        setState(() => _isCanceling = false);
-                      }
+                                setState(() {});
+                              } catch (e) {
+                                ScaffoldMessenger.of(
+                                  context,
+                                ).showSnackBar(SnackBar(content: Text(e.toString())));
+                              } finally {
+                                setState(() => _isCanceling = false);
+                              }
+                              Navigator.pop(context, false);
+                            },
+                            child: Text(t.cancel),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                );
                     },
 
               child: _isCanceling
@@ -399,7 +425,7 @@ class _RentalWidgetState extends ConsumerState<RentalWidget> {
 
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text("Edit request submitted successfully!"),
+                        content: Text(t.editSuccess),
                       ),
                     );
                   } catch (e) {
@@ -450,23 +476,49 @@ class _RentalWidgetState extends ConsumerState<RentalWidget> {
               text: _isCanceling ? '...' : t.cancel,
               onTap: _isCanceling ? (){}
               : () async {
-                setState(() => _isCanceling = true);
+                final confirm = await showDialog<bool>(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: Text(t.cancel),
+                    content: Text(t.doYouReallyWantToCancelEdit),
+                    actions: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(context, false),
+                            child: Text(t.back),
+                          ),
+                          TextButton(
+                            onPressed: _isCanceling
+                                ? () {}
+                                : () async{
+                              setState(() => _isCanceling = true);
 
-                try {
+                              try {
 
-                  await ref.read(cancelUpdateProvider)(
-                    widget.rental.updateRequest!.id!,
-                  );
-                  print("DONE CANCELING");
+                                await ref.read(cancelUpdateProvider)(
+                                  widget.rental.updateRequest!.id!,
+                                );
+                                print("DONE CANCELING");
 
-                  setState(() {});
-                } catch (e) {
-                  ScaffoldMessenger.of(
-                    context,
-                  ).showSnackBar(SnackBar(content: Text(e.toString())));
-                }finally {
-                  setState(() => _isCanceling = false);
-                }
+                                setState(() {});
+                              } catch (e) {
+                                ScaffoldMessenger.of(
+                                  context,
+                                ).showSnackBar(SnackBar(content: Text(e.toString())));
+                              }finally {
+                                setState(() => _isCanceling = false);
+                              }
+                              Navigator.pop(context, false);
+                            },
+                            child: Text(t.cancel),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                );
               },
               child: _isCanceling
                   ? SizedBox(
@@ -499,27 +551,52 @@ class _RentalWidgetState extends ConsumerState<RentalWidget> {
               text: _isAccepting ? "..." : t.accept,
               onTap: _isAccepting ? (){}
                   : () async{
+                final confirm = await showDialog<bool>(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: Text(t.accept),
+                    content: Text(t.acceptRental),
+                    actions: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(context, false),
+                            child: Text(t.cancel),
+                          ),
+                          TextButton(
+                            onPressed: _isAccepting
+                                ? () {}
+                                : () async{
+                              setState(() => _isAccepting = true);
 
-                setState(() => _isAccepting = true);
+                              try {
+                                print(
+                                  "Accepting ---------------------",
+                                );
+                                await ref.read(acceptRequestProvider)(
+                                  widget.rental.updateRequest != null ? widget.rental.updateRequest!.id! : widget.rental.id, // rentalId
+                                  widget.rental.updateRequest != null, // isEdit
+                                );
+                                print("DONE");
 
-                try {
-                  print(
-                    "Accepting ---------------------",
-                  );
-                  await ref.read(acceptRequestProvider)(
-                    widget.rental.updateRequest != null ? widget.rental.updateRequest!.id! : widget.rental.id, // rentalId
-                    widget.rental.updateRequest != null, // isEdit
-                  );
-                  print("DONE");
-
-                  setState(() {});
-                } catch (e) {
-                  ScaffoldMessenger.of(
-                    context,
-                  ).showSnackBar(SnackBar(content: Text(e.toString())));
-                }finally {
-                  setState(() => _isAccepting = false);
-                }
+                                setState(() {});
+                              } catch (e) {
+                                ScaffoldMessenger.of(
+                                  context,
+                                ).showSnackBar(SnackBar(content: Text(e.toString())));
+                              }finally {
+                                setState(() => _isAccepting = false);
+                              }
+                              Navigator.pop(context, false);
+                            },
+                            child: Text(t.accept),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                );
               },
               child: _isAccepting
                   ? SizedBox(
@@ -544,26 +621,52 @@ class _RentalWidgetState extends ConsumerState<RentalWidget> {
               text: _isRejecting ? "..." : t.reject,
               onTap: _isRejecting ? (){}
                   : () async{
-                setState(() => _isRejecting = true);
+                final confirm = await showDialog<bool>(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: Text(t.reject),
+                    content: Text(t.rejectRental),
+                    actions: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(context, false),
+                            child: Text(t.cancel),
+                          ),
+                          TextButton(
+                            onPressed: _isRejecting
+                                ? () {}
+                                : () async{
+                              setState(() => _isRejecting = true);
 
-                try {
-                  print(
-                    "Rejecting ---------------------",
-                  );
-                  await ref.read(rejectRequestProvider)(
-                    widget.rental.updateRequest != null ? widget.rental.updateRequest!.id! : widget.rental.id, // rentalId
-                    widget.rental.updateRequest != null, // isEdit
-                  );
-                  print("DONE");
+                              try {
+                                print(
+                                  "Rejecting ---------------------",
+                                );
+                                await ref.read(rejectRequestProvider)(
+                                  widget.rental.updateRequest != null ? widget.rental.updateRequest!.id! : widget.rental.id, // rentalId
+                                  widget.rental.updateRequest != null, // isEdit
+                                );
+                                print("DONE");
 
-                  setState(() {});
-                } catch (e) {
-                  ScaffoldMessenger.of(
-                    context,
-                  ).showSnackBar(SnackBar(content: Text(e.toString())));
-                }finally {
-                  setState(() => _isRejecting = false);
-                }
+                                setState(() {});
+                              } catch (e) {
+                                ScaffoldMessenger.of(
+                                  context,
+                                ).showSnackBar(SnackBar(content: Text(e.toString())));
+                              }finally {
+                                setState(() => _isRejecting = false);
+                              }
+                              Navigator.pop(context, false);
+                            },
+                            child: Text(t.reject),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                );
               },
               child: _isRejecting
                   ? SizedBox(

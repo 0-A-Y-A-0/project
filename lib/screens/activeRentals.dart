@@ -19,7 +19,7 @@ class _ActiveRentalsScreenState extends ConsumerState<ActiveRentalsScreen> {
     final cs = Theme.of(context).colorScheme;
 
     final screenWidth = MediaQuery.of(context).size.width;
-    // final screenHeight = MediaQuery.of(context).size.height;
+    final screenHeight = MediaQuery.of(context).size.height;
     final AppLocalizations t = AppLocalizations.of(context)!;
 
     final activeRentals = ref.watch(ActiveRentalsProvider);
@@ -50,16 +50,33 @@ class _ActiveRentalsScreenState extends ConsumerState<ActiveRentalsScreen> {
         error: (e, __) {
 
           return RefreshIndicator(
-              onRefresh: () async {
-                ref.invalidate(ActiveRentalsProvider);
-              },
-              child: Center(child: Text("there's an error, try again later :("))
-          ) ;
+            onRefresh: () async {
+              ref.invalidate(ActiveRentalsProvider);
+            },
+            child: ListView(
+              children: [
+                Container(
+                    height: screenHeight - 200,
+                    child: Center(child: Text(t.theresAnError))
+                )
+              ],
+            ),
+          );
         },
         data: (list){
           if (list.isEmpty) {
-            return Center(
-              child: Text("No active rentals yet"),
+            return RefreshIndicator(
+              onRefresh: () async {
+                ref.invalidate(ActiveRentalsProvider);
+              },
+              child: ListView(
+                children: [
+                  Container(
+                      height: screenHeight - 200,
+                      child: Center(child: Text(t.noActiveRentalsYet))
+                  )
+                ],
+              ),
             );
           }
 
@@ -81,6 +98,3 @@ class _ActiveRentalsScreenState extends ConsumerState<ActiveRentalsScreen> {
     );
   }
 }
-
-//ongoing+approved=> 
-//

@@ -82,6 +82,7 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
     setState(() => _isSubmitting = true);
 
     try{
+      final AppLocalizations t = AppLocalizations.of(context)!;
       print ("inside try");
 
       final formData = FormData();
@@ -121,7 +122,7 @@ class _AddApartmentScreenState extends ConsumerState<AddApartmentScreen> {
       //  success
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(const SnackBar(content: Text('Apartment added')));
+      ).showSnackBar(SnackBar(content: Text(t.addApt_added)));
 
       //  clear fields
       setState(() {

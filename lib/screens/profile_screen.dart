@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:project/generated/l10n/app_localizations.dart';
 import 'package:project/screens/history_screen.dart';
+import 'package:project/screens/my_apartments_screen.dart';
 import 'package:project/widgets/langToggle.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:project/screens/favorite_screen.dart';
@@ -50,11 +51,12 @@ class ProfileScreen extends ConsumerWidget {
             children: [
               // the pic
               Container(
-                height: screenHeight / 4,
-                width: screenHeight / 4,
+                height: screenWidth / 2.1,
+                width: screenWidth / 2.1,
                 margin: EdgeInsetsDirectional.only(
-                  start: screenWidth * 0.02,
+                  start: screenWidth * 0.03,
                   end: screenWidth * 0.03,
+                  top: screenWidth * 0.05,
                 ),
 
                 decoration: BoxDecoration(
@@ -104,6 +106,9 @@ class ProfileScreen extends ConsumerWidget {
                       fontWeight: FontWeight.w900,
                       fontFamily: 'Monoglyceride',
                     ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    softWrap: true,
                   ),
 
                   SizedBox(height: 5),
@@ -112,19 +117,21 @@ class ProfileScreen extends ConsumerWidget {
                   SizedBox(
                     // we have to force a width so the text wrap works ... remove it if you want to see yellow flags 🚧
                     width: screenWidth * 0.46,
-                    child: Text(
-                      user.bio!,
-                      // "this is me testing the overflow text wrap i don't know what im writing i just want to fill some space and bla bla bla bla i hope its more than two lines now are you open mindu?",
-                      style: TextStyle(
-                        color: cs.primary,
-                        fontWeight: FontWeight.w500,
-                        fontFamily: 'BellotaText',
-                      ),
+                    child: Center(
+                      child: Text(
+                        user.bio!,
+                        // "this is me testing the overflow text wrap i don't know what im writing i just want to fill some space and bla bla bla bla i hope its more than two lines now are you open mindu?",
+                        style: TextStyle(
+                          color: cs.primary,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: 'BellotaText',
+                        ),
 
-                      // if the bio is too long this only shows x lines and adds ...
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis,
-                      softWrap: true,
+                        // if the bio is too long this only shows x lines and adds ...
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                        softWrap: true,
+                      ),
                     ),
                   ),
 
@@ -133,7 +140,7 @@ class ProfileScreen extends ConsumerWidget {
                   // edit button
                   Container(
                     height: screenHeight * 0.055,
-                    width: screenWidth * 0.45,
+                    width: screenWidth * 0.4,
                     child: ElevatedButton.icon(
                       style: ElevatedButton.styleFrom(
                         side: BorderSide(
@@ -176,7 +183,9 @@ class ProfileScreen extends ConsumerWidget {
                   text: t.myApartments,
                   iconPath: 'assets/icons/apartment_icon.png',
                   onPressed: () {
-                    print("clicked");
+                    PersistentNavBarNavigator.pushNewScreen(context,
+                        screen: MyApartmentsScreen(),
+                        withNavBar: false );
                   },
                 ),
 
@@ -190,7 +199,6 @@ class ProfileScreen extends ConsumerWidget {
                   text: t.favorites,
                   iconPath: 'assets/icons/fav_icon.png',
                   onPressed: () {
-                    print("clicked");
                     PersistentNavBarNavigator.pushNewScreen(context,
                         screen: FavoriteScreen(),
                         withNavBar: false );
@@ -207,7 +215,6 @@ class ProfileScreen extends ConsumerWidget {
                   text: t.rentalHistory,
                   iconPath: 'assets/icons/history_icon.png',
                   onPressed: () {
-                    print("clicked");
                     PersistentNavBarNavigator.pushNewScreen(context,
                         screen: PastRentalsScreen(),
                         withNavBar: false );
@@ -312,11 +319,39 @@ class ProfileScreen extends ConsumerWidget {
                           color: Colors.transparent,
                           borderRadius: BorderRadius.circular(16),
                           child: InkWell(
-                            onTap: (){
-                              print("clicked -----------------------------");
-                              ref.read(AuthNotifierProvider.notifier).logout();
-                              // navigating is happening in the main screen
+                            onTap: () async {
+                              final confirm = await showDialog<bool>(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  title: Text(t.logout),
+                                  content: Text(t.doYouWantToLogOut),
+                                  actions: [
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        TextButton(
+                                          onPressed: () => Navigator.pop(context, false),
+                                          child: Text(t.cancel),
+                                        ),
+                                        TextButton(
+                                          onPressed: ()
+                                          {
+                                            ref
+                                                .read(
+                                                AuthNotifierProvider.notifier)
+                                                .logout();
+                                            Navigator.pop(context, false);
+                                          },
+                                          child: Text(t.logout),
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              );
+
                             },
+
                             splashColor: cs.primary.withAlpha(50), // to make the splash color matchy matchy
                           )
                       ),
@@ -372,15 +407,18 @@ class ProfileScreen extends ConsumerWidget {
           ),
 
           // the most important part
-          Text(
-            t.profile_version,
-            style: TextStyle(
-              color: cs.primary.withAlpha(120),
-              fontWeight: FontWeight.w400,
-              fontSize: 15,
-              fontFamily: 'BellotaText',
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 15),
+            child: Text(
+              t.profile_version,
+              style: TextStyle(
+                color: cs.primary.withAlpha(120),
+                fontWeight: FontWeight.w400,
+                fontSize: 15,
+                fontFamily: 'BellotaText',
+              ),
+              textAlign: TextAlign.center,
             ),
-            textAlign: TextAlign.center,
           ),
         ],
       ),

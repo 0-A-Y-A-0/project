@@ -154,6 +154,8 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                             'city' : selectedCity,
                             'min_price' : minPrice,
                             'max_price' : maxPrice,
+                            'min_rating' : minRate,
+                            'max_rating' : maxRate
                           }
                       );
                     },
@@ -194,6 +196,8 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                             'city' : selectedCity,
                             'min_price' : minPrice,
                             'max_price' : maxPrice,
+                            'min_rating' : minRate,
+                            'max_rating' : maxRate
                           }
                       );
                     },
@@ -202,9 +206,37 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                   FilterButton(
                     value: rateValue,
                     label: t.rating,
-                    options: [t.ratingOptionLessThan3, t.ratingOptionBetween2And4],
+                    options: [t.ratingOptionLessThan3, t.ratingOptionBetween2And4, t.ratingOptionHigherThan4],
                       onSelected: (index) {
-                      print("changed ----- $index");
+                        // setting the values
+                        setState(() {
+                          rateValue = index;
+
+                          if (index == 0) {
+                            minRate = 0;
+                            maxRate = 3;
+                          } else if (index == 1) {
+                            minRate = 2;
+                            maxRate = 4;
+                          } else if (index == 2) {
+                            minRate = 4;
+                            maxRate = 5;
+                          }
+                        });
+
+                        print ("$minRate          $minRate");
+
+                        // refreshing
+                        ref.read(ApartmentsProvider.notifier).fetchApartments(
+                            dataMap: {
+                              'governorate' : selectedGovNum,
+                              'city' : selectedCity,
+                              'min_price' : minPrice,
+                              'max_price' : maxPrice,
+                              'min_rating' : minRate,
+                              'max_rating' : maxRate
+                            }
+                        );
                     },
                   ),
                 ],
@@ -225,12 +257,12 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
               );
             },
             error: (_, __) {
-              return Center(child: Text("there's an error, try again later :(")) ;
+              return Center(child: Text(t.theresAnError)) ;
             },
             data: (list){
               if (list.isEmpty) {
                 return Center(
-                  child: Text("No apartment matches your search"),
+                  child: Text(t.noApartmentMatchesYourSearch),
                 );
               }
               

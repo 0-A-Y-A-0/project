@@ -108,7 +108,8 @@ class _ApartmentWidgetState extends ConsumerState<ApartmentWidget> {
                     ),
 
                     // the text
-                    PositionedDirectional( //added directional
+                    PositionedDirectional(
+                      //added directional
                       // this tells the widget where to start from
                       bottom: 5,
                       start:  15,

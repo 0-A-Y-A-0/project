@@ -238,7 +238,7 @@ class _RegisterSecondScreenState extends ConsumerState<RegisterSecondScreen> {
                 ),
 
                 SizedBox(
-                  height: isRtl ? screenWidth * 0.13 : screenWidth * 0.05,
+                  height: isRtl ? screenWidth * 0.13 : screenWidth * 0.15,
                 ),
 
                 // Birthdate label

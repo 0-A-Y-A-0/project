@@ -10,14 +10,24 @@ import 'package:project/widgets/my_text_field.dart';
 // import '../providers/auth_provide.dart';
 import '../widgets/primary_button.dart';
 
-class RegisterFirstScreen extends ConsumerWidget {
+class RegisterFirstScreen extends ConsumerStatefulWidget {
+
+  const RegisterFirstScreen({super.key});
+
+  @override
+  ConsumerState<RegisterFirstScreen> createState() => _registerFirstScreenState();
+}
+
+class _registerFirstScreenState extends ConsumerState<RegisterFirstScreen> {
   final _firstNameCtrl = TextEditingController();
   final _lastNameCtrl = TextEditingController();
+  bool _obscurePassword = true;
+  final _nameCtrl = TextEditingController();
   final _phoneNumCtrl = TextEditingController(text: "+963");
   final _passwordCtrl = TextEditingController();
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     // final register = ref.watch(AuthNotifierProvider);
 
     final screenWidth = MediaQuery.of(context).size.width;
@@ -37,7 +47,7 @@ class RegisterFirstScreen extends ConsumerWidget {
     final cs = Theme.of(context).colorScheme;
 
     return Scaffold(
-      resizeToAvoidBottomInset: true,
+      resizeToAvoidBottomInset: false,
       body: GestureDetector(
         onTap: () =>
             FocusScope.of(context).unfocus(), //for unfocusing from textfields
@@ -49,13 +59,12 @@ class RegisterFirstScreen extends ConsumerWidget {
             ),
 
             SafeArea(
-              child: SingleChildScrollView(
+              child: Container(
                 padding: EdgeInsets.fromLTRB(
                   screenWidth * 0.05,
                   screenHeight * 0.02,
                   screenWidth * 0.05,
-                  screenHeight * 0.02 +
-                      MediaQuery.of(context).viewInsets.bottom,
+                  screenHeight * 0.02,
                 ),
 
                 // SafeArea(
@@ -84,11 +93,11 @@ class RegisterFirstScreen extends ConsumerWidget {
                     ),
 
                     SizedBox(
-                      height: isRtl ? screenWidth * 0.13 : screenWidth * 0.05,
+                      height: isRtl ? screenWidth * 0.13 : screenWidth * 0.2,
                     ),
 
                     Text(
-                      t.register_firstNameLabel,
+                      t.name,
                       style: TextStyle(
                         color: cs.onSurface,
                         fontWeight: FontWeight.w700,
@@ -99,33 +108,44 @@ class RegisterFirstScreen extends ConsumerWidget {
                     SizedBox(
                       height: screenHeight * 0.07,
                       child: MyTextField(
-                        controller: _firstNameCtrl,
-                        hintText: t.register_firstNameHint,
+                        controller: _nameCtrl,
+                        hintText: t.name,
                         keyboardType: TextInputType.text,
+                        onChanged: (value) {
+                          final words = value.trim().split(RegExp(r'\s+'));
+
+                          if (words.length > 2) {
+                            _nameCtrl.text =
+                                words.take(2).join(' ');
+                            _nameCtrl.selection = TextSelection.fromPosition(
+                              TextPosition(offset: _nameCtrl.text.length),
+                            );
+                          }
+                        },
                       ),
                     ),
 
                     SizedBox(height: screenHeight * 0.013),
 
-                    Text(
-                      t.register_lastNameLabel,
-                      style: TextStyle(
-                        color: cs.onSurface,
-                        fontWeight: FontWeight.w700,
-                        fontSize: screenWidth * 0.04,
-                      ),
-                    ),
-                    SizedBox(height: screenHeight * 0.003),
-                    SizedBox(
-                      height: screenHeight * 0.07,
-                      child: MyTextField(
-                        controller: _lastNameCtrl,
-                        hintText: t.register_lastNameHint,
-                        keyboardType: TextInputType.text,
-                      ),
-                    ),
-
-                    SizedBox(height: screenHeight * 0.013),
+                    // Text(
+                    //   t.register_lastNameLabel,
+                    //   style: TextStyle(
+                    //     color: cs.onSurface,
+                    //     fontWeight: FontWeight.w700,
+                    //     fontSize: screenWidth * 0.04,
+                    //   ),
+                    // ),
+                    // SizedBox(height: screenHeight * 0.003),
+                    // SizedBox(
+                    //   height: screenHeight * 0.07,
+                    //   child: MyTextField(
+                    //     controller: _lastNameCtrl,
+                    //     hintText: t.register_lastNameHint,
+                    //     keyboardType: TextInputType.text,
+                    //   ),
+                    // ),
+                    //
+                    // SizedBox(height: screenHeight * 0.013),
 
                     Text(
                       t.phoneLabel,
@@ -170,7 +190,19 @@ class RegisterFirstScreen extends ConsumerWidget {
                       child: MyTextField(
                         controller: _passwordCtrl,
                         hintText: " * * * * * * * * ",
-                        obscureText: true,
+                        obscureText: _obscurePassword,
+                        ib: IconButton(
+                          icon: Icon(
+                            _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                            color: Colors.grey,
+                          ),
+                          onPressed: () {
+                            // toggle password visibility
+                            _obscurePassword = !_obscurePassword;
+                            // if using setState:
+                            setState(() {});
+                          },
+                        ),
                       ),
                     ),
 
@@ -181,8 +213,16 @@ class RegisterFirstScreen extends ConsumerWidget {
                       onPressed: () {
                         FocusScope.of(context).unfocus();
 
-                        final first = _firstNameCtrl.text.trim();
-                        final last = _lastNameCtrl.text.trim();
+                        final parts = _nameCtrl.text.trim().split(RegExp(r'\s+'));
+                        // Force exactly 2 words
+                        if (parts.length != 2) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text(t.register_enterFullName)),
+                          );
+                          return;
+                        }
+                        final first = parts[0];
+                        final last = parts[1];
                         final phone = _phoneNumCtrl.text.trim();
                         final pass = _passwordCtrl.text;
 
@@ -209,8 +249,8 @@ class RegisterFirstScreen extends ConsumerWidget {
                           context,
                           MaterialPageRoute(
                             builder: (_) => RegisterSecondScreen(
-                              firstName: _firstNameCtrl.text,
-                              lastName: _lastNameCtrl.text,
+                              firstName: first,
+                              lastName: last,
                               phoneNum: _phoneNumCtrl.text,
                               password: _passwordCtrl.text,
                             ),

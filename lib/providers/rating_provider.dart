@@ -37,17 +37,18 @@ class UserRatingNotifier extends AsyncNotifier<UserRating> {
         canRate: false,
         rate: double.tryParse(rating['rating']?.toString() ?? '0'),
         comment:  rating['comment'] as String?,
+        ratingId: rating['id'],
       );
     }
 
     // cannot rate
     else if (data['can_rate'] == false) {
-      userRating = UserRating(canRate: false, rate: null, comment: null);
+      userRating = UserRating(canRate: false, rate: null, comment: null, ratingId: null);
     }
 
     // can rate
     else {
-      userRating = UserRating(canRate: true, rate: null, comment: null);
+      userRating = UserRating(canRate: true, rate: null, comment: null, ratingId: null);
     }
 
     print ("${userRating.canRate}");
@@ -64,7 +65,7 @@ class UserRatingNotifier extends AsyncNotifier<UserRating> {
   }) async {
     final dio = ref.read(dioProvider);
 
-    await dio.post(
+    final response = await dio.post(
       '/apartments/$apartmentId/rate',
       data: {
         'rating': rating,
@@ -72,12 +73,48 @@ class UserRatingNotifier extends AsyncNotifier<UserRating> {
       },
     );
 
+    final data = response.data;
+    final ratingRes = data['rating'];
+
+    print (ratingRes);
+
+
     // Update local state after successful submit
     state = AsyncData(
-      UserRating(canRate: false, rate: rating.toDouble(), comment: comment),
+      UserRating(canRate: false,
+          rate: double.tryParse(ratingRes['rating']?.toString() ?? '0'),
+          comment: ratingRes['comment'] as String?,
+          ratingId: ratingRes['id'],
+      ),
+    );
+  }
+
+  Future<void> editRating({
+    required int ratingId,
+    required double rating,
+    String? comment,
+  }) async {
+    final dio = ref.read(dioProvider);
+
+    await dio.put(
+      '/apartments/${ratingId}/rate/update',
+      data: {
+        'rating': rating,
+        'comment': comment,
+      },
     );
 
+    // update local state
+    state = AsyncData(
+      UserRating(
+        canRate: false,
+        rate: rating,
+        comment: comment!.isEmpty ? null : comment,
+        ratingId: ratingId,
+      ),
+    );
   }
+
 }
 
 final RatingProvider =

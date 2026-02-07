@@ -219,10 +219,7 @@ class ApartmentInfo extends StatelessWidget {
               ),
             ),
 
-            if (footer != null) ...[
-              SizedBox(height: screenHeight * 0.02),
-              footer!,
-            ],
+            SizedBox(height: screenHeight * 0.01)
           ],
         ),
       ),

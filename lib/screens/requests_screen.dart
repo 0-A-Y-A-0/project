@@ -29,7 +29,7 @@ class _RequestsScreenState extends ConsumerState<RequestsScreen> {
         backgroundColor: cs.onPrimary,
         toolbarHeight: screenHeight * 0.1,
         title: Text(
-          "Rental requests",
+          t.rentalRequests,
           style: TextStyle(
             color: cs.primary,
             fontSize: screenWidth * 0.08,
@@ -53,13 +53,13 @@ class _RequestsScreenState extends ConsumerState<RequestsScreen> {
               onRefresh: () async {
                 ref.invalidate(RequestsProvider);
               },
-              child: Center(child: Text("there's an error, try again later :("))
+              child: Center(child: Text(t.theresAnError))
           ) ;
         },
         data: (list){
           if (list.isEmpty) {
             return Center(
-              child: Text("No rental requests yet"),
+              child: Text(t.noRentalRequestsYet),
             );
           }
 

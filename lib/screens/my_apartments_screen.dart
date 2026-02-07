@@ -1,34 +1,36 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:project/generated/l10n/app_localizations.dart';
-import 'package:project/providers/activeRentalsProvider.dart';
-import 'package:project/providers/pastRentalsProvider.dart';
-import 'package:project/widgets/rental_widget.dart';
+import 'package:project/providers/my_apartments_provider.dart';
 
-class PastRentalsScreen extends ConsumerStatefulWidget {
-  const PastRentalsScreen({super.key});
+import '../generated/l10n/app_localizations.dart';
+import '../widgets/apartment_widget.dart';
+
+class MyApartmentsScreen extends ConsumerStatefulWidget {
+  const MyApartmentsScreen({super.key});
 
   @override
-  ConsumerState<PastRentalsScreen> createState() => _PastRentalsScreenState();
+  ConsumerState<MyApartmentsScreen> createState() => _MyApartmentsScreenState();
 }
 
-class _PastRentalsScreenState extends ConsumerState<PastRentalsScreen> {
+class _MyApartmentsScreenState extends ConsumerState<MyApartmentsScreen> {
+
   @override
   Widget build(BuildContext context) {
-    final cs = Theme.of(context).colorScheme;
-
+    final cs = Theme.of(context).colorScheme ;
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     final AppLocalizations t = AppLocalizations.of(context)!;
 
-    final pastRentals = ref.watch(PastRentalsProvider);
+    final myApts = ref.watch(MyApartmentsProvider);
 
     return Scaffold(
+      backgroundColor: cs.onPrimary,
       appBar: AppBar(
         backgroundColor: cs.onPrimary,
         toolbarHeight: screenHeight * 0.1,
         title: Text(
-          t.rentalHistory,
+          t.myApartments,
           style: TextStyle(
             color: cs.primary,
             fontSize: screenWidth * 0.08,
@@ -37,8 +39,7 @@ class _PastRentalsScreenState extends ConsumerState<PastRentalsScreen> {
           ),
         ),
       ),
-      backgroundColor: cs.onPrimary,
-      body: pastRentals.when(
+      body: myApts.when(
         loading: () {
           return Container(
             alignment: Alignment.center,
@@ -49,7 +50,7 @@ class _PastRentalsScreenState extends ConsumerState<PastRentalsScreen> {
         error: (_, __) {
           return RefreshIndicator(
             onRefresh: () async {
-              ref.invalidate(ActiveRentalsProvider);
+              ref.invalidate(MyApartmentsProvider);
             },
             child: ListView(
               children: [
@@ -65,13 +66,13 @@ class _PastRentalsScreenState extends ConsumerState<PastRentalsScreen> {
           if (list.isEmpty) {
             return RefreshIndicator(
               onRefresh: () async {
-                ref.invalidate(ActiveRentalsProvider);
+                ref.invalidate(MyApartmentsProvider);
               },
               child: ListView(
                 children: [
                   Container(
                       height: screenHeight - 200,
-                      child: Center(child: Text(t.noPastRentalsYet))
+                      child: Center(child: Text(t.youDidntPostAnyApartmentYet))
                   )
                 ],
               ),
@@ -80,15 +81,16 @@ class _PastRentalsScreenState extends ConsumerState<PastRentalsScreen> {
 
           return RefreshIndicator(
             onRefresh: () async {
-              ref.invalidate(ActiveRentalsProvider);
+              ref.invalidate(MyApartmentsProvider);
             },
             child: ListView.builder(
               itemCount: list.length,
-              itemBuilder: (context, index) => RentalWidget(
-                rental: list[index],
-                onActive: false,
-                ownerView: false,
-              ),
+              itemBuilder: (context, index) {
+                return ApartmentWidget(
+                  apartment: list[index] ,
+                  height: 200,
+                );
+              },
             ),
           );
         },

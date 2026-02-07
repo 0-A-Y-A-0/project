@@ -92,6 +92,18 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
     if (!_formKey.currentState!.validate()) return;
 
     final cardDigits = _cardNumberCtrl.text.replaceAll(' ', '');
+    if (cardDigits.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(AppLocalizations.of(context)!.booking_cardRequired)),
+      );
+      return;
+    }
+    if (cardDigits.length < 16) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(AppLocalizations.of(context)!.booking_cardMustBe16)),
+      );
+      return;
+    }
 
     setState(() => _isSubmitting = true);
     try {
@@ -140,6 +152,43 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
     }
   }
 
+  Future<String?> showCardInputDialog(BuildContext context, String initial) async {
+    final controller = TextEditingController(text: initial);
+
+    return showDialog<String>(
+      context: context,
+      builder: (ctx) {
+        return AlertDialog(
+          title: Text('Enter Card Number'),
+          content: TextFormField(
+            maxLength: 19,
+            controller: controller,
+            keyboardType: TextInputType.number,
+            inputFormatters: [
+              FilteringTextInputFormatter.digitsOnly,
+              _CardNumberFormatter(),
+              LengthLimitingTextInputFormatter(19),
+            ],
+            decoration: InputDecoration(
+              hintText: '0000 0000 0000 0000',
+              border: OutlineInputBorder(),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(ctx), // cancel returns null
+              child: const Text('Cancel'),
+            ),
+            FilledButton(
+              onPressed: () => Navigator.pop(ctx, controller.text),
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final fromText = _formatDate(_fromDate);
@@ -160,7 +209,7 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
         borderRadius: BorderRadius.circular(12),
       ),
       child: Text(
-        "You can't book your own apartment man \n(￣(工)￣)",
+        t.youCantBookYourOwnApartment,
         textAlign: TextAlign.center,
       ),
     )
@@ -200,27 +249,49 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
             ),
             const SizedBox(height: 12),
 
-            TextFormField(
-              maxLength: 19,
-              controller: _cardNumberCtrl,
-              enabled: !_isSubmitting,
-              keyboardType: TextInputType.number,
-              inputFormatters: [
-                FilteringTextInputFormatter.digitsOnly,
-                _CardNumberFormatter(),
-              ],
-              decoration: InputDecoration(
-                labelText: t.booking_cardNumber,
-                hintText: '0000 0000 0000 0000',
-                border: OutlineInputBorder(),
-              ),
-              validator: (v) {
-                final digits = (v ?? '').replaceAll(' ', '');
-                if (digits.isEmpty) return t.booking_cardRequired;
-                if (digits.length < 16) return t.booking_cardMustBe16;
-                return null;
+            // TextFormField(
+            //   maxLength: 19,
+            //   controller: _cardNumberCtrl,
+            //   enabled: !_isSubmitting,
+            //   keyboardType: TextInputType.number,
+            //   inputFormatters: [
+            //     FilteringTextInputFormatter.digitsOnly,
+            //     _CardNumberFormatter(),
+            //   ],
+            //   decoration: InputDecoration(
+            //     labelText: t.booking_cardNumber,
+            //     hintText: '0000 0000 0000 0000',
+            //     border: OutlineInputBorder(),
+            //   ),
+            //   validator: (v) {
+            //     final digits = (v ?? '').replaceAll(' ', '');
+            //     if (digits.isEmpty) return t.booking_cardRequired;
+            //     if (digits.length < 16) return t.booking_cardMustBe16;
+            //     return null;
+            //   },
+            // ),
+
+            InkWell(
+              onTap: _isSubmitting
+                  ? null
+                  : () async {
+                final result = await showCardInputDialog(context, _cardNumberCtrl.text);
+                if (result != null) {
+                  setState(() => _cardNumberCtrl.text = result);
+                }
               },
+              child: InputDecorator(
+                decoration: InputDecoration(
+                  labelText: t.booking_cardNumber,
+                  border: const OutlineInputBorder(),
+                  suffixIcon: const Icon(Icons.edit),
+                ),
+                child: Text(
+                  _cardNumberCtrl.text.isEmpty ? '0000 0000 0000 0000' : _cardNumberCtrl.text,
+                ),
+              ),
             ),
+
 
             const SizedBox(height: 24),
 

@@ -80,6 +80,7 @@ class _ApartmentDetailsScreenState extends ConsumerState<ApartmentDetailsScreen>
     ];
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: cs.onPrimary,
       appBar: AppBar(
         backgroundColor: cs.onPrimary,
@@ -151,7 +152,7 @@ class _ApartmentDetailsScreenState extends ConsumerState<ApartmentDetailsScreen>
                 Container(
                   margin: EdgeInsets.only(top: 10, left: 8, right: 8),
                   width: double.infinity,
-                  height: screenHeight * 0.5,
+                  height: screenHeight * 0.55,
 
                   child: TabContainer(
                     controller: _tabController,
@@ -164,7 +165,7 @@ class _ApartmentDetailsScreenState extends ConsumerState<ApartmentDetailsScreen>
                       8,
                     ), // for the entire container
                     tabBorderRadius: BorderRadius.circular(8), // only for the tabs
-                    childPadding: const EdgeInsets.only(top: 1), // for the content
+                    childPadding: const EdgeInsets.only(top: 5, bottom: 5), // for the content
                     // this doesn't do anything
                     // selectedTextStyle: TextStyle(
                     //   color: Colors.yellow,
@@ -225,10 +226,19 @@ class _ApartmentDetailsScreenState extends ConsumerState<ApartmentDetailsScreen>
                     children: [
                       ApartmentInfo(apartment: apt),
                       RatingTab(apartment: apt),
-                      TakenDaysCalendar(
-                        takenRanges: apt.rentals,
-                        firstDate: DateTime(2025, 1, 1),
-                        lastDate: DateTime(2026, 12, 31),
+                      Container(
+                        width: double.infinity,
+                        height: double.infinity,
+                        margin: EdgeInsets.all(7),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          color: cs.onPrimary,
+                        ),
+                        child: TakenDaysCalendar(
+                          takenRanges: apt.rentals,
+                          firstDate: DateTime(2025, 1, 1),
+                          lastDate: DateTime(2026, 12, 31),
+                        ),
                       ),
                       Text('map + location'),
                       BookingScreen(),

@@ -48,12 +48,24 @@ class _FavoriteScreenState extends ConsumerState<FavoriteScreen> {
           );
         },
         error: (_, __) {
-          return Center(child: Text("there's an error, try again later :(")) ;
+          return RefreshIndicator(
+            onRefresh: () async {
+              ref.invalidate(FavoritesProvider);
+            },
+            child: ListView(
+              children: [
+                Container(
+                    height: screenHeight - 200,
+                    child: Center(child: Text(t.theresAnError))
+                )
+              ],
+            ),
+          );
         },
         data: (list){
           if (list.isEmpty) {
             return Center(
-              child: Text("No favorite apartments added yet"),
+              child: Text(t.noFavs),
             );
           }
 

@@ -96,7 +96,7 @@ class RatingTab extends ConsumerWidget {
             border: Border.all(color: Colors.transparent),
           ),
           child: (apartment.comments == null || apartment.comments!.isEmpty)
-              ? Text("No reviews yet")
+              ? Text(t.noReviewsYet)
           : Column(
             children: List.generate( apartment.comments!.length , (index) {
               final review = apartment.comments![index];
@@ -110,7 +110,7 @@ class RatingTab extends ConsumerWidget {
                 name: review.name ?? 'Anonymous',
                 rate: review.rate ?? 0,
                 comment: review.review,
-                divider: index < apartment.comments!.length - 1 ? true : false, // dont put a divider to the last element
+                divider: index < apartment.comments!.length - 1 ? true : false, // don't put a divider to the last element
               );
             },),
           ),
@@ -169,6 +169,7 @@ class ReviewRow extends StatelessWidget {
     final cs = Theme.of(context).colorScheme ;
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
+    final AppLocalizations t = AppLocalizations.of(context)!;
 
     return Container(
       width: double.infinity,
@@ -235,7 +236,7 @@ class ReviewRow extends StatelessWidget {
           SizedBox(
             width: double.infinity,
             child: Text(
-              comment == null ? "No comment" : comment!,
+              comment == null ? t.noComment : comment!,
               style: TextStyle(
                 color: comment == null ? cs.primary.withAlpha(150) :cs.primary,
                 fontWeight: FontWeight.w700,

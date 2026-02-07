@@ -99,6 +99,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get ratingOptionBetween2And4 => 'Between ☆☆ and ☆☆☆☆';
 
   @override
+  String get ratingOptionHigherThan4 => 'Higher than ☆☆☆☆';
+
+  @override
   String get gov_damascus => 'Damascus';
 
   @override
@@ -527,4 +530,81 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get youCantRent =>
       'You can\'t rate an apartment that you haven\'t rented before';
+
+  @override
+  String get theresAnError => 'there\'s an error, try again later :(';
+
+  @override
+  String get noActiveRentalsYet => 'No active rentals yet';
+
+  @override
+  String get noPastRentalsYet => 'No passed rentals yet';
+
+  @override
+  String get youDidntPostAnyApartmentYet =>
+      'You didn\'t post any apartment yet';
+
+  @override
+  String get doYouWantToLogOut => 'Do you want to log out?';
+
+  @override
+  String get noReviewsYet => 'No reviews yet';
+
+  @override
+  String get noComment => 'No comment';
+
+  @override
+  String get rentalRequests => 'Rental requests';
+
+  @override
+  String get noRentalRequestsYet => 'No rental requests yet';
+
+  @override
+  String get noApartmentMatchesYourSearch => 'No apartment matches your search';
+
+  @override
+  String get yourReview => 'Your review:';
+
+  @override
+  String get cantRate =>
+      'You can\'t rate an apartment that you haven\'t rented before';
+
+  @override
+  String get rateThisApartment => 'Rate this apartment:';
+
+  @override
+  String get update => 'Update';
+
+  @override
+  String get editSuccess => 'Edit request submitted successfully!';
+
+  @override
+  String get doYouWantToCancel => 'Do you really want to cancel this rental?';
+
+  @override
+  String get back => 'Back';
+
+  @override
+  String get doYouReallyWantToCancelEdit =>
+      'Do you really want to cancel the edit on this rental?';
+
+  @override
+  String get acceptRental => 'Do you want to accept this rental?';
+
+  @override
+  String get rejectRental => 'Do you want to reject this rental?';
+
+  @override
+  String get noFavs => 'No favorite apartments added yet';
+
+  @override
+  String get name => 'User full Name';
+
+  @override
+  String get register_enterFullName =>
+      'Please enter a full name with first and last name.';
+
+  @override
+  String get youCantBookYourOwnApartment =>
+      'You can\'t book your own apartment man \n(￣(工)￣)';
 }
